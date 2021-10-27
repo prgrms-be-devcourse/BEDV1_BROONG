@@ -20,6 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,26 +34,27 @@ public class User extends BaseEntity {
     @Column(name = "id", columnDefinition = "BIGINT")
     private Long id;
 
-    @Column(name = "email", columnDefinition = "VARCAHR(100)", nullable = false)
+    @Column(name = "email", columnDefinition = "VARCHAR(100)", nullable = false)
     private String email;
 
-    @Column(name = "password", columnDefinition = "VARCAHR(100)", nullable = false)
+    @Column(name = "password", columnDefinition = "VARCHAR(100)", nullable = false)
     private String password;
 
-    @Column(name = "name", columnDefinition = "VARCAHR(100)", nullable = false)
+    @Column(name = "name", columnDefinition = "VARCHAR(100)", nullable = false)
     private String name;
 
     @Convert(converter = BooleanToYnConverter.class)
-    @Column(name = "license_info", columnDefinition = "VARCAHR(50)", nullable = false)
+    @Column(name = "license_info", columnDefinition = "VARCHAR(50)", nullable = false)
     private boolean licenseInfo;
 
     @Convert(converter = BooleanToYnConverter.class)
-    @Column(name = "payment_method", columnDefinition = "VARCAHR(50)", nullable = false)
+    @Column(name = "payment_method", columnDefinition = "VARCHAR(50)", nullable = false)
     private boolean paymentMethod;
 
     @Column(name = "point", columnDefinition = "INT")
     private Integer point;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservationUser> ReservationUsers = new ArrayList<>();
 
