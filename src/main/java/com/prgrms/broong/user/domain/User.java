@@ -2,7 +2,7 @@ package com.prgrms.broong.user.domain;
 
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.common.BooleanToYnConverter;
-import com.prgrms.broong.reservation.domain.ReservationUser;
+import com.prgrms.broong.reservation.domain.Reservation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -56,6 +56,6 @@ public class User extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservationUser> ReservationUsers = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
 }
