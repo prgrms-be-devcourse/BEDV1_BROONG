@@ -2,6 +2,7 @@ package com.prgrms.broong.reservation.domain;
 
 
 import com.prgrms.broong.user.domain.User;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -50,4 +51,11 @@ public class ReservationUser {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    public void setUser(User user) {
+        if (Objects.nonNull(this.user)) {
+            user.getReservationUsers().remove(this);
+        }
+        this.user = user;
+        user.getReservationUsers().add(this);
+    }
 }
