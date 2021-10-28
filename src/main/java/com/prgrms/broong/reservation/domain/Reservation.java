@@ -1,14 +1,13 @@
 package com.prgrms.broong.reservation.domain;
 
 import com.prgrms.broong.common.BaseEntity;
-import com.prgrms.broong.management.park.domain.Park;
+import com.prgrms.broong.common.BooleanToYnConverter;
+import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.user.domain.User;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,7 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -45,7 +43,7 @@ public class Reservation extends BaseEntity {
     @Column(name = "end_time", columnDefinition = "TIMESTAMP", updatable = false, nullable = false)
     private LocalDateTime endTime;
 
-    @Column(name = "used_point", columnDefinition = "INT")
+    @Column(name = "usage_point", columnDefinition = "INT")
     private Integer usagePoint;
 
     @Enumerated(EnumType.STRING)
@@ -55,19 +53,19 @@ public class Reservation extends BaseEntity {
     @Column(name = "fee", columnDefinition = "INT", nullable = false)
     private Integer fee;
 
+    @Convert(converter = BooleanToYnConverter.class)
+    @Column(name = "is_oneway", columnDefinition = "VARCHAR(50)", nullable = false)
+    private boolean isOneway;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rent_park_id", referencedColumnName = "id")
-    private Park rentPark;
+    @JoinColumn(name = "park_car_id", referencedColumnName = "id")
+    private ParkCar parkCar;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "return_park_id", referencedColumnName = "id")
-    private Park returnPark;
-
-    public void setUser(User user) {
+    public void registerUser(User user) {
         if (Objects.nonNull(this.user)) {
             user.getReservations().remove(this);
         }
