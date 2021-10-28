@@ -41,7 +41,12 @@ public class Park extends BaseEntity {
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
+    @Builder.Default
     @OneToMany(mappedBy = "park", cascade = CascadeType.ALL)
     private List<ParkCar> parkCars = new ArrayList<>();
+
+    public void changePossibleNum(Integer possibleNum) {
+        this.possibleNum = possibleNum;
+    }
 
 }
