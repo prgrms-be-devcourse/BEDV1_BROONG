@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserResponseDto;
+import com.prgrms.broong.user.dto.UserUpdateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,16 @@ class UserServiceTest {
         assertThat(result.isPaymentMethod(),is(userRequestDto.isPaymentMethod()));
 
 
+    }
+
+    @Test
+    void editTest(){
+        Long id = userService.save(userRequestDto);
+        UserUpdateDto userUpdateDto=UserUpdateDto.builder()
+            .point(15)
+            .build();
+        UserResponseDto userResponseDto = userService.editUser(id, userUpdateDto);
+        assertThat(userResponseDto.getPoint(),is(userUpdateDto.getPoint()));
     }
 
 }

@@ -58,4 +58,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
+    public void changeUser(Integer point) {
+        this.point = point;
+
+    }
+
 }

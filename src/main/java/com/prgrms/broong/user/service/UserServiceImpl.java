@@ -2,9 +2,12 @@ package com.prgrms.broong.user.service;
 
 
 import com.prgrms.broong.user.UserConverter;
+import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserResponseDto;
+import com.prgrms.broong.user.dto.UserUpdateDto;
 import com.prgrms.broong.user.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +32,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).map(userConverter::convertUserResponseDto)
             .orElseThrow(() -> new RuntimeException("user을 찾을 수 없습니다."));
 
+    }
+
+    @Override
+    @Transactional
+    public UserResponseDto editUser(Long id, UserUpdateDto userUpdateDto) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("post를 찾을 수 없어 update에 실패했습니다"));
+        user.changeUser(userUpdateDto.getPoint());
+        return userConverter.convertUserResponseDto(user);
     }
 }
