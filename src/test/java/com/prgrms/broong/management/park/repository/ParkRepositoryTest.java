@@ -61,7 +61,7 @@ class ParkRepositoryTest {
 
     @DisplayName("주차장 조회 테스트")
     @Test
-    void findParkTest() {
+    void getParkTest() {
         //when
         parkRepository.save(park);
 
@@ -74,7 +74,7 @@ class ParkRepositoryTest {
     @Transactional
     @DisplayName("주차장 변경 테스트")
     @Test
-    void updateParkTest() {
+    void editParkTest() {
         //given
         parkRepository.save(park);
 
@@ -82,14 +82,14 @@ class ParkRepositoryTest {
         park.changePossibleNum(100);
 
         //then
-        Park getPark = parkRepository.getById(park.getId());
+        Park getPark = parkRepository.findById(park.getId()).get();
 
         assertThat(getPark.getPossibleNum()).isEqualTo(park.getPossibleNum());
     }
 
     @DisplayName("주차장 삭제 테스트")
     @Test
-    void deleteParkTest() {
+    void removeParkTest() {
         //given
         parkRepository.save(park);
 
