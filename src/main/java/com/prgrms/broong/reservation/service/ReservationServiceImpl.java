@@ -31,7 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationResponseDto getReservation(Long reservationId) {
         return repository.findById(reservationId)
-            .map(converter::ReservationToDto)
+            .map(converter::ReservationToResponseDto)
             .orElseThrow(() -> new RuntimeException(
                 MessageFormat.format("해당 {0}키의 객체를 찾을 수 없습니다.", reservationId)));
     }

@@ -25,12 +25,12 @@ public class ReservationConverter {
         return null;
     }
 
-    public ReservationResponseDto ReservationToDto(Reservation reservation) {
+    public ReservationResponseDto ReservationToResponseDto(Reservation reservation) {
         ReservationResponseDto getReservation = ReservationResponseDto.builder()
             .id(reservation.getId())
-            .reservationStatus(reservation.getReservationStatus()) //DB에서 꺼내면 STRING으로 되나? 확인
-            .startTime(reservation.getStartTime()) //날짜 형식 맞는지 확인하기 -> String으로 바꿔줘야 함
-            .endTime(reservation.getEndTime())  //날짜 형식 맞는지 확인하기
+            .reservationStatus(reservation.getReservationStatus())
+            .startTime(reservation.getStartTime())
+            .endTime(reservation.getEndTime())
             .usagePoint(reservation.getUsagePoint())
             .fee(reservation.getFee())
             .isOneway(reservation.isOneway())

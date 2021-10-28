@@ -68,7 +68,7 @@ class ReservationRepositoryTest {
 
     @Test
     @DisplayName("Reservation 생성 후 불러오기")
-    void save_Reservation_test() {
+    void saveReservationTest() {
         //given
         reservation.setUser(user);
         reservation = reservationRepository.save(reservation);
@@ -79,8 +79,10 @@ class ReservationRepositoryTest {
         //then
         assertThat(reservation.getId(), samePropertyValuesAs(getReservation.getId()));
         assertThat(reservation.getFee(), samePropertyValuesAs(getReservation.getFee()));
-//        System.out.println("localDate 값"+reservation.getStartTime()+",  find 값"+getReservation.getStartTime());
-//        System.out.println(getReservation.getEndTime());
+        assertThat(reservation.getStartTime(), samePropertyValuesAs(getReservation.getStartTime()));
+        assertThat(reservation.getEndTime(), samePropertyValuesAs(getReservation.getEndTime()));
+        //todo localDateTime log error 해결하기
+
     }
 
 }

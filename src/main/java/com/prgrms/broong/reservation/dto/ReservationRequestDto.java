@@ -3,11 +3,11 @@ package com.prgrms.broong.reservation.dto;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 public class ReservationRequestDto {
 
     @NotNull(message = "startTime is not NULL")

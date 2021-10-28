@@ -2,7 +2,7 @@ package com.prgrms.broong.reservation.domain;
 
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.common.BooleanToYnConverter;
-import com.prgrms.broong.management.park.domain.Park;
+import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -43,7 +43,7 @@ public class Reservation extends BaseEntity {
     @Column(name = "end_time", columnDefinition = "TIMESTAMP", updatable = false, nullable = false)
     private LocalDateTime endTime;
 
-    @Column(name = "used_point", columnDefinition = "INT")
+    @Column(name = "usage_point", columnDefinition = "INT")
     private Integer usagePoint;
 
     @Enumerated(EnumType.STRING)
@@ -63,7 +63,7 @@ public class Reservation extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "park_car_id", referencedColumnName = "id")
-    private Park parkCar;
+    private ParkCar parkCar;
 
     public void setUser(User user) {
         if (Objects.nonNull(this.user)) {
