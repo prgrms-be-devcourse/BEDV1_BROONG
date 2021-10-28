@@ -68,7 +68,7 @@ class ReservationRepositoryTest {
     @DisplayName("Reservation 생성 후 불러오기")
     void saveReservationTest() {
         //given
-        reservation.setUser(user);
+        reservation.registerUser(user);
         reservation = reservationRepository.save(reservation);
 
         //then

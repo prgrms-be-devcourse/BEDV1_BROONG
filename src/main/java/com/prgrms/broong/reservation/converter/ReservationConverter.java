@@ -21,7 +21,7 @@ public class ReservationConverter {
             .isOneway(true)
             .user(user)
             .build();
-        reservation.setUser(user);
+        reservation.registerUser(user);
         return null;
     }
 

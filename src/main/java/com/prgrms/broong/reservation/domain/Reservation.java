@@ -65,7 +65,7 @@ public class Reservation extends BaseEntity {
     @JoinColumn(name = "park_car_id", referencedColumnName = "id")
     private ParkCar parkCar;
 
-    public void setUser(User user) {
+    public void registerUser(User user) {
         if (Objects.nonNull(this.user)) {
             user.getReservations().remove(this);
         }

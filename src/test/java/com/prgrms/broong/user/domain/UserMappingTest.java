@@ -40,7 +40,7 @@ class UserMappingTest {
             .fee(1000)
             .build();
 
-        reservation.setUser(user);
+        reservation.registerUser(user);
 
         //When
         userRepository.save(user);
