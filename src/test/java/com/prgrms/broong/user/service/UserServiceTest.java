@@ -1,7 +1,7 @@
 package com.prgrms.broong.user.service;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserResponseDto;
@@ -29,37 +29,47 @@ class UserServiceTest {
             .paymentMethod(true)
             .point(13)
             .build();
-
     }
 
     @Test
     void save() {
+        //Given
+        // When
         Long id = userService.saveUser(userRequestDto);
-        assertThat(id, is(1L));
 
+        //Then
+        assertThat(id, is(1L));
     }
 
     @Test
     void getById() {
+        //Given
         Long id = userService.saveUser(userRequestDto);
+
+        //When
         UserResponseDto result = userService.getUserById(id);
+
+        //Then
         assertThat(result.getEmail(), is(userRequestDto.getEmail()));
         assertThat(result.getName(), is(userRequestDto.getName()));
         assertThat(result.getPassword(), is(userRequestDto.getPassword()));
         assertThat(result.getPoint(), is(userRequestDto.getPoint()));
         assertThat(result.isLicenseInfo(), is(userRequestDto.isLicenseInfo()));
         assertThat(result.isPaymentMethod(), is(userRequestDto.isPaymentMethod()));
-
-
     }
 
     @Test
     void editTest() {
+        //Given
         Long id = userService.saveUser(userRequestDto);
         UserUpdateDto userUpdateDto = UserUpdateDto.builder()
             .point(0)
             .build();
+
+        //When
         UserResponseDto userResponseDto = userService.editUser(id, userUpdateDto);
+
+        //Then
         assertThat(userResponseDto.getPoint(), is(userUpdateDto.getPoint()));
     }
 

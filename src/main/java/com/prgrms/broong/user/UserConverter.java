@@ -17,8 +17,6 @@ public class UserConverter {
             .licenseInfo(userRequestDto.isLicenseInfo())
             .paymentMethod(userRequestDto.isPaymentMethod())
             .build();
-
-
     }
 
     public UserResponseDto convertUserResponseDto(User user) {
@@ -31,8 +29,6 @@ public class UserConverter {
             .paymentMethod(user.isPaymentMethod())
             .licenseInfo(user.isLicenseInfo())
             .build();
-
-
     }
 
 }

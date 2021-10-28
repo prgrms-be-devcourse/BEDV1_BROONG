@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
+
     Long saveUser(UserRequestDto userRequestDto);
+
     UserResponseDto getUserById(Long id);
-    UserResponseDto editUser(Long id,UserUpdateDto userUpdateDto);
+
+    UserResponseDto editUser(Long id, UserUpdateDto userUpdateDto);
 
 }
