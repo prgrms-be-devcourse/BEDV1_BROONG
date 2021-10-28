@@ -42,7 +42,7 @@ public class ParkCar extends BaseEntity {
     private Car car;
 
     public void registerCar(Car car) {
-        this.car = car;
+        car.registerParkCar(this);
     }
 
     public void registerPark(Park park) {

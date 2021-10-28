@@ -77,4 +77,8 @@ public class Car extends BaseEntity {
         this.possiblePassengers = possiblePassengers;
     }
 
+    public void registerParkCar(ParkCar parkCar) {
+        this.parkCar = parkCar;
+    }
+
 }
