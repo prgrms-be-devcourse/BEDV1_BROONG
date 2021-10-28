@@ -33,15 +33,15 @@ class UserServiceTest {
 
     @Test
     void save() {
-        Long id = userService.save(userRequestDto);
+        Long id = userService.saveUser(userRequestDto);
         assertThat(id,is(1L));
 
     }
 
     @Test
     void getById(){
-        Long id = userService.save(userRequestDto);
-        UserResponseDto result = userService.getById(id);
+        Long id = userService.saveUser(userRequestDto);
+        UserResponseDto result = userService.getUserById(id);
         assertThat(result.getEmail(),is(userRequestDto.getEmail()));
         assertThat(result.getName(),is(userRequestDto.getName()));
         assertThat(result.getPassword(),is(userRequestDto.getPassword()));
@@ -54,7 +54,7 @@ class UserServiceTest {
 
     @Test
     void editTest(){
-        Long id = userService.save(userRequestDto);
+        Long id = userService.saveUser(userRequestDto);
         UserUpdateDto userUpdateDto=UserUpdateDto.builder()
             .point(15)
             .build();

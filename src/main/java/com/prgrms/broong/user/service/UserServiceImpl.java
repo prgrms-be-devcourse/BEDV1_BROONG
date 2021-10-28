@@ -22,13 +22,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long save(UserRequestDto userRequestDto) {
+    public Long saveUser(UserRequestDto userRequestDto) {
         return userRepository.save(userConverter.convertUser(userRequestDto)).getId();
 
     }
 
     @Override
-    public UserResponseDto getById(Long id) {
+    public UserResponseDto getUserById(Long id) {
         return userRepository.findById(id).map(userConverter::convertUserResponseDto)
             .orElseThrow(() -> new RuntimeException("user을 찾을 수 없습니다."));
 
