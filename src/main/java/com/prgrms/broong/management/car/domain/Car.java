@@ -54,7 +54,28 @@ public class Car extends BaseEntity {
     @JoinColumn(name = "species_id", referencedColumnName = "id")
     private Species species;
 
+    @Builder.Default
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ParkCar> parkCars = new ArrayList<>();
+
+    public void changeCarNum(String carNum) {
+        this.carNum = carNum;
+    }
+
+    public void changeModel(String model) {
+        this.model = model;
+    }
+
+    public void changeFuel(Long fuel) {
+        this.fuel = fuel;
+    }
+
+    public void changePrice(Long price) {
+        this.price = price;
+    }
+
+    public void changePossiblePassengers(Integer possiblePassengers) {
+        this.possiblePassengers = possiblePassengers;
+    }
 
 }
