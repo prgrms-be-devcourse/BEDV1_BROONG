@@ -9,7 +9,6 @@ import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.repository.UserRepository;
 import java.time.LocalDateTime;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
-@Slf4j
 @SpringBootTest
 class ReservationRepositoryTest {
 
@@ -81,7 +79,8 @@ class ReservationRepositoryTest {
         assertThat(reservation.getFee(), samePropertyValuesAs(getReservation.getFee()));
         assertThat(reservation.getStartTime(), samePropertyValuesAs(getReservation.getStartTime()));
         assertThat(reservation.getEndTime(), samePropertyValuesAs(getReservation.getEndTime()));
-        //todo localDateTime log error 해결하기
+        assertThat(reservation.getReservationStatus(),
+            samePropertyValuesAs(getReservation.getReservationStatus()));
 
     }
 
