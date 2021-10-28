@@ -2,12 +2,16 @@ package com.prgrms.broong.reservation.domain;
 
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.management.park.domain.Park;
+import com.prgrms.broong.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,6 +45,20 @@ public class Reservation extends BaseEntity {
     @Column(name = "end_time", columnDefinition = "TIMESTAMP", updatable = false, nullable = false)
     private LocalDateTime endTime;
 
+    @Column(name = "used_point", columnDefinition = "INT")
+    private Integer usagePoint;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reservation_status", columnDefinition = "VARCHAR(100)", nullable = false)
+    private ReservationStatus reservationStatus;
+
+    @Column(name = "fee", columnDefinition = "INT", nullable = false)
+    private Integer fee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rent_park_id", referencedColumnName = "id")
     private Park rentPark;
@@ -49,7 +67,12 @@ public class Reservation extends BaseEntity {
     @JoinColumn(name = "return_park_id", referencedColumnName = "id")
     private Park returnPark;
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservationUser> reservationUsers = new ArrayList<>();
+    public void setUser(User user) {
+        if (Objects.nonNull(this.user)) {
+            user.getReservations().remove(this);
+        }
+        this.user = user;
+        user.getReservations().add(this);
+    }
 
 }

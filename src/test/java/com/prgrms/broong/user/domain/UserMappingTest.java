@@ -1,22 +1,19 @@
 package com.prgrms.broong.user.domain;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
+import com.prgrms.broong.reservation.domain.Reservation;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
-import com.prgrms.broong.reservation.domain.ReservationUser;
 import com.prgrms.broong.user.repository.UserRepository;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserTest {
+class UserMappingTest {
 
     @Autowired
     UserRepository userRepository;
@@ -32,16 +29,18 @@ class UserTest {
             .point(13)
             .build();
 
-        ReservationUser reservationUser = ReservationUser.builder()
+        Reservation reservation = Reservation.builder()
             .reservationStatus(ReservationStatus.RESERVATION)
-            .userPoint(10)
+            .usagePoint(10)
+            .startTime(LocalDateTime.MIN)
+            .endTime(LocalDateTime.MAX)
             .fee(1000)
             .build();
 
-        reservationUser.setUser(user);
+        reservation.setUser(user);
 
         userRepository.save(user);
-        assertThat(reservationUser, samePropertyValuesAs(user.getReservationUsers().get(0)));
+        assertThat(reservation, samePropertyValuesAs(user.getReservations().get(0)));
 
 
     }
