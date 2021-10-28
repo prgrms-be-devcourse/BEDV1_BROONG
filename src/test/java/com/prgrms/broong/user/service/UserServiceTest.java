@@ -2,6 +2,7 @@ package com.prgrms.broong.user.service;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserResponseDto;
 import com.prgrms.broong.user.dto.UserUpdateDto;
@@ -34,32 +35,32 @@ class UserServiceTest {
     @Test
     void save() {
         Long id = userService.saveUser(userRequestDto);
-        assertThat(id,is(1L));
+        assertThat(id, is(1L));
 
     }
 
     @Test
-    void getById(){
+    void getById() {
         Long id = userService.saveUser(userRequestDto);
         UserResponseDto result = userService.getUserById(id);
-        assertThat(result.getEmail(),is(userRequestDto.getEmail()));
-        assertThat(result.getName(),is(userRequestDto.getName()));
-        assertThat(result.getPassword(),is(userRequestDto.getPassword()));
-        assertThat(result.getPoint(),is(userRequestDto.getPoint()));
-        assertThat(result.isLicenseInfo(),is(userRequestDto.isLicenseInfo()));
-        assertThat(result.isPaymentMethod(),is(userRequestDto.isPaymentMethod()));
+        assertThat(result.getEmail(), is(userRequestDto.getEmail()));
+        assertThat(result.getName(), is(userRequestDto.getName()));
+        assertThat(result.getPassword(), is(userRequestDto.getPassword()));
+        assertThat(result.getPoint(), is(userRequestDto.getPoint()));
+        assertThat(result.isLicenseInfo(), is(userRequestDto.isLicenseInfo()));
+        assertThat(result.isPaymentMethod(), is(userRequestDto.isPaymentMethod()));
 
 
     }
 
     @Test
-    void editTest(){
+    void editTest() {
         Long id = userService.saveUser(userRequestDto);
-        UserUpdateDto userUpdateDto=UserUpdateDto.builder()
-            .point(15)
+        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+            .point(0)
             .build();
         UserResponseDto userResponseDto = userService.editUser(id, userUpdateDto);
-        assertThat(userResponseDto.getPoint(),is(userUpdateDto.getPoint()));
+        assertThat(userResponseDto.getPoint(), is(userUpdateDto.getPoint()));
     }
 
 }
