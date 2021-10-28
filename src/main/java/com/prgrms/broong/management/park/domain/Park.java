@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ public class Park extends BaseEntity {
     @Column(name = "id", columnDefinition = "BIGINT")
     private Long id;
 
+    @Min(0)
     @Column(name = "possible_num", columnDefinition = "INT", nullable = false)
     private Integer possibleNum;
 
