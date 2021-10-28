@@ -19,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 class ParkRepositoryTest {
 
     @Autowired
-    private ParkRepository parkRepository;
+    ParkRepository parkRepository;
 
     @Autowired
-    private LocationRepository locationRepository;
+    LocationRepository locationRepository;
 
     private Park park;
 
