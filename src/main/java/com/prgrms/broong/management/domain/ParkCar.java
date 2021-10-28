@@ -3,6 +3,7 @@ package com.prgrms.broong.management.domain;
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.management.car.domain.Car;
 import com.prgrms.broong.management.park.domain.Park;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -35,8 +37,21 @@ public class ParkCar extends BaseEntity {
     @JoinColumn(name = "park_id", referencedColumnName = "id")
     private Park park;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id", referencedColumnName = "id")
     private Car car;
+
+    public void registerCar(Car car) {
+        this.car = car;
+        car.registerParkCar(this);
+    }
+
+    public void registerPark(Park park) {
+        if (Objects.nonNull(this.park)) {
+            park.getParkCars().remove(this);
+        }
+        this.park = park;
+        park.getParkCars().add(this);
+    }
 
 }

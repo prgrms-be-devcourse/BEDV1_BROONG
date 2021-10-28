@@ -64,12 +64,12 @@ class CarRepositoryTest {
 
     @DisplayName("차량 조회 테스트")
     @Test
-    void findCarTest() {
+    void getCarTest() {
         //when
         carRepository.save(car);
 
         //then
-        Car getCar = carRepository.getById(car.getId());
+        Car getCar = carRepository.findById(car.getId()).get();
 
         assertThat(getCar, samePropertyValuesAs(car));
     }
@@ -77,7 +77,7 @@ class CarRepositoryTest {
     @Transactional
     @DisplayName("차량 변경 테스트")
     @Test
-    void updateCarTest() {
+    void editCarTest() {
         //given
         carRepository.save(car);
 
@@ -92,7 +92,7 @@ class CarRepositoryTest {
 
     @DisplayName("차량 삭제 테스트")
     @Test
-    void deleteCarTest() {
+    void removeCarTest() {
         //given
         carRepository.save(car);
 

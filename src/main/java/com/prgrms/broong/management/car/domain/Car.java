@@ -3,8 +3,6 @@ package com.prgrms.broong.management.car.domain;
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.species.domain.Species;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,9 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,9 +39,11 @@ public class Car extends BaseEntity {
     @Column(name = "model", columnDefinition = "VARCHAR(100)", nullable = false)
     private String model;
 
+    @Min(0)
     @Column(name = "fuel", columnDefinition = "BIGINT", nullable = false)
     private Long fuel;
 
+    @Min(0)
     @Column(name = "price", columnDefinition = "BIGINT", nullable = false)
     private Long price;
 
@@ -54,9 +54,8 @@ public class Car extends BaseEntity {
     @JoinColumn(name = "species_id", referencedColumnName = "id")
     private Species species;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ParkCar> parkCars = new ArrayList<>();
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ParkCar parkCar;
 
     public void changeCarNum(String carNum) {
         this.carNum = carNum;
@@ -76,6 +75,10 @@ public class Car extends BaseEntity {
 
     public void changePossiblePassengers(Integer possiblePassengers) {
         this.possiblePassengers = possiblePassengers;
+    }
+
+    public void registerParkCar(ParkCar parkCar) {
+        this.parkCar = parkCar;
     }
 
 }
