@@ -22,12 +22,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long saveUser(UserRequestDto userRequestDto) {
-        return userRepository.save(userConverter.convertUser(userRequestDto)).getId();
+        return userRepository.save(userConverter.UserToEntity(userRequestDto)).getId();
     }
 
     @Override
     public UserResponseDto getUserById(Long id) {
-        return userRepository.findById(id).map(userConverter::convertUserResponseDto)
+        return userRepository.findById(id).map(userConverter::UserToResponseDto)
             .orElseThrow(() -> new RuntimeException("user을 찾을 수 없습니다."));
     }
 
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto editUser(Long id, UserUpdateDto userUpdateDto) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("post를 찾을 수 없어 update에 실패했습니다"));
-        user.changeUser(userUpdateDto.getPoint());
-        return userConverter.convertUserResponseDto(user);
+        user.changePoint(userUpdateDto.getPoint());
+        return userConverter.UserToResponseDto(user);
     }
 }

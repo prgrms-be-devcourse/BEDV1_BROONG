@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserConverter {
 
-    public User convertUser(UserRequestDto userRequestDto) {
+    public User UserToEntity(UserRequestDto userRequestDto) {
         return User.builder()
             .email(userRequestDto.getEmail())
             .name(userRequestDto.getName())
@@ -19,7 +19,7 @@ public class UserConverter {
             .build();
     }
 
-    public UserResponseDto convertUserResponseDto(User user) {
+    public UserResponseDto UserToResponseDto(User user) {
         return UserResponseDto.builder()
             .id(user.getId())
             .email(user.getEmail())

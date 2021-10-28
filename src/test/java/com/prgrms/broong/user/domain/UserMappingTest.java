@@ -8,6 +8,7 @@ import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ class UserMappingTest {
     UserRepository userRepository;
 
     @Test
+    @DisplayName("User와 Reservation의 맵핑관계 테스트")
     void mappingTest() {
         //Given
         User user = User.builder()

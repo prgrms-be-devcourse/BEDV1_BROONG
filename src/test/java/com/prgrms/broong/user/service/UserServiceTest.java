@@ -7,6 +7,7 @@ import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserResponseDto;
 import com.prgrms.broong.user.dto.UserUpdateDto;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("User에 저장 할 수 있다.")
     void save() {
         //Given
         // When
@@ -42,6 +44,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("User를 id로 찾을 수 있다.")
     void getById() {
         //Given
         Long id = userService.saveUser(userRequestDto);
@@ -59,6 +62,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("User를 수정 할 수 있다.")
     void editTest() {
         //Given
         Long id = userService.saveUser(userRequestDto);
