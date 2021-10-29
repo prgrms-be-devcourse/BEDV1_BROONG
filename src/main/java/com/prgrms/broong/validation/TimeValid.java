@@ -6,12 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 
-@Target(ElementType.FIELD) // 1
-@Retention(RetentionPolicy.RUNTIME) // 2
-@Constraint(validatedBy = TimeValidator.class) // 3
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = TimeValidator.class)
 public @interface TimeValid {
 
-    String message() default "유효하지 않은 시간입니다"; // 4
+    String message() default "유효하지 않은 시간입니다";
 
     Class[] groups() default {};
 
