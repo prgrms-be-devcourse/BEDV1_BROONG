@@ -78,7 +78,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("User의 면허정보를 확인할 수 있다..")
+    @DisplayName("User의 면허정보를 확인할 수 있다.")
     void checkLicense() {
         //Given
         Long id = userService.saveUser(userRequestDto);
@@ -91,7 +91,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("User의 결제정보를 확인할 수 있다..")
+    @DisplayName("User의 결제정보를 확인할 수 있다.")
     void checkPayment() {
         //Given
         Long id = userService.saveUser(userRequestDto);
