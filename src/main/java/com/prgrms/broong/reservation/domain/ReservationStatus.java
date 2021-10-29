@@ -4,6 +4,7 @@ public enum ReservationStatus {
 
     RESERVATION,
     USING,
-    RETURN
+    RETURN,
+    CANCELD
 
 }
