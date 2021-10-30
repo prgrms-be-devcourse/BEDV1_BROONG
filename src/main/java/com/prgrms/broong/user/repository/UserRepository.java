@@ -11,5 +11,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByIdAndPaymentMethod(Long id, boolean payment);
 
-
 }

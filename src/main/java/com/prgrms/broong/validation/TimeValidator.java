@@ -34,7 +34,6 @@ public class TimeValidator implements ConstraintValidator<TimeValid, LocalDateTi
 
         if (ChronoUnit.DAYS.between(roundNow, time) == 0
             && ChronoUnit.MINUTES.between(roundNow, time) < 30) {
-
             return false;
         }
         return true;
