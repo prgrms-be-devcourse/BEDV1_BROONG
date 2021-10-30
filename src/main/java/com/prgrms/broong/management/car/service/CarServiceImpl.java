@@ -40,11 +40,7 @@ public class CarServiceImpl implements CarService {
         Car getCar = carRepository.findById(carId)
             .orElseThrow(
                 () -> new RuntimeException(MessageFormat.format("해당 {0}키의 차량을 찾을 수 없습니다.", carId)));
-        getCar.changeCarNum(carUpdateDto.getCarNum());
-        getCar.changeModel(carUpdateDto.getModel());
-        getCar.changeFuel(carUpdateDto.getFuel());
-        getCar.changePrice(carUpdateDto.getPrice());
-        getCar.changePossiblePassengers(carUpdateDto.getPossiblePassengers());
+        getCar.changeCarInfo(carUpdateDto);
         return getCar.getId();
     }
 
