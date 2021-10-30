@@ -1,6 +1,7 @@
 package com.prgrms.broong.reservation.repository;
 
 import com.prgrms.broong.reservation.domain.Reservation;
+import com.prgrms.broong.reservation.domain.ReservationStatus;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -17,16 +18,21 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     // userId , 예약시간 으로 이미 예약된게 있는지 확인하는 쿼리
     @Query(value = "SELECT r FROM Reservation r WHERE r.user.id = :userId"
+        + " AND r.reservationStatus = :status"
         + " AND r.startTime <= :checkTime"
         + " AND r.endTime >= :checkTime")
     Optional<Reservation> checkReservationByUserId(@Param("userId") Long userId,
-        @Param("checkTime") LocalDateTime checkTime);
+        @Param("checkTime") LocalDateTime checkTime, @Param("status") ReservationStatus status);
 
     // 예약시간 + carId 로 해당 시간에 예약이 가능한지 확인하는 쿼리
     @Query(value = "SELECT r FROM Reservation r WHERE r.parkCar.car.id = :carId"
+        + " AND r.reservationStatus = :status"
         + " AND r.startTime <= :checkTime"
         + " AND r.endTime >= :checkTime")
     Optional<Reservation> possibleReservationTimeByCarId(@Param("carId") Long carId,
-        @Param("checkTime") LocalDateTime checkTime);
+        @Param("checkTime") LocalDateTime checkTime, @Param("status") ReservationStatus status);
+
+    @Query(value = "SELECT r FROM Reservation r JOIN FETCH User u WHERE r.id = :reservationId")
+    Optional<Reservation> findReservationAndUser(@Param("reservationId") Long reservationId);
 
 }
