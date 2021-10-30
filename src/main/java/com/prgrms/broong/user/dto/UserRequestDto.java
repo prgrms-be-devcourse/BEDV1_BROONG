@@ -13,6 +13,8 @@ public class UserRequestDto {
 
     String name;
 
+    String locationName;
+
     boolean licenseInfo;
 
     boolean paymentMethod;
