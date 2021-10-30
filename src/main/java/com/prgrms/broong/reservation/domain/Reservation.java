@@ -73,4 +73,8 @@ public class Reservation extends BaseEntity {
         user.getReservations().add(this);
     }
 
+    public void changeReservationStatus(ReservationStatus status) {
+        this.reservationStatus = status;
+    }
+
 }
