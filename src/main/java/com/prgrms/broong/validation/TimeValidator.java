@@ -9,6 +9,10 @@ import javax.validation.ConstraintValidatorContext;
 
 public class TimeValidator implements ConstraintValidator<TimeValid, LocalDateTime> {
 
+    private static final int HOUR_End = 24;
+    private static final int MIN_End = 60;
+    private static final int USER_ABLE = 30;
+
     @Override
     public void initialize(TimeValid constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
@@ -22,10 +26,10 @@ public class TimeValidator implements ConstraintValidator<TimeValid, LocalDateTi
 
         int roundMinute = (int) Math.round(now.getMinute() / 10.0) * 10;
 
-        if (roundMinute >= 60) {
+        if (roundMinute >= MIN_End) {
             hour += 1;
             roundMinute = 0;
-            if (hour >= 24) {
+            if (hour >= HOUR_End) {
                 hour = 0;
             }
         }
@@ -33,7 +37,7 @@ public class TimeValidator implements ConstraintValidator<TimeValid, LocalDateTi
         LocalDateTime roundNow = LocalDate.now().atTime(hour, roundMinute);
 
         if (ChronoUnit.DAYS.between(roundNow, time) == 0
-            && ChronoUnit.MINUTES.between(roundNow, time) < 30) {
+            && ChronoUnit.MINUTES.between(roundNow, time) < USER_ABLE) {
             return false;
         }
         return true;
