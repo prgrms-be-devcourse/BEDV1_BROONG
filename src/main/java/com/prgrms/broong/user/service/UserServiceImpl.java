@@ -40,13 +40,4 @@ public class UserServiceImpl implements UserService {
         return userConverter.UserToResponseDto(user);
     }
 
-    @Override
-    public boolean hasLicense(Long id) {
-        return userRepository.findByIdAndLicenseInfo(id, true).isPresent();
-    }
-
-    @Override
-    public boolean hasPayment(Long id) {
-        return userRepository.findByIdAndPaymentMethod(id, true).isPresent();
-    }
 }

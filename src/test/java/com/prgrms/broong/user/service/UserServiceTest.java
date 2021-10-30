@@ -25,6 +25,7 @@ class UserServiceTest {
         userRequestDto = UserRequestDto.builder()
             .email("pinoa1228@naver.com")
             .name("박연수")
+            .locationName("101")
             .licenseInfo(true)
             .password("1234")
             .paymentMethod(true)
@@ -58,6 +59,7 @@ class UserServiceTest {
         assertThat(result.getPassword(), is(userRequestDto.getPassword()));
         assertThat(result.getPoint(), is(userRequestDto.getPoint()));
         assertThat(result.isLicenseInfo(), is(userRequestDto.isLicenseInfo()));
+        assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
         assertThat(result.isPaymentMethod(), is(userRequestDto.isPaymentMethod()));
     }
 

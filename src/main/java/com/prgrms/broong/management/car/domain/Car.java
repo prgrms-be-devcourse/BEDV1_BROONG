@@ -66,4 +66,8 @@ public class Car extends BaseEntity {
         this.possiblePassengers = carUpdateDto.getPossiblePassengers();
     }
 
+    public void registerParkCar(ParkCar parkCar) {
+        this.parkCar = parkCar;
+    }
+
 }

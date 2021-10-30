@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
 @Builder
 public class UserResponseDto {
@@ -19,6 +18,8 @@ public class UserResponseDto {
 
     String name;
 
+    String locationName;
+
     boolean licenseInfo;
 
     boolean paymentMethod;
@@ -26,4 +27,5 @@ public class UserResponseDto {
     Integer point;
 
     List<Reservation> reservations;
+  
 }
