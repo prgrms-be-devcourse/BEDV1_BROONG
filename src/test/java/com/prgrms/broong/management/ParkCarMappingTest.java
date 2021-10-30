@@ -1,10 +1,11 @@
-package com.prgrms.broong.management.domain;
+package com.prgrms.broong.management;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import com.prgrms.broong.management.car.domain.Car;
 import com.prgrms.broong.management.car.repository.CarRepository;
+import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
 import com.prgrms.broong.management.park.repository.LocationRepository;
