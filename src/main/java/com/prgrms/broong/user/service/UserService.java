@@ -14,4 +14,8 @@ public interface UserService {
 
     UserResponseDto editUser(Long id, UserUpdateDto userUpdateDto);
 
+    boolean hasLicense(Long id);
+
+    boolean hasPayment(Long id);
+
 }
