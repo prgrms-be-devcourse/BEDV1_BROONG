@@ -1,6 +1,7 @@
 package com.prgrms.broong.management.car.domain;
 
 import com.prgrms.broong.common.BaseEntity;
+import com.prgrms.broong.management.car.dto.CarUpdateDto;
 import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.species.domain.Species;
 import javax.persistence.CascadeType;
@@ -57,28 +58,12 @@ public class Car extends BaseEntity {
     @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     private ParkCar parkCar;
 
-    public void changeCarNum(String carNum) {
-        this.carNum = carNum;
-    }
-
-    public void changeModel(String model) {
-        this.model = model;
-    }
-
-    public void changeFuel(Long fuel) {
-        this.fuel = fuel;
-    }
-
-    public void changePrice(Long price) {
-        this.price = price;
-    }
-
-    public void changePossiblePassengers(Integer possiblePassengers) {
-        this.possiblePassengers = possiblePassengers;
-    }
-
-    public void registerParkCar(ParkCar parkCar) {
-        this.parkCar = parkCar;
+    public void changeCarInfo(CarUpdateDto carUpdateDto) {
+        this.carNum = carUpdateDto.getCarNum();
+        this.model = carUpdateDto.getModel();
+        this.fuel = carUpdateDto.getFuel();
+        this.price = carUpdateDto.getPrice();
+        this.possiblePassengers = carUpdateDto.getPossiblePassengers();
     }
 
 }
