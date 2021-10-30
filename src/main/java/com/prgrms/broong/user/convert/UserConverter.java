@@ -27,6 +27,7 @@ public class UserConverter {
             .name(user.getName())
             .point(user.getPoint())
             .paymentMethod(user.isPaymentMethod())
+            .reservations(user.getReservations())
             .licenseInfo(user.isLicenseInfo())
             .build();
     }
