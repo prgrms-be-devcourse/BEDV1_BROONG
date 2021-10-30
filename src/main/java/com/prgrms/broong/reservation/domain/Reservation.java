@@ -77,4 +77,8 @@ public class Reservation extends BaseEntity {
         this.reservationStatus = status;
     }
 
+    public void changeEndTime(long addHour) {
+        this.endTime.plusHours(addHour);
+    }
+
 }
