@@ -1,6 +1,8 @@
 package com.prgrms.broong.reservation.dto;
 
+import com.prgrms.broong.management.domain.dto.ParkCarResponseDto;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
+import com.prgrms.broong.user.dto.UserResponseDto;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
@@ -25,7 +27,8 @@ public class ReservationRequestDto {
 
     private boolean isOneway;
 
-//    @NotNull(message = "ParkCar is not NULL")
-//    private ParkCarResponse parkCarResponse;
+    private UserResponseDto userResponseDto;
+
+    private ParkCarResponseDto parkCarResponse;
 
 }
