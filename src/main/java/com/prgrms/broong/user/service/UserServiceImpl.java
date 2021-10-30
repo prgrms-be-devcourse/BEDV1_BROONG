@@ -1,6 +1,6 @@
 package com.prgrms.broong.user.service;
 
-import com.prgrms.broong.user.UserConverter;
+import com.prgrms.broong.user.convert.UserConverter;
 import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserResponseDto;

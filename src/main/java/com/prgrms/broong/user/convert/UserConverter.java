@@ -1,4 +1,4 @@
-package com.prgrms.broong.user;
+package com.prgrms.broong.user.convert;
 
 import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.dto.UserRequestDto;
