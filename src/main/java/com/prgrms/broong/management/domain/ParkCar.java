@@ -40,5 +40,4 @@ public class ParkCar extends BaseEntity {
     @JoinColumn(name = "car_id", referencedColumnName = "id")
     private Car car;
 
-
 }
