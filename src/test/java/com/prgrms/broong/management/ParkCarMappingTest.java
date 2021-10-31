@@ -4,15 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import com.prgrms.broong.management.car.domain.Car;
-import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
-import com.prgrms.broong.management.park.repository.LocationRepository;
-import com.prgrms.broong.management.park.repository.ParkRepository;
 import com.prgrms.broong.management.repository.ParkCarRepository;
 import com.prgrms.broong.management.species.domain.Species;
-import com.prgrms.broong.management.species.repository.SpeciesRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +16,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 public class ParkCarMappingTest {
-
-    @Autowired
-    CarRepository carRepository;
-
-    @Autowired
-    SpeciesRepository speciesRepository;
-
-    @Autowired
-    ParkRepository parkRepository;
-
-    @Autowired
-    LocationRepository locationRepository;
 
     @Autowired
     ParkCarRepository parkCarRepository;
@@ -43,7 +27,6 @@ public class ParkCarMappingTest {
         Species species = Species.builder()
             .name("중형")
             .build();
-        speciesRepository.save(species);
 
         Car car = Car.builder()
             .carNum("11허124333")
@@ -59,25 +42,25 @@ public class ParkCarMappingTest {
             .townId("101")
             .locationName("도봉구")
             .build();
-        locationRepository.save(location);
 
         Park park = Park.builder()
             .possibleNum(10)
             .location(location)
             .build();
 
-        ParkCar parkCar = ParkCar.builder().build();
-
-        parkCar.registerCar(car);
-        parkCar.registerPark(park);
+        ParkCar parkCar = ParkCar.builder()
+            .car(car)
+            .park(park)
+            .build();
 
         //when
         parkCarRepository.save(parkCar);
 
         //then
         assertThat(parkCar.getCar(), samePropertyValuesAs(car));
-        assertThat(parkCar, samePropertyValuesAs(park.getParkCars().get(0)));
+        assertThat(parkCar.getCar().getSpecies(), samePropertyValuesAs(car.getSpecies()));
         assertThat(parkCar.getPark(), samePropertyValuesAs(park));
+        assertThat(parkCar.getPark().getLocation(), samePropertyValuesAs(park.getLocation()));
     }
 
 }

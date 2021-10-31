@@ -3,7 +3,6 @@ package com.prgrms.broong.management.domain;
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.management.car.domain.Car;
 import com.prgrms.broong.management.park.domain.Park;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,17 +40,5 @@ public class ParkCar extends BaseEntity {
     @JoinColumn(name = "car_id", referencedColumnName = "id")
     private Car car;
 
-    public void registerCar(Car car) {
-        this.car = car;
-        car.registerParkCar(this);
-    }
-
-    public void registerPark(Park park) {
-        if (Objects.nonNull(this.park)) {
-            park.getParkCars().remove(this);
-        }
-        this.park = park;
-        park.getParkCars().add(this);
-    }
 
 }
