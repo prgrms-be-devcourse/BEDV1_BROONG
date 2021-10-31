@@ -1,5 +1,6 @@
 package com.prgrms.broong.user.service;
 
+import com.prgrms.broong.exception.NotFoundException;
 import com.prgrms.broong.user.convert.UserConverter;
 import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.dto.UserRequestDto;
@@ -27,8 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getUserById(Long id) {
-        return userRepository.findById(id).map(userConverter::UserToResponseDto)
-            .orElseThrow(() -> new RuntimeException("user을 찾을 수 없습니다."));
+        return userRepository.findByIdAndReservations(id).map(userConverter::UserToResponseDto)
+            .orElseThrow(() -> new NotFoundException("user을 찾을 수 없습니다."));
     }
 
     @Override

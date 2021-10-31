@@ -61,6 +61,7 @@ class UserServiceTest {
         assertThat(result.isLicenseInfo(), is(userRequestDto.isLicenseInfo()));
         assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
         assertThat(result.isPaymentMethod(), is(userRequestDto.isPaymentMethod()));
+        assertThat(result.getReservationResponseDto().get(0).getFee(), is(1000));
     }
 
     @Test
@@ -77,32 +78,6 @@ class UserServiceTest {
 
         //Then
         assertThat(userResponseDto.getPoint(), is(userUpdateDto.getPoint()));
-    }
-
-    @Test
-    @DisplayName("User의 면허정보를 확인할 수 있다.")
-    void checkLicense() {
-        //Given
-        Long id = userService.saveUser(userRequestDto);
-
-        //When
-        boolean check = userService.hasLicense(id);
-
-        //Then
-        assertThat(check, is(true));
-    }
-
-    @Test
-    @DisplayName("User의 결제정보를 확인할 수 있다.")
-    void checkPayment() {
-        //Given
-        Long id = userService.saveUser(userRequestDto);
-
-        //When
-        boolean check = userService.hasPayment(id);
-
-        //Then
-        assertThat(check, is(true));
     }
 
 }
