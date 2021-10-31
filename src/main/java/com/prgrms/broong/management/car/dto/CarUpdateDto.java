@@ -7,10 +7,10 @@ import lombok.Getter;
 @Builder
 public class CarUpdateDto {
 
-    String carNum;
+    private String carNum;
 
-    Long fuel;
+    private Long fuel;
 
-    Long price;
+    private Long price;
 
 }

@@ -8,18 +8,18 @@ import lombok.Getter;
 @Builder
 public class CarResponseDto {
 
-    Long id;
+    private Long id;
 
-    String carNum;
+    private String carNum;
 
-    String model;
+    private String model;
 
-    Long fuel;
+    private Long fuel;
 
-    Long price;
+    private Long price;
 
-    Integer possiblePassengers;
+    private Integer possiblePassengers;
 
-    Species species;
+    private Species species;
 
 }

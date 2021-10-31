@@ -1,8 +1,6 @@
 package com.prgrms.broong.management.park.dto;
 
-import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.park.domain.Location;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,12 +8,10 @@ import lombok.Getter;
 @Builder
 public class ParkResponseDto {
 
-    Long id;
+    private Long id;
 
-    Integer possibleNum;
+    private Integer possibleNum;
 
-    Location location;
-
-    List<ParkCar> parkCars;
+    private Location location;
 
 }
