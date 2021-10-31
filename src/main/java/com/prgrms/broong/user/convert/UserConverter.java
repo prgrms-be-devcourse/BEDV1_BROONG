@@ -13,6 +13,7 @@ public class UserConverter {
             .email(userRequestDto.getEmail())
             .name(userRequestDto.getName())
             .password(userRequestDto.getPassword())
+            .locationName(userRequestDto.getLocationName())
             .point(userRequestDto.getPoint())
             .licenseInfo(userRequestDto.isLicenseInfo())
             .paymentMethod(userRequestDto.isPaymentMethod())
@@ -25,8 +26,10 @@ public class UserConverter {
             .email(user.getEmail())
             .password(user.getPassword())
             .name(user.getName())
+            .locationName(user.getLocationName())
             .point(user.getPoint())
             .paymentMethod(user.isPaymentMethod())
+            .reservations(user.getReservations())
             .licenseInfo(user.isLicenseInfo())
             .build();
     }

@@ -1,7 +1,10 @@
 package com.prgrms.broong.user.dto;
 
+import com.prgrms.broong.reservation.domain.Reservation;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Builder
@@ -15,10 +18,14 @@ public class UserResponseDto {
 
     String name;
 
+    String locationName;
+
     boolean licenseInfo;
 
     boolean paymentMethod;
 
     Integer point;
-    //예약 dto에 대한 필드가 들어야함
+
+    List<Reservation> reservations;
+  
 }

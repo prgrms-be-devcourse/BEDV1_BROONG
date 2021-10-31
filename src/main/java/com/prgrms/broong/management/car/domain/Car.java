@@ -59,4 +59,8 @@ public class Car extends BaseEntity {
         this.price = carUpdateDto.getPrice();
     }
 
+    public void registerParkCar(ParkCar parkCar) {
+        this.parkCar = parkCar;
+    }
+
 }

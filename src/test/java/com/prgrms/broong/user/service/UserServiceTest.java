@@ -25,6 +25,7 @@ class UserServiceTest {
         userRequestDto = UserRequestDto.builder()
             .email("pinoa1228@naver.com")
             .name("박연수")
+            .locationName("101")
             .licenseInfo(true)
             .password("1234")
             .paymentMethod(true)
@@ -58,6 +59,7 @@ class UserServiceTest {
         assertThat(result.getPassword(), is(userRequestDto.getPassword()));
         assertThat(result.getPoint(), is(userRequestDto.getPoint()));
         assertThat(result.isLicenseInfo(), is(userRequestDto.isLicenseInfo()));
+        assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
         assertThat(result.isPaymentMethod(), is(userRequestDto.isPaymentMethod()));
     }
 
@@ -75,6 +77,32 @@ class UserServiceTest {
 
         //Then
         assertThat(userResponseDto.getPoint(), is(userUpdateDto.getPoint()));
+    }
+
+    @Test
+    @DisplayName("User의 면허정보를 확인할 수 있다.")
+    void checkLicense() {
+        //Given
+        Long id = userService.saveUser(userRequestDto);
+
+        //When
+        boolean check = userService.hasLicense(id);
+
+        //Then
+        assertThat(check, is(true));
+    }
+
+    @Test
+    @DisplayName("User의 결제정보를 확인할 수 있다.")
+    void checkPayment() {
+        //Given
+        Long id = userService.saveUser(userRequestDto);
+
+        //When
+        boolean check = userService.hasPayment(id);
+
+        //Then
+        assertThat(check, is(true));
     }
 
 }

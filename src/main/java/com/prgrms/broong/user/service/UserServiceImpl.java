@@ -39,4 +39,5 @@ public class UserServiceImpl implements UserService {
         user.changePoint(userUpdateDto.getPoint());
         return userConverter.UserToResponseDto(user);
     }
+
 }

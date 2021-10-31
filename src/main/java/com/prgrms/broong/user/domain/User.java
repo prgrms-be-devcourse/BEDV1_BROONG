@@ -47,6 +47,9 @@ public class User extends BaseEntity {
     @Column(name = "name", columnDefinition = "VARCHAR(100)", nullable = false)
     private String name;
 
+    @Column(name = "location_name", columnDefinition = "VARCHAR(100)", nullable = false)
+    private String locationName;
+
     @Convert(converter = BooleanToYnConverter.class)
     @Column(name = "license_info", columnDefinition = "VARCHAR(50)", nullable = false)
     private boolean licenseInfo;
