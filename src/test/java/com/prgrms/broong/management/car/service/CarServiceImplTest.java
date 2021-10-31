@@ -35,7 +35,6 @@ class CarServiceImplTest {
     private static final Long PRICE = 5000L;
     private static final Integer POSSIBLE_PASSENGERS = 20;
     private static final String UPDATE_CAR_NUM = "99범4939";
-    private static final String UPDATE_MODEL = "아반떼";
 
     @InjectMocks
     private CarServiceImpl carService;
@@ -116,12 +115,9 @@ class CarServiceImplTest {
     void editCarTest() {
         //given
         CarUpdateDto carUpdateDto = CarUpdateDto.builder()
-            .id(CAR_ID)
             .carNum(UPDATE_CAR_NUM)
-            .model(UPDATE_MODEL)
             .fuel(FUEL)
             .price(PRICE)
-            .possiblePassengers(POSSIBLE_PASSENGERS)
             .build();
         given(carRepository.findById(anyLong())).willReturn(Optional.of(car));
 
