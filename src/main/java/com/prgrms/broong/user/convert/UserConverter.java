@@ -20,7 +20,6 @@ public class UserConverter {
             .name(userRequestDto.getName())
             .password(userRequestDto.getPassword())
             .locationName(userRequestDto.getLocationName())
-            .point(userRequestDto.getPoint())
             .licenseInfo(userRequestDto.isLicenseInfo())
             .paymentMethod(userRequestDto.isPaymentMethod())
             .build();
@@ -42,5 +41,31 @@ public class UserConverter {
             .build();
     }
 
+    public UserResponseDto UserToResponseDtoWithoutReservationList(User user) {
+        return UserResponseDto.builder()
+            .id(user.getId())
+            .email(user.getEmail())
+            .password(user.getPassword())
+            .name(user.getName())
+            .locationName(user.getLocationName())
+            .point(user.getPoint())
+            .paymentMethod(user.isPaymentMethod())
+            .licenseInfo(user.isLicenseInfo())
+            .build();
+    }
+
+
+    public User UserResponseToEntity(UserResponseDto userResponseDto) {
+        return User.builder()
+            .id(userResponseDto.getId())
+            .email(userResponseDto.getEmail())
+            .name(userResponseDto.getName())
+            .password(userResponseDto.getPassword())
+            .locationName(userResponseDto.getLocationName())
+            .point(userResponseDto.getPoint())
+            .licenseInfo(userResponseDto.isLicenseInfo())
+            .paymentMethod(userResponseDto.isPaymentMethod())
+            .build();
+    }
 
 }
