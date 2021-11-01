@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 
 @SpringBootTest
@@ -147,7 +146,6 @@ class ReservationRepositoryTest {
         assertThat(reservation.getEndTime(), samePropertyValuesAs(getReservation.getEndTime()));
         assertThat(reservation.getReservationStatus(),
             samePropertyValuesAs(getReservation.getReservationStatus()));
-
     }
 
     @Test
@@ -158,15 +156,13 @@ class ReservationRepositoryTest {
         reservation2.registerUser(user);
         reservation = reservationRepository.save(reservation);
         reservation2 = reservationRepository.save(reservation2);
-        Pageable pageable = null;
 
         //when
         Page<Reservation> list = reservationRepository.findReservationsByUserId(
-            reservation.getUser().getId(), pageable);
+            reservation.getUser().getId(), null);
 
         //then
         assertThat(list.stream().count(), samePropertyValuesAs(2L));
-
     }
 
     @Test
@@ -177,7 +173,6 @@ class ReservationRepositoryTest {
         reservation2.registerUser(user);
         reservation = reservationRepository.save(reservation);
         reservation2 = reservationRepository.save(reservation2);
-        Pageable pageable = null;
 
         //when
         Optional<Reservation> duplicateReservation = reservationRepository.checkReservationByUserId(
@@ -190,7 +185,6 @@ class ReservationRepositoryTest {
         //then
         assertThat(duplicateReservation.isEmpty(), samePropertyValuesAs(true));
         assertThat(possibleReservation.isPresent(), samePropertyValuesAs(true));
-
     }
 
     @Test
@@ -213,7 +207,6 @@ class ReservationRepositoryTest {
         //then
         assertThat(failReservation.isEmpty(), samePropertyValuesAs(true));
         assertThat(successReservation.isPresent(), samePropertyValuesAs(true));
-
     }
 
     @Test
@@ -242,7 +235,6 @@ class ReservationRepositoryTest {
             samePropertyValuesAs(reservation.getStartTime()));
         assertThat(getReservation.get().getEndTime(),
             samePropertyValuesAs(reservation.getEndTime()));
-
     }
 
 }
