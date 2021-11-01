@@ -15,7 +15,7 @@ import com.prgrms.broong.management.car.dto.CarResponseDto;
 import com.prgrms.broong.management.car.dto.CarUpdateDto;
 import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.management.species.domain.Species;
-import com.prgrms.broong.management.species.repository.SpeciesRepository;
+import com.prgrms.broong.management.species.dto.SpeciesDto;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +28,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CarServiceImplTest {
 
+    private static final Long SPECIES_ID = 1L;
+    private static final String SPECIES_NAME = "중형";
     private static final Long CAR_ID = 1L;
     private static final String CAR_NUM = "12범3456";
     private static final Long FUEL = 100L;
@@ -43,9 +45,6 @@ class CarServiceImplTest {
     private CarRepository carRepository;
 
     @Mock
-    private SpeciesRepository speciesRepository;
-
-    @Mock
     private CarConverter carConverter;
 
     private Car car;
@@ -53,7 +52,7 @@ class CarServiceImplTest {
     @BeforeEach
     void setUp() {
         Species species = Species.builder()
-            .name("중형")
+            .name(SPECIES_NAME)
             .build();
 
         car = Car.builder()
@@ -77,6 +76,11 @@ class CarServiceImplTest {
             .fuel(FUEL)
             .price(PRICE)
             .possiblePassengers(POSSIBLE_PASSENGERS)
+            .speciesDto(
+                SpeciesDto.builder()
+                    .id(SPECIES_ID)
+                    .name(SPECIES_NAME)
+                    .build())
             .build();
         given(carConverter.carToEntity(carRequestDto)).willReturn(car);
         given(carRepository.save(any(Car.class))).willReturn(car);
@@ -99,6 +103,12 @@ class CarServiceImplTest {
             .fuel(FUEL)
             .price(PRICE)
             .possiblePassengers(POSSIBLE_PASSENGERS)
+            .speciesDto(
+                SpeciesDto.builder()
+                    .id(SPECIES_ID)
+                    .name(SPECIES_NAME)
+                    .build()
+            )
             .build();
         given(carRepository.findById(CAR_ID)).willReturn(Optional.of(car));
         given(carConverter.carToResponseDto(car)).willReturn(carResponseDto);

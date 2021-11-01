@@ -1,6 +1,6 @@
 package com.prgrms.broong.management.car.dto;
 
-import com.prgrms.broong.management.species.domain.Species;
+import com.prgrms.broong.management.species.dto.SpeciesDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,6 +18,6 @@ public class CarRequestDto {
 
     private Integer possiblePassengers;
 
-    private Species species;
+    private SpeciesDto speciesDto;
 
 }
