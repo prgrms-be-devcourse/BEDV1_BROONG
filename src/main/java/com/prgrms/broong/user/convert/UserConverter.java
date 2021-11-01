@@ -41,6 +41,20 @@ public class UserConverter {
             .build();
     }
 
+    public UserResponseDto UserToResponseDtoWithoutReservationList(User user) {
+        return UserResponseDto.builder()
+            .id(user.getId())
+            .email(user.getEmail())
+            .password(user.getPassword())
+            .name(user.getName())
+            .locationName(user.getLocationName())
+            .point(user.getPoint())
+            .paymentMethod(user.isPaymentMethod())
+            .licenseInfo(user.isLicenseInfo())
+            .build();
+    }
+
+
     public User UserResponseToEntity(UserResponseDto userResponseDto) {
         return User.builder()
             .id(userResponseDto.getId())

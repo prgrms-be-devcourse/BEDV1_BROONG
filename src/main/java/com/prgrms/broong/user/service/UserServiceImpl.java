@@ -28,16 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getUserById(Long id) {
-        UserResponseDto userResponseDto = userRepository.findById(id)
-            .map(userConverter::UserToResponseDto)
+        return userRepository.findByIdAndReservations(id).map(userConverter::UserToResponseDto)
             .orElseThrow(() -> new NotFoundException("user을 찾을 수 없습니다."));
-
-        if (userResponseDto.getReservationResponseDto().isEmpty()) {
-            return userResponseDto;
-        } else {
-            return userRepository.findByIdAndReservations(id).map(userConverter::UserToResponseDto)
-                .orElseThrow(() -> new NotFoundException("user을 찾을 수 없습니다."));
-        }
     }
 
     @Override
