@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
+import com.prgrms.broong.management.park.dto.ParkUpdateDto;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,7 +80,11 @@ class ParkRepositoryTest {
         parkRepository.save(park);
 
         //when
-        park.changePossibleNum(100);
+        park.changeParkInfo(
+            ParkUpdateDto.builder()
+                .possibleNum(100)
+                .build()
+        );
 
         //then
         Park getPark = parkRepository.findById(park.getId()).get();

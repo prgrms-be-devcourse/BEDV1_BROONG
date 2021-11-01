@@ -90,7 +90,6 @@ class CarRepositoryTest {
                 .price(3000L)
                 .build()
         );
-//        car.changeCarNum("11호123456");
 
         //then
         Car updatedCar = carRepository.findById(car.getId()).get();
