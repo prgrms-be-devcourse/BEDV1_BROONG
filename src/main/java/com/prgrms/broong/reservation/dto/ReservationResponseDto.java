@@ -1,7 +1,9 @@
 package com.prgrms.broong.reservation.dto;
 
 
+import com.prgrms.broong.management.dto.ParkCarResponseDto;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
+import com.prgrms.broong.user.dto.UserResponseDto;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +26,8 @@ public class ReservationResponseDto {
 
     private Integer fee;
 
-//    private ParkCarResponse parkCarResponse;
+    private ParkCarResponseDto parkCarResponseDto;
+
+    private UserResponseDto userResponseDto;
 
 }
