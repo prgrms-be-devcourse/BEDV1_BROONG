@@ -14,5 +14,6 @@ public class ParkCarRequestDto {
     private CarResponseDto carResponseDto;
 
     private ParkResponseDto parkResponseDto;
+
 }
 
