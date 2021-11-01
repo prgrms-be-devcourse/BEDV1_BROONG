@@ -15,7 +15,7 @@ import com.prgrms.broong.management.car.dto.CarResponseDto;
 import com.prgrms.broong.management.car.dto.CarUpdateDto;
 import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.management.species.domain.Species;
-import com.prgrms.broong.management.species.dto.SpeciesDto;
+import com.prgrms.broong.management.species.repository.SpeciesRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,8 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CarServiceImplTest {
 
-    private static final Long SPECIES_ID = 1L;
-    private static final String SPECIES_NAME = "중형";
     private static final Long CAR_ID = 1L;
     private static final String CAR_NUM = "12범3456";
     private static final Long FUEL = 100L;
@@ -37,12 +35,16 @@ class CarServiceImplTest {
     private static final Long PRICE = 5000L;
     private static final Integer POSSIBLE_PASSENGERS = 20;
     private static final String UPDATE_CAR_NUM = "99범4939";
+    private static final String UPDATE_MODEL = "아반떼";
 
     @InjectMocks
     private CarServiceImpl carService;
 
     @Mock
     private CarRepository carRepository;
+
+    @Mock
+    private SpeciesRepository speciesRepository;
 
     @Mock
     private CarConverter carConverter;
@@ -52,7 +54,7 @@ class CarServiceImplTest {
     @BeforeEach
     void setUp() {
         Species species = Species.builder()
-            .name(SPECIES_NAME)
+            .name("중형")
             .build();
 
         car = Car.builder()
@@ -76,11 +78,6 @@ class CarServiceImplTest {
             .fuel(FUEL)
             .price(PRICE)
             .possiblePassengers(POSSIBLE_PASSENGERS)
-            .speciesDto(
-                SpeciesDto.builder()
-                    .id(SPECIES_ID)
-                    .name(SPECIES_NAME)
-                    .build())
             .build();
         given(carConverter.carToEntity(carRequestDto)).willReturn(car);
         given(carRepository.save(any(Car.class))).willReturn(car);
@@ -103,12 +100,6 @@ class CarServiceImplTest {
             .fuel(FUEL)
             .price(PRICE)
             .possiblePassengers(POSSIBLE_PASSENGERS)
-            .speciesDto(
-                SpeciesDto.builder()
-                    .id(SPECIES_ID)
-                    .name(SPECIES_NAME)
-                    .build()
-            )
             .build();
         given(carRepository.findById(CAR_ID)).willReturn(Optional.of(car));
         given(carConverter.carToResponseDto(car)).willReturn(carResponseDto);
@@ -125,9 +116,12 @@ class CarServiceImplTest {
     void editCarTest() {
         //given
         CarUpdateDto carUpdateDto = CarUpdateDto.builder()
+            .id(CAR_ID)
             .carNum(UPDATE_CAR_NUM)
+            .model(UPDATE_MODEL)
             .fuel(FUEL)
             .price(PRICE)
+            .possiblePassengers(POSSIBLE_PASSENGERS)
             .build();
         given(carRepository.findById(anyLong())).willReturn(Optional.of(car));
 

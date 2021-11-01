@@ -19,24 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/v1/broong/users/")
 public class UserController {
 
 
     private final UserServiceImpl userService;
 
-    @PostMapping(path = "/v1/broong/users")
+    @PostMapping(path = "")
     public ResponseEntity<Long> save(@RequestBody @Valid UserRequestDto userRequestDto) {
         return ResponseEntity.ok(userService.saveUser(userRequestDto));
     }
 
-    @GetMapping(path = "/v1/broong/users/{user_id}")
+    @GetMapping(path = "{user_id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable("user_id") Long userId) {
         log.info("{}", userService.getUserById(userId).getReservationResponseDto().get(0));
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @PutMapping(path = "/v1/broong/users/{user_id}")
+    @PutMapping(path = "{user_id}")
     public ResponseEntity<UserResponseDto> editUser(@PathVariable("user_id") Long userId,
         @RequestBody @Valid UserUpdateDto userUpdateDto) {
         return ResponseEntity.ok(userService.editUser(userId, userUpdateDto));

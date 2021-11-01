@@ -85,10 +85,10 @@ class UserServiceTest {
         //Given
         Long id = userService.saveUser(userRequestDto);
 
-//        // When
+        // When
         UserResponseDto userById = userService.getUserById(id);
-//
-//        //Then
+
+        //Then
         assertThat(userById.getPoint(), is(0));
     }
 
