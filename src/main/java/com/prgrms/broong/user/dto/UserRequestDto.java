@@ -20,9 +20,10 @@ public class UserRequestDto {
     String email;
 
     @Min(message = "비밀번호는 두자리 이상이어야 합니다.", value = 2)
+    @NotNull(message = "비밀번호를 입력해 주세요")
     String password;
 
-    @NotBlank(message = "이름은 필수 입니다.")
+    @Min(message = "이름은 두자리 이상이어야 합니다.", value = 2)
     @NotNull(message = "이름을 입력해 주세요")
     String name;
 
@@ -34,7 +35,5 @@ public class UserRequestDto {
 
     @NotNull(message = "결제수단 여부를 입력해 주세요")
     boolean paymentMethod;
-
-    Integer point;
 
 }

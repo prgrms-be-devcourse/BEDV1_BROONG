@@ -82,7 +82,7 @@ class CarRepositoryTest {
         carRepository.save(car);
 
         //when
-        car.changeCarNum("11호123456");
+//        car.changeCarNum("11호123456");
 
         //then
         Car updatedCar = carRepository.findById(car.getId()).get();

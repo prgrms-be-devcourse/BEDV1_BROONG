@@ -55,7 +55,6 @@ class UserControllerTest {
             .licenseInfo(true)
             .password("1234")
             .paymentMethod(true)
-            .point(13)
             .build();
 
     }

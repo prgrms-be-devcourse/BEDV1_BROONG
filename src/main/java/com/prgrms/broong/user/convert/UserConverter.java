@@ -20,7 +20,6 @@ public class UserConverter {
             .name(userRequestDto.getName())
             .password(userRequestDto.getPassword())
             .locationName(userRequestDto.getLocationName())
-            .point(userRequestDto.getPoint())
             .licenseInfo(userRequestDto.isLicenseInfo())
             .paymentMethod(userRequestDto.isPaymentMethod())
             .build();
@@ -41,6 +40,5 @@ public class UserConverter {
             .licenseInfo(user.isLicenseInfo())
             .build();
     }
-
 
 }
