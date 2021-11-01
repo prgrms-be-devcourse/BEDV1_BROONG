@@ -17,14 +17,6 @@ public class ParkConverter {
             .build();
     }
 
-    public Park parkResponseToEntity(ParkResponseDto parkResponseDto) {
-        return Park.builder()
-            .id(parkResponseDto.getId())
-            .possibleNum(parkResponseDto.getPossibleNum())
-            .location(locationToEntity(parkResponseDto.getLocationDto()))
-            .build();
-    }
-
     public ParkResponseDto parkToResponseDto(Park park) {
         return ParkResponseDto.builder()
             .id(park.getId())
