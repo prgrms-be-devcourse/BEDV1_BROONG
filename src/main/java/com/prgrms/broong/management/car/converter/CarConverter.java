@@ -21,18 +21,6 @@ public class CarConverter {
             .build();
     }
 
-    public Car carResponseDtoToEntity(CarResponseDto carResponseDto) {
-        return Car.builder()
-            .id(carResponseDto.getId())
-            .carNum(carResponseDto.getCarNum())
-            .model(carResponseDto.getModel())
-            .fuel(carResponseDto.getFuel())
-            .price(carResponseDto.getPrice())
-            .possiblePassengers(carResponseDto.getPossiblePassengers())
-            .species(speciesToEntity(carResponseDto.getSpeciesDto()))
-            .build();
-    }
-
     public CarResponseDto carToResponseDto(Car car) {
         return CarResponseDto.builder()
             .id(car.getId())
