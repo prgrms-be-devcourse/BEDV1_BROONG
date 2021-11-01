@@ -1,13 +1,16 @@
 package com.prgrms.broong.user.dto;
 
-import com.prgrms.broong.reservation.domain.Reservation;
+import com.prgrms.broong.reservation.dto.ReservationResponseDto;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseDto {
 
     Long id;
@@ -26,6 +29,6 @@ public class UserResponseDto {
 
     Integer point;
 
-    List<Reservation> reservations;
-  
+    List<ReservationResponseDto> reservationResponseDto;
+
 }
