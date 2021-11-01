@@ -20,6 +20,7 @@ import com.prgrms.broong.reservation.converter.ReservationConverter;
 import com.prgrms.broong.reservation.domain.Reservation;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.reservation.dto.ReservationRequestDto;
+import com.prgrms.broong.reservation.dto.ReservationResponseDto;
 import com.prgrms.broong.reservation.repository.ReservationRepository;
 import com.prgrms.broong.user.convert.UserConverter;
 import com.prgrms.broong.user.domain.User;
@@ -33,6 +34,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -270,23 +272,76 @@ class ReservationServiceTest {
     }
 
     @Test
+    @DisplayName("예약 단건 조회 테스트")
     void getReservation() {
+        //given, when
+        ReservationResponseDto findReservation = reservationService.getReservation(
+            reservationService.getReservation(reservation.getId()).getId());
 
+        //then
+        assertThat(reservation.getReservationStatus(),
+            samePropertyValuesAs(findReservation.getReservationStatus()));
+        assertThat(reservation.getId(), samePropertyValuesAs(findReservation.getId()));
+        assertThat(reservation.getUsagePoint(),
+            samePropertyValuesAs(findReservation.getUsagePoint()));
+        assertThat(reservation.getFee(), samePropertyValuesAs(findReservation.getFee()));
+        assertThat(reservation.getStartTime(),
+            samePropertyValuesAs(findReservation.getStartTime()));
+        assertThat(reservation.getEndTime(), samePropertyValuesAs(findReservation.getEndTime()));
     }
 
     @Test
+    @DisplayName("사용자의 예약 내역 조회 테스트")
     void getReservationListByUserId() {
+        //given
+        saveSuccessReservation();
+
+        //when
+        Page<ReservationResponseDto> reservationListByUserId = reservationService.getReservationListByUserId(
+            user.getId(), null);
+
+        //then
+        assertThat(reservationListByUserId.stream().count(), samePropertyValuesAs(2L));
     }
 
     @Test
+    @DisplayName("사용자의 예약 가능 확인 테스트")
     void checkReservationByUserId() {
+        //given
+        UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
+            .id(user.getId())
+            .checkTime(LocalDateTime.now().plusHours(4L))
+            .build();
+
+        //when
+        boolean check = reservationService.checkReservationByUserId(userReservationCheckDto,
+            ReservationStatus.CANCELD);
+
+        //then
+        assertThat(check, samePropertyValuesAs(true));
     }
 
     @Test
+    @DisplayName("특정 자동차의 예약 가능 확인")
     void possibleReservationTimeByCarId() {
+        //given, when
+        boolean check = reservationService.possibleReservationTimeByCarId(car.getId(),
+            LocalDateTime.now().plusHours(4L), ReservationStatus.CANCELD);
+
+        //then
+        assertThat(check, samePropertyValuesAs(true));
     }
 
     @Test
+    @DisplayName("예약 취소시 DELETE 하지 않고 Reservation 상태값을 CANCEL로 변경")
     void removeReservation() {
+        //given, when
+        Long cancelReservationId = reservationService.removeReservation(reservation.getId());
+
+        //then
+        ReservationResponseDto cancelReservation = reservationService.getReservation(
+            cancelReservationId);
+        assertThat(cancelReservation.getReservationStatus(),
+            samePropertyValuesAs(ReservationStatus.CANCELD));
     }
 }
