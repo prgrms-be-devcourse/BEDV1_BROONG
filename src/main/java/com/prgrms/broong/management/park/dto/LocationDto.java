@@ -5,12 +5,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ParkResponseDto {
+public class LocationDto {
 
     private Long id;
 
-    private Integer possibleNum;
+    private String cityId;
 
-    private LocationDto locationDto;
+    private String townId;
+
+    private String locationName;
 
 }

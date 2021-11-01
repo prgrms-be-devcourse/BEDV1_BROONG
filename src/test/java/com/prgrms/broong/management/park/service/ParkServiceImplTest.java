@@ -11,6 +11,7 @@ import static org.mockito.BDDMockito.then;
 import com.prgrms.broong.management.park.converter.ParkConverter;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
+import com.prgrms.broong.management.park.dto.LocationDto;
 import com.prgrms.broong.management.park.dto.ParkRequestDto;
 import com.prgrms.broong.management.park.dto.ParkResponseDto;
 import com.prgrms.broong.management.park.dto.ParkUpdateDto;
@@ -27,6 +28,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ParkServiceImplTest {
 
+    private static final Long LOCATION_ID = 1L;
+    private static final String CITY_ID = "1";
+    private static final String TOWN_ID = "101";
+    private static final String LOCATION_NAME = "도봉구";
     private static final Long PARK_ID = 1L;
     private static final Integer POSSIBLE_NUM = 11;
 
@@ -44,9 +49,9 @@ class ParkServiceImplTest {
     @BeforeEach
     void setUp() {
         Location location = Location.builder()
-            .cityId("1")
-            .townId("101")
-            .locationName("도봉구")
+            .cityId(CITY_ID)
+            .townId(TOWN_ID)
+            .locationName(LOCATION_NAME)
             .build();
 
         park = Park.builder()
@@ -62,6 +67,13 @@ class ParkServiceImplTest {
         //given
         ParkRequestDto parkRequestDto = ParkRequestDto.builder()
             .possibleNum(POSSIBLE_NUM)
+            .locationDto(
+                LocationDto.builder()
+                    .id(LOCATION_ID)
+                    .cityId(CITY_ID)
+                    .townId(TOWN_ID)
+                    .locationName(LOCATION_NAME)
+                    .build())
             .build();
         given(parkConverter.parkToEntity(parkRequestDto)).willReturn(park);
         given(parkRepository.save(any(Park.class))).willReturn(park);
@@ -79,6 +91,13 @@ class ParkServiceImplTest {
         //given
         ParkResponseDto parkResponseDto = ParkResponseDto.builder()
             .possibleNum(POSSIBLE_NUM)
+            .locationDto(
+                LocationDto.builder()
+                    .id(LOCATION_ID)
+                    .cityId(CITY_ID)
+                    .townId(TOWN_ID)
+                    .locationName(LOCATION_NAME)
+                    .build())
             .build();
         given(parkRepository.findById(PARK_ID)).willReturn(Optional.of(park));
         given(parkConverter.parkToResponseDto(park)).willReturn(parkResponseDto);
