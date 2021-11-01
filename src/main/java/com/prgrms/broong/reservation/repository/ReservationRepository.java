@@ -9,15 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    // userId 와 reservationId로 엮인 쿼리
     Page<Reservation> findReservationsByUserId(Long userId, Pageable pageable);
 
-    // userId , 예약시간 으로 이미 예약된게 있는지 확인하는 쿼리
     @Query(value = "SELECT r FROM Reservation r WHERE r.user.id = :userId"
         + " AND r.reservationStatus <> :status"
         + " AND r.startTime <= :checkTime"
@@ -25,7 +21,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Optional<Reservation> checkReservationByUserId(@Param("userId") Long userId,
         @Param("checkTime") LocalDateTime checkTime, @Param("status") ReservationStatus status);
 
-    // 예약시간 + carId 로 해당 시간에 예약이 가능한지 확인하는 쿼리
     @Query(value = "SELECT r FROM Reservation r WHERE r.parkCar.car.id = :carId"
         + " AND r.reservationStatus <> :status"
         + " AND r.startTime <= :checkTime"
