@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 class UserServiceTest {
 
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
 
     private UserRequestDto userRequestDto;
 
