@@ -100,10 +100,10 @@ class ReservationRepositoryTest {
             .build();
         park = parkRepository.save(park);
 
-        parkCar = ParkCar.builder().build();
-
-        parkCar.registerCar(car);
-        parkCar.registerPark(park);
+        parkCar = ParkCar.builder()
+            .car(car)
+            .park(park)
+            .build();
 
         parkCar = parkCarRepository.save(parkCar);
 
