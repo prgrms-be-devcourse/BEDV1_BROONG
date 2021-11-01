@@ -81,7 +81,7 @@ public class ReservationServiceImpl implements ReservationService {
             userReservationCheckDto.getCheckTime(), reservationStatus).stream().count();
         if (reservationCount != 0) {
             throw new RuntimeException(
-                MessageFormat.format("사용자:{0}는 동일한 시간대에 예약이 존재합니다.",
+                MessageFormat.format("사용자:{0}키는 동일한 시간대에 예약이 존재합니다.",
                     userReservationCheckDto.getId()));
         }
         return true;
@@ -94,7 +94,7 @@ public class ReservationServiceImpl implements ReservationService {
             checkTime, reservationStatus).stream().count();
         if (reservationCount != 0) {
             throw new RuntimeException(
-                MessageFormat.format("사용자:{0}는 동일한 시간대에 예약이 존재합니다.", carId));
+                MessageFormat.format("자동차:{0}키는 동일한 시간대에 예약이 존재합니다.", carId));
         }
         return true;
     }
