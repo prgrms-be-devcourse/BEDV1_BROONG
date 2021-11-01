@@ -1,18 +1,12 @@
 package com.prgrms.broong.user.convert;
 
-import com.prgrms.broong.reservation.converter.ReservationConverter;
 import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserResponseDto;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserConverter {
-
-    @Autowired
-    ReservationConverter reservationConverter;
 
     public User UserToEntity(UserRequestDto userRequestDto) {
         return User.builder()
@@ -20,6 +14,7 @@ public class UserConverter {
             .name(userRequestDto.getName())
             .password(userRequestDto.getPassword())
             .locationName(userRequestDto.getLocationName())
+            .point(userRequestDto.getPoint())
             .licenseInfo(userRequestDto.isLicenseInfo())
             .paymentMethod(userRequestDto.isPaymentMethod())
             .build();
@@ -34,9 +29,7 @@ public class UserConverter {
             .locationName(user.getLocationName())
             .point(user.getPoint())
             .paymentMethod(user.isPaymentMethod())
-            .reservationResponseDto(
-                user.getReservations().stream().map(reservationConverter::ReservationToResponseDto)
-                    .collect(Collectors.toList()))
+            .reservations(user.getReservations())
             .licenseInfo(user.isLicenseInfo())
             .build();
     }
