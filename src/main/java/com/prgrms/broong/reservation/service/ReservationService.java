@@ -6,6 +6,7 @@ import com.prgrms.broong.reservation.dto.ReservationResponseDto;
 import com.prgrms.broong.user.dto.UserReservationCheckDto;
 import java.time.LocalDateTime;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ReservationService {
 
@@ -14,7 +15,7 @@ public interface ReservationService {
 
     ReservationResponseDto getReservation(Long reservationId);
 
-    Page<ReservationResponseDto> getReservationListByUserId(Long userId);
+    Page<ReservationResponseDto> getReservationListByUserId(Long userId, Pageable pageable);
 
     boolean checkReservationByUserId(UserReservationCheckDto userReservationCheckDto,
         ReservationStatus reservationStatus);
