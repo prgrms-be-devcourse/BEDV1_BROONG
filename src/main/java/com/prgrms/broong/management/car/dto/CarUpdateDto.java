@@ -7,16 +7,10 @@ import lombok.Getter;
 @Builder
 public class CarUpdateDto {
 
-    Long id;
+    private String carNum;
 
-    String carNum;
+    private Long fuel;
 
-    String model;
-
-    Long fuel;
-
-    Long price;
-
-    Integer possiblePassengers;
+    private Long price;
 
 }
