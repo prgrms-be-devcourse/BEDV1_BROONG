@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserUpdateDto;
 import com.prgrms.broong.user.service.UserServiceImpl;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -38,6 +42,9 @@ class UserControllerTest {
 
     @Autowired
     WebApplicationContext wac;
+
+    @Autowired
+    LocalValidatorFactoryBean validatorFactoryBean;
 
     private UserRequestDto userRequestDto;
 
@@ -92,6 +99,33 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(userUpdateDto)))
             .andExpect(status().isOk())
             .andDo(print());
+    }
+
+    @Test
+    @DisplayName("validation 테스트")
+    void validation() {
+        UserRequestDto userRequestDto1 = UserRequestDto.builder()
+            .email("pinoa1228.com")
+            .name("")
+            .locationName("")
+            .licenseInfo(true)
+            .password("1")
+            .paymentMethod(true)
+            .build();
+        Errors error = new BeanPropertyBindingResult(userRequestDto1,
+            "user_request");
+        validatorFactoryBean.validate(userRequestDto1, error);
+
+        // 에러가 있는지
+        System.out.println("hasErrors(): " + error.hasErrors());
+
+        // 발생한 에러를 순차적으로 순회하며 에러코드와 default message 출력
+        error.getAllErrors().forEach(e -> {
+            System.out.println("=== Error Code ===");
+            Arrays.stream(e.getCodes()).forEach(System.out::println);
+            System.out.println(e.getDefaultMessage());
+        });
+
     }
 
 }
