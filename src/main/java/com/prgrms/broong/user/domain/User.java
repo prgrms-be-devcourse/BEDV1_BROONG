@@ -59,8 +59,8 @@ public class User extends BaseEntity {
     private boolean paymentMethod;
 
     @Min(0)
-    @Column(name = "point", columnDefinition = "INT")
-    private Integer point;
+    @Column(name = "point", columnDefinition = "INT DEFAULT 0")
+    private int point;
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
