@@ -3,6 +3,8 @@ package com.prgrms.broong.management.car.converter;
 import com.prgrms.broong.management.car.domain.Car;
 import com.prgrms.broong.management.car.dto.CarRequestDto;
 import com.prgrms.broong.management.car.dto.CarResponseDto;
+import com.prgrms.broong.management.species.domain.Species;
+import com.prgrms.broong.management.species.dto.SpeciesDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +17,19 @@ public class CarConverter {
             .fuel(carRequestDto.getFuel())
             .price(carRequestDto.getPrice())
             .possiblePassengers(carRequestDto.getPossiblePassengers())
-            .species(carRequestDto.getSpecies())
+            .species(speciesToEntity(carRequestDto.getSpeciesDto()))
+            .build();
+    }
+
+    public Car carResponseDtoToEntity(CarResponseDto carResponseDto) {
+        return Car.builder()
+            .id(carResponseDto.getId())
+            .carNum(carResponseDto.getCarNum())
+            .model(carResponseDto.getModel())
+            .fuel(carResponseDto.getFuel())
+            .price(carResponseDto.getPrice())
+            .possiblePassengers(carResponseDto.getPossiblePassengers())
+            .species(speciesToEntity(carResponseDto.getSpeciesDto()))
             .build();
     }
 
@@ -27,7 +41,21 @@ public class CarConverter {
             .model(car.getModel())
             .fuel(car.getFuel())
             .possiblePassengers(car.getPossiblePassengers())
-            .species(car.getSpecies())
+            .speciesDto(speciesToDto(car.getSpecies()))
+            .build();
+    }
+
+    private Species speciesToEntity(SpeciesDto speciesDtoDto) {
+        return Species.builder()
+            .id(speciesDtoDto.getId())
+            .name(speciesDtoDto.getName())
+            .build();
+    }
+
+    private SpeciesDto speciesToDto(Species species) {
+        return SpeciesDto.builder()
+            .id(species.getId())
+            .name(species.getName())
             .build();
     }
 

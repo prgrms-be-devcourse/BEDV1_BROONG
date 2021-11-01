@@ -41,4 +41,17 @@ public class UserConverter {
             .build();
     }
 
+    public User UserResponseToEntity(UserResponseDto userResponseDto) {
+        return User.builder()
+            .id(userResponseDto.getId())
+            .email(userResponseDto.getEmail())
+            .name(userResponseDto.getName())
+            .password(userResponseDto.getPassword())
+            .locationName(userResponseDto.getLocationName())
+            .point(userResponseDto.getPoint())
+            .licenseInfo(userResponseDto.isLicenseInfo())
+            .paymentMethod(userResponseDto.isPaymentMethod())
+            .build();
+    }
+
 }

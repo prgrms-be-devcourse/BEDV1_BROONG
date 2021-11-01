@@ -93,6 +93,7 @@ class UserServiceTest {
         assertThat(userResponseDto.getPoint(), is(userUpdateDto.getPoint()));
     }
 
+
     @Test
     @Transactional
     @DisplayName("User를 생성할때 기본 point는 0 이다.")
@@ -100,11 +101,12 @@ class UserServiceTest {
         //Given
         Long id = userService.saveUser(userRequestDto);
 
-//        // When
+       // When
         UserResponseDto userById = userService.getUserById(id);
-//
-//        //Then
+  
+        //Then
         assertThat(userById.getPoint(), is(0));
     }
+
 
 }

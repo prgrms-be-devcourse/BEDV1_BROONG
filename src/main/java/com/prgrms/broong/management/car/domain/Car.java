@@ -2,9 +2,7 @@ package com.prgrms.broong.management.car.domain;
 
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.management.car.dto.CarUpdateDto;
-import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.species.domain.Species;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,7 +35,7 @@ public class Car extends BaseEntity {
     @Column(name = "car_num", columnDefinition = "VARCHAR(100)", nullable = false)
     private String carNum;
 
-    @Column(name = "model", columnDefinition = "VARCHAR(100)", nullable = false)
+    @Column(name = "model", columnDefinition = "VARCHAR(100)", nullable = false, updatable = false)
     private String model;
 
     @Min(0)
@@ -48,26 +46,17 @@ public class Car extends BaseEntity {
     @Column(name = "price", columnDefinition = "BIGINT", nullable = false)
     private Long price;
 
-    @Column(name = "possible_passengers", columnDefinition = "INT", nullable = false)
+    @Column(name = "possible_passengers", columnDefinition = "INT", nullable = false, updatable = false)
     private Integer possiblePassengers;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "species_id", referencedColumnName = "id")
     private Species species;
 
-    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ParkCar parkCar;
-
     public void changeCarInfo(CarUpdateDto carUpdateDto) {
         this.carNum = carUpdateDto.getCarNum();
-        this.model = carUpdateDto.getModel();
         this.fuel = carUpdateDto.getFuel();
         this.price = carUpdateDto.getPrice();
-        this.possiblePassengers = carUpdateDto.getPossiblePassengers();
-    }
-
-    public void registerParkCar(ParkCar parkCar) {
-        this.parkCar = parkCar;
     }
 
 }
