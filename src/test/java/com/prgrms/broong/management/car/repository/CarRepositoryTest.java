@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import com.prgrms.broong.management.car.domain.Car;
+import com.prgrms.broong.management.car.dto.CarUpdateDto;
 import com.prgrms.broong.management.species.domain.Species;
 import com.prgrms.broong.management.species.repository.SpeciesRepository;
 import java.util.List;
@@ -82,12 +83,18 @@ class CarRepositoryTest {
         carRepository.save(car);
 
         //when
-        car.changeCarNum("11호123456");
+        car.changeCarInfo(
+            CarUpdateDto.builder()
+                .carNum("11호123456")
+                .fuel(50L)
+                .price(3000L)
+                .build()
+        );
 
         //then
         Car updatedCar = carRepository.findById(car.getId()).get();
 
-        assertThat(updatedCar.getCarNum()).isEqualTo("11호123456");
+        assertThat(updatedCar.getCarNum()).isEqualTo(car.getCarNum());
     }
 
     @DisplayName("차량 삭제 테스트")
