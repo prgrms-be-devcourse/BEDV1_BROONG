@@ -37,6 +37,7 @@ public class UserConverter {
             .reservationResponseDto(
                 user.getReservations().stream().map(reservationConverter::ReservationToResponseDto)
                     .collect(Collectors.toList()))
+
             .licenseInfo(user.isLicenseInfo())
             .build();
     }
@@ -50,6 +51,7 @@ public class UserConverter {
             .locationName(user.getLocationName())
             .point(user.getPoint())
             .paymentMethod(user.isPaymentMethod())
+
             .licenseInfo(user.isLicenseInfo())
             .build();
     }

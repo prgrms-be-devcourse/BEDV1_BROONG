@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserUpdateDto;
@@ -42,6 +41,7 @@ class UserControllerTest {
 
     @Autowired
     WebApplicationContext wac;
+
 
     @Autowired
     LocalValidatorFactoryBean validatorFactoryBean;
@@ -100,6 +100,7 @@ class UserControllerTest {
             .andExpect(status().isOk())
             .andDo(print());
     }
+
 
     @Test
     @DisplayName("validation 테스트")

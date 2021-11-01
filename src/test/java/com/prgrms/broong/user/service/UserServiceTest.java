@@ -3,9 +3,14 @@ package com.prgrms.broong.user.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import com.prgrms.broong.reservation.domain.Reservation;
+import com.prgrms.broong.reservation.repository.ReservationRepository;
+import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserResponseDto;
 import com.prgrms.broong.user.dto.UserUpdateDto;
+import com.prgrms.broong.user.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,13 +18,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @SpringBootTest
 class UserServiceTest {
 
     @Autowired
     UserServiceImpl userService;
 
+    @Autowired
+    ReservationRepository reservationRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
     private UserRequestDto userRequestDto;
+    private Reservation reservation;
+    private User user;
 
     @BeforeEach
     void setup() {
@@ -60,6 +74,7 @@ class UserServiceTest {
         assertThat(result.isLicenseInfo(), is(userRequestDto.isLicenseInfo()));
         assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
         assertThat(result.isPaymentMethod(), is(userRequestDto.isPaymentMethod()));
+        assertThat(result.getReservationResponseDto().get(0).getFee(), is(1000));
     }
 
     @Test
@@ -85,10 +100,18 @@ class UserServiceTest {
         //Given
         Long id = userService.saveUser(userRequestDto);
 
-//        // When
+
+        // When
         UserResponseDto userById = userService.getUserById(id);
-//
-//        //Then
+      
+        //Then
+        assertThat(userById.getPoint(), is(0));
+    }
+
+       // When
+        UserResponseDto userById = userService.getUserById(id);
+  
+        //Then
         assertThat(userById.getPoint(), is(0));
     }
 
