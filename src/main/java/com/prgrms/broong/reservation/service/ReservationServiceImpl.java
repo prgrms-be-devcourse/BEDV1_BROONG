@@ -13,7 +13,6 @@ import com.prgrms.broong.user.dto.UserReservationCheckDto;
 import com.prgrms.broong.user.repository.UserRepository;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationServiceImpl implements ReservationService {
 
     private static final Long ADD_HOUR = 2L;
+
     private final ReservationRepository repository;
     private final UserRepository userRepository;
     private final CarRepository carRepository;
@@ -40,20 +40,18 @@ public class ReservationServiceImpl implements ReservationService {
             addReservationRequest.getParkCarResponseDto().getCarResponseDto().getId()).get();
         User getUser = userRepository.findById(addReservationRequest.getUserResponseDto().getId())
             .get();
-        boolean checkUserReservation = checkReservationByUserId(userReservationCheckDto,
+        checkReservationByUserId(userReservationCheckDto, ReservationStatus.CANCELD);
+        possibleReservationTimeByCarId(car.getId(), userReservationCheckDto.getCheckTime(),
             ReservationStatus.CANCELD);
-        if (checkUserReservation) {
-            return 0L;
+        if (!getUser.isLicenseInfo()) {
+            throw new RuntimeException(
+                MessageFormat.format("사용자:{0}는 면허를 등록해 주세요",
+                    getUser.getId()));
         }
-        boolean possibleReservation = possibleReservationTimeByCarId(
-            car.getId(),
-            userReservationCheckDto.getCheckTime(),
-            ReservationStatus.CANCELD);
-        if (possibleReservation) {
-            return 0L;
-        }
-        if (!getUser.isLicenseInfo() || !getUser.isPaymentMethod()) {
-            return 0L;
+        if (!getUser.isPaymentMethod()) {
+            throw new RuntimeException(
+                MessageFormat.format("사용자:{0}는 결제수단을 등록해 주세요",
+                    getUser.getId()));
         }
         if (!reservation.isOneway()) {
             reservation.changeEndTime(ADD_HOUR);
@@ -79,19 +77,26 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public boolean checkReservationByUserId(UserReservationCheckDto userReservationCheckDto,
         ReservationStatus reservationStatus) {
-        Optional<Reservation> checkReservation =
-            repository.checkReservationByUserId(userReservationCheckDto.getId(),
-                userReservationCheckDto.getCheckTime(), reservationStatus);
-        return checkReservation.isPresent();
+        long reservationCount = repository.checkReservationByUserId(userReservationCheckDto.getId(),
+            userReservationCheckDto.getCheckTime(), reservationStatus).stream().count();
+        if (reservationCount != 0) {
+            throw new RuntimeException(
+                MessageFormat.format("사용자:{0}는 동일한 시간대에 예약이 존재합니다.",
+                    userReservationCheckDto.getId()));
+        }
+        return true;
     }
 
     @Override
     public boolean possibleReservationTimeByCarId(Long carId, LocalDateTime checkTime,
         ReservationStatus reservationStatus) {
-        Optional<Reservation> checkReservation =
-            repository.possibleReservationTimeByCarId(carId,
-                checkTime, reservationStatus);
-        return checkReservation.isPresent();
+        long reservationCount = repository.possibleReservationTimeByCarId(carId,
+            checkTime, reservationStatus).stream().count();
+        if (reservationCount != 0) {
+            throw new RuntimeException(
+                MessageFormat.format("사용자:{0}는 동일한 시간대에 예약이 존재합니다.", carId));
+        }
+        return true;
     }
 
     @Transactional
@@ -105,4 +110,5 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.getUser().changePoint(returnUsagePoint);
         return reservationId;
     }
+
 }
