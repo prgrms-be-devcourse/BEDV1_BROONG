@@ -1,5 +1,7 @@
 package com.prgrms.broong.reservation.service;
 
+import com.prgrms.broong.management.car.domain.Car;
+import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.reservation.converter.ReservationConverter;
 import com.prgrms.broong.reservation.domain.Reservation;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ public class ReservationServiceImpl implements ReservationService {
     private static final Long ADD_HOUR = 2L;
     private final ReservationRepository repository;
     private final UserRepository userRepository;
+    private final CarRepository carRepository;
     private final ReservationConverter converter;
 
     @Transactional
@@ -32,17 +36,19 @@ public class ReservationServiceImpl implements ReservationService {
     public Long saveReservation(ReservationRequestDto addReservationRequest,
         UserReservationCheckDto userReservationCheckDto) {
         Reservation reservation = converter.ReservationToEntity(addReservationRequest);
+        Car car = carRepository.findById(
+            addReservationRequest.getParkCarResponseDto().getCarResponseDto().getId()).get();
         User getUser = userRepository.findById(addReservationRequest.getUserResponseDto().getId())
             .get();
         boolean checkUserReservation = checkReservationByUserId(userReservationCheckDto,
-            addReservationRequest.getReservationStatus());
+            ReservationStatus.CANCELD);
         if (checkUserReservation) {
             return 0L;
         }
         boolean possibleReservation = possibleReservationTimeByCarId(
-            reservation.getParkCar().getCar().getId(),
+            car.getId(),
             userReservationCheckDto.getCheckTime(),
-            addReservationRequest.getReservationStatus());
+            ReservationStatus.CANCELD);
         if (possibleReservation) {
             return 0L;
         }
@@ -65,8 +71,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Page<ReservationResponseDto> getReservationListByUserId(Long userId) {
-        return repository.findReservationsByUserId(userId)
+    public Page<ReservationResponseDto> getReservationListByUserId(Long userId, Pageable pageable) {
+        return repository.findReservationsByUserId(userId, pageable)
             .map(converter::ReservationToResponseDto);
     }
 
