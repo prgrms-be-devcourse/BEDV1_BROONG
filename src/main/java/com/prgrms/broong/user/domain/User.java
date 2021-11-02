@@ -73,5 +73,4 @@ public class User extends BaseEntity {
     public void reduceUsagePoint(Integer usagePoint) {
         this.point -= usagePoint;
     }
-
 }
