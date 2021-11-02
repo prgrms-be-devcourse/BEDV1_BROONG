@@ -11,12 +11,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class UserServiceTest {
 
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
 
     private UserRequestDto userRequestDto;
 
@@ -29,7 +30,6 @@ class UserServiceTest {
             .licenseInfo(true)
             .password("1234")
             .paymentMethod(true)
-            .point(13)
             .build();
     }
 
@@ -57,7 +57,6 @@ class UserServiceTest {
         assertThat(result.getEmail(), is(userRequestDto.getEmail()));
         assertThat(result.getName(), is(userRequestDto.getName()));
         assertThat(result.getPassword(), is(userRequestDto.getPassword()));
-        assertThat(result.getPoint(), is(userRequestDto.getPoint()));
         assertThat(result.isLicenseInfo(), is(userRequestDto.isLicenseInfo()));
         assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
         assertThat(result.isPaymentMethod(), is(userRequestDto.isPaymentMethod()));
@@ -77,6 +76,20 @@ class UserServiceTest {
 
         //Then
         assertThat(userResponseDto.getPoint(), is(userUpdateDto.getPoint()));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("User를 생성할때 기본 point는 0 이다.")
+    void checkPoint() {
+        //Given
+        Long id = userService.saveUser(userRequestDto);
+
+        // When
+        UserResponseDto userById = userService.getUserById(id);
+
+        //Then
+        assertThat(userById.getPoint(), is(0));
     }
 
 }
