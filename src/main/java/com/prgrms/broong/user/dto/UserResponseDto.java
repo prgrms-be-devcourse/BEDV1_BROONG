@@ -27,7 +27,7 @@ public class UserResponseDto {
 
     boolean paymentMethod;
 
-    Integer point;
+    int point;
 
     List<ReservationResponseDto> reservationResponseDto;
 

@@ -53,7 +53,7 @@ class UserControllerTest {
 
         userRequestDto = UserRequestDto.builder()
             .email("pinoa1228@naver.com")
-            .name("박연수")
+            .name("")
             .locationName("101")
             .licenseInfo(true)
             .password("1234")
@@ -67,7 +67,7 @@ class UserControllerTest {
     void getByIdTest() throws Exception {
         mockMvc.perform(get("/api/v1/broong/users/{user_id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON).param("user_id", String.valueOf(1L)))
-            .andExpect(status().isOk())
+            .andExpect(status().is(400))
             .andDo(print());
     }
 
