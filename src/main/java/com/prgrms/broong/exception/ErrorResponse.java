@@ -1,5 +1,8 @@
 package com.prgrms.broong.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ErrorResponse {
 
     private final String errorMessage;
