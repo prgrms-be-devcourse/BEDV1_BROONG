@@ -1,28 +1,42 @@
 package com.prgrms.broong.reservation.converter;
 
+import com.prgrms.broong.management.domain.ParkCar;
+import com.prgrms.broong.management.domain.converter.ParkCarConverter;
 import com.prgrms.broong.reservation.domain.Reservation;
+import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.reservation.dto.ReservationRequestDto;
 import com.prgrms.broong.reservation.dto.ReservationResponseDto;
+import com.prgrms.broong.user.convert.UserConverter;
 import com.prgrms.broong.user.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReservationConverter {
 
+    @Autowired
+    private UserConverter userConverter;
+
+    @Autowired
+    private ParkCarConverter parkCarConverter;
+
     public Reservation ReservationToEntity(ReservationRequestDto addReservationRequest) {
-        User user = null; //converterToEntity(addReservationRequest.user)
+        User user = userConverter.UserResponseToEntity(
+            addReservationRequest.getUserResponseDto());
+        ParkCar parkCar = parkCarConverter.parkCarResponseToEntity(
+            addReservationRequest.getParkCarResponseDto());
         Reservation reservation = Reservation.builder()
-            .reservationStatus(addReservationRequest.getReservationStatus())
+            .reservationStatus(ReservationStatus.RESERVATION)
             .startTime(addReservationRequest.getStartTime())
             .endTime(addReservationRequest.getEndTime())
             .usagePoint(addReservationRequest.getUsagePoint())
             .fee(addReservationRequest.getFee())
-            .parkCar(null) //converterToEntity(addReservationRequest.parkCar)
-            .isOneway(true)
+            .parkCar(parkCar)
+            .isOneway(addReservationRequest.isOneway())
             .user(user)
             .build();
         reservation.registerUser(user);
-        return null;
+        return reservation;
     }
 
     public ReservationResponseDto ReservationToResponseDto(Reservation reservation) {
@@ -34,8 +48,11 @@ public class ReservationConverter {
             .usagePoint(reservation.getUsagePoint())
             .fee(reservation.getFee())
             .isOneway(reservation.isOneway())
+            .parkCarResponseDto(
+                parkCarConverter.ParkToResponseDto(reservation.getParkCar()))
+            .userResponseDto(
+                userConverter.UserToResponseDtoWithoutReservationList(reservation.getUser()))
             .build();
         return getReservation;
     }
-
 }
