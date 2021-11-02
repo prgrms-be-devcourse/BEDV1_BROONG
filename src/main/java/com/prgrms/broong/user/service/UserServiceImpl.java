@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponseDto editUser(Long id, UserUpdateDto userUpdateDto) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("post를 찾을 수 없어 update에 실패했습니다"));
+            .orElseThrow(() -> new RuntimeException("user를 찾을 수 없어 update에 실패했습니다"));
         user.changePoint(userUpdateDto.getPoint());
         return userConverter.UserToResponseDto(user);
     }
