@@ -24,7 +24,7 @@ public class ParkCarConverter {
             .build();
     }
 
-    public ParkCarResponseDto ParkToResponseDto(ParkCar parkCar) {
+    public ParkCarResponseDto parkCarToResponseDto(ParkCar parkCar) {
         return ParkCarResponseDto.builder()
             .id(parkCar.getId())
             .parkResponseDto(parkConverter.parkToResponseDto(parkCar.getPark()))
