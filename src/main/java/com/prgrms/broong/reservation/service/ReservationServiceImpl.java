@@ -39,10 +39,13 @@ public class ReservationServiceImpl implements ReservationService {
             addReservationRequest.getParkCarResponseDto().getCarResponseDto().getId()).get();
         User getUser = userRepository.findById(addReservationRequest.getUserResponseDto().getId())
             .get();
+
         checkReservationByUserId(UserReservationCheckDto.builder().id(getUser.getId())
             .checkTime(addReservationRequest.getStartTime()).build(), ReservationStatus.CANCELD);
+
         possibleReservationTimeByCarId(car.getId(), addReservationRequest.getStartTime(),
             ReservationStatus.CANCELD);
+
         if (!getUser.isLicenseInfo()) {
             throw new RuntimeException(
                 MessageFormat.format("사용자:{0}는 면허를 등록해 주세요",

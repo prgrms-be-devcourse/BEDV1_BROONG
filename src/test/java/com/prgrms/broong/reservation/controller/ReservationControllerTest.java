@@ -167,7 +167,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("유저 예약 컨트롤러 테스트")
-    void save() throws Exception {
+    void saveTest() throws Exception {
         UserResponseDto userResponseDto = userConverter.UserToResponseDtoWithoutReservationList(
             user);
         ParkCarResponseDto parkCarResponseDto = ParkCarResponseDto.builder()
@@ -196,7 +196,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 단건 조회 테스트")
-    void getReservation() throws Exception {
+    void getReservationTest() throws Exception {
         mockMvc.perform(get("/api/v1/broong/reservations/{reservationId}", reservation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -205,7 +205,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 취소시 상태 변경 테스트")
-    void cancelReservation() throws Exception {
+    void cancelReservationTest() throws Exception {
         mockMvc.perform(put("/api/v1/broong/reservations/{reservationId}", reservation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -214,7 +214,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("사용자의 예약 조회 리스트")
-    void getReservationListByUserId() throws Exception {
+    void getReservationListByUserIdTest() throws Exception {
         mockMvc.perform(
                 get("/api/v1/broong/reservations/users/{userId}", reservation.getUser().getId())
                     .param("page", String.valueOf(0))
@@ -226,7 +226,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("사용자의 중복 예약 확인 테스트")
-    void checkReservationByUserId() throws Exception {
+    void checkReservationByUserIdTest() throws Exception {
         mockMvc.perform(
                 get("/api/v1/broong/reservations/check-reservations/{userId}",
                     reservation.getUser().getId())
@@ -238,7 +238,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("선택한 자동차 예약 가능 확인 테스트")
-    void possibleReservationByCarId() throws Exception {
+    void possibleReservationByCarIdTest() throws Exception {
         mockMvc.perform(
                 get("/api/v1/broong/reservations/possible-reservations/{carId}",
                     reservation.getUser().getId())
