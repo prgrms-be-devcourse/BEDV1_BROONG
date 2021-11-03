@@ -10,8 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReservationService {
 
-    Long saveReservation(ReservationRequestDto addReservationRequest,
-        UserReservationCheckDto userReservationCheckDto);
+    Long saveReservation(ReservationRequestDto addReservationRequest);
 
     ReservationResponseDto getReservation(Long reservationId);
 
