@@ -22,17 +22,17 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(path = "/v1/broong/users")
+    @PostMapping(path = "/v1/users")
     public ResponseEntity<Long> save(@RequestBody @Valid UserRequestDto userRequestDto) {
         return ResponseEntity.ok(userService.saveUser(userRequestDto));
     }
 
-    @GetMapping(path = "/v1/broong/users/{userId}")
+    @GetMapping(path = "/v1/users/{userId}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @PutMapping(path = "/v1/broong/users/{userId}")
+    @PutMapping(path = "/v1/users/{userId}")
     public ResponseEntity<UserResponseDto> editUser(@PathVariable("userId") Long userId,
         @RequestBody @Valid UserUpdateDto userUpdateDto) {
         return ResponseEntity.ok(userService.editUser(userId, userUpdateDto));
