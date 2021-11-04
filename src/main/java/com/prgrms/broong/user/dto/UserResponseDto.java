@@ -13,22 +13,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserResponseDto {
 
-    Long id;
+    private Long id;
 
-    String email;
+    private String email;
 
-    String password;
+    private String password;
 
-    String name;
+    private String name;
 
-    String locationName;
+    private String locationName;
 
-    boolean licenseInfo;
+    private boolean licenseInfo;
 
-    boolean paymentMethod;
+    private boolean paymentMethod;
 
-    int point;
+    private int point;
 
-    List<ReservationResponseDto> reservationResponseDto;
+    private List<ReservationResponseDto> reservationResponseDto;
 
 }
