@@ -1,9 +1,14 @@
 package com.prgrms.broong.user.controller;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,18 +19,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
-
+@AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @SpringBootTest
 class UserControllerTest {
@@ -36,8 +40,8 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Autowired
-    WebApplicationContext wac;
+//    @Autowired
+//    WebApplicationContext wac;
 
     @Autowired
     LocalValidatorFactoryBean validatorFactoryBean;
@@ -46,14 +50,14 @@ class UserControllerTest {
 
     @BeforeEach
     void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-            .addFilters(new CharacterEncodingFilter("UTF-8", true))
-            .alwaysDo(print())
-            .build();
+//        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+//            .addFilters(new CharacterEncodingFilter("UTF-8", true))
+//            .alwaysDo(print())
+//            .build();
 
         userRequestDto = UserRequestDto.builder()
             .email("pinoa1228@naver.com")
-            .name("")
+            .name("박연수")
             .locationName("101")
             .licenseInfo(true)
             .password("1234")
@@ -67,8 +71,48 @@ class UserControllerTest {
     void getByIdTest() throws Exception {
         mockMvc.perform(get("/api/v1/broong/users/{user_id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON).param("user_id", String.valueOf(1L)))
-            .andExpect(status().is(400))
-            .andDo(print());
+            .andExpect(status().isOk())
+            .andDo(document("user-find",
+                // 요청
+                requestParameters(
+                    parameterWithName("user_id").description("user_id")
+                ),
+                // 응답
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("id"),
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("email"),
+                    fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
+                    fieldWithPath("locationName").type(JsonFieldType.STRING)
+                        .description("locationName"),
+                    fieldWithPath("licenseInfo").type(JsonFieldType.BOOLEAN)
+                        .description("licenseInfo"),
+                    fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
+                        .description("paymentMethod"),
+                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point")
+//                    fieldWithPath("reservationResponseDto[]").type(JsonFieldType.ARRAY)
+//                        .description("reservationResponseDto")
+//                    fieldWithPath("reservationResponseDto[].id").type(JsonFieldType.NUMBER)
+//                        .description("reservationResponseDto id"),
+//                    fieldWithPath("reservationResponseDto[].startTime").type(JsonFieldType.STRING)
+//                        .description("reservationResponseDto startTime"),
+//                    fieldWithPath("reservationResponseDto[].endTime").type(JsonFieldType.STRING)
+//                        .description("reservationResponseDto endTime"),
+//                    fieldWithPath("reservationResponseDto[].usagePoint").type(JsonFieldType.NUMBER)
+//                        .description("reservationResponseDto usagePoint"),
+//                    fieldWithPath("reservationResponseDto[].reservationStatus").type(
+//                            JsonFieldType.STRING)
+//                        .description("reservationResponseDto reservationStatus"),
+//                    fieldWithPath("reservationResponseDto[].isOneway").type(JsonFieldType.BOOLEAN)
+//                        .description("reservationResponseDto isOneway"),
+//                    fieldWithPath("reservationResponseDto[].fee").type(JsonFieldType.NUMBER)
+//                        .description("reservationResponseDto fee"),
+//                    fieldWithPath("reservationResponseDto[].parkCarResponseDto").type(
+//                        JsonFieldType.OBJECT).description("parkCarResponseDto"),
+//                    fieldWithPath("reservationResponseDto[].userResponseDto").type(
+//                        JsonFieldType.OBJECT).description("userResponseDto")
+                )
+            ));
     }
 
     @Test
@@ -78,7 +122,26 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRequestDto)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("user-save",
+                // 요청
+                requestFields(
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("email"),
+                    fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
+                    fieldWithPath("locationName").type(JsonFieldType.STRING)
+                        .description("locationName"),
+                    fieldWithPath("licenseInfo").type(JsonFieldType.BOOLEAN)
+                        .description("licenseInfo"),
+                    fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
+                        .description("paymentMethod")
+                )
+
+//                // 응답
+//                responseFields(
+////                    fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태코드"),
+//                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("id값")
+//                )
+            ));
     }
 
     @Test
@@ -94,7 +157,11 @@ class UserControllerTest {
                 .param("user_id", String.valueOf(1L))
                 .content(objectMapper.writeValueAsString(userUpdateDto)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("user-update",
+                // 요청
+                requestFields(
+                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point")
+                )));
     }
 
 

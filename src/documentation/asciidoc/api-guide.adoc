@@ -1,0 +1,22 @@
+   :hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+
+== User
+
+=== 회원가입
+
+==== /api/v1/broong/users
+
+.CURL
+include::{snippets}/user-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/user-save/http-request.adoc[]
+
+.Response
+include::{snippets}/user-save/http-response.adoc[]
+
+.Response Fields
+include::{snippets}/user-save/response-fields.adoc[]
