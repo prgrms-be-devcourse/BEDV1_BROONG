@@ -7,16 +7,15 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import com.prgrms.broong.management.car.converter.CarConverter;
 import com.prgrms.broong.management.car.domain.Car;
-import com.prgrms.broong.management.car.dto.CarResponseDto;
 import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.dto.ParkCarRequestDto;
 import com.prgrms.broong.management.dto.ParkCarResponseDto;
+import com.prgrms.broong.management.dto.ParksInfoDto;
 import com.prgrms.broong.management.park.converter.ParkConverter;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
 import com.prgrms.broong.management.park.dto.LocationDto;
-import com.prgrms.broong.management.park.dto.ParkResponseDto;
 import com.prgrms.broong.management.park.repository.LocationRepository;
 import com.prgrms.broong.management.park.repository.ParkRepository;
 import com.prgrms.broong.management.repository.ParkCarRepository;
@@ -33,6 +32,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class ParkCarServiceImplTest {
+
+    private static final Long ID = 1L;
+    private static final String CITY_ID = "1";
+    private static final String TOWN_ID = "101";
+    private static final String LOCATION_NAME = "도봉구";
+    private static final Integer POSSIBLE_NUM = 3;
 
     @Autowired
     private ParkCarService parkCarService;
@@ -59,24 +64,22 @@ class ParkCarServiceImplTest {
     private CarConverter carConverter;
 
     private ParkCarRequestDto parkCarRequestDto;
-    private ParkResponseDto parkResponseDto;
-    private CarResponseDto carResponseDto;
-    private LocationDto locationdto;
-    private SpeciesDto speciesDto;
+
     private Park park;
+
     private Car car;
 
     @BeforeEach
     void setUp() {
         Location location = Location.builder()
-            .cityId("1")
-            .townId("101")
-            .locationName("도봉구")
+            .cityId(CITY_ID)
+            .townId(TOWN_ID)
+            .locationName(LOCATION_NAME)
             .build();
         locationRepository.save(location);
 
         park = Park.builder()
-            .possibleNum(3)
+            .possibleNum(POSSIBLE_NUM)
             .location(location)
             .build();
         park = parkRepository.save(park);
@@ -96,32 +99,16 @@ class ParkCarServiceImplTest {
             .build();
         car = carRepository.save(car);
 
-        locationdto = LocationDto.builder()
-            .id(1L)
+        LocationDto locationdto = LocationDto.builder()
+            .id(ID)
             .cityId("1")
             .townId("101")
             .locationName("송파구")
             .build();
 
-        speciesDto = SpeciesDto.builder()
-            .id(1L)
+        SpeciesDto speciesDto = SpeciesDto.builder()
+            .id(ID)
             .name("중형")
-            .build();
-
-        parkResponseDto = ParkResponseDto.builder()
-            .id(1L)
-            .possibleNum(3)
-            .locationDto(locationdto)
-            .build();
-
-        carResponseDto = CarResponseDto.builder()
-            .id(1L)
-            .speciesDto(speciesDto)
-            .carNum("11허124333")
-            .fuel(100L)
-            .model("k5")
-            .price(50000L)
-            .possiblePassengers(10)
             .build();
 
         parkCarRequestDto = ParkCarRequestDto.builder()
@@ -140,21 +127,21 @@ class ParkCarServiceImplTest {
         //Then
         ParkCar result = parkCarRepository.findById(id).get();
 
-        assertThat(result.getCar().getCarNum(), is("11허124333"));
-        assertThat(result.getPark().getId(), is(1L));
-        assertThat(result.getCar().getId(), is(1L));
-        assertThat(result.getCar().getId(), is(1L));
+        assertThat(result.getPark().getId()).isEqualTo(ID);
+        assertThat(result.getCar().getId()).isEqualTo(ID);
+        assertThat(result.getCar().getCarNum()).isEqualTo("11허124333");
     }
 
-    //패스
     @DisplayName("주차장 다건 조회 및 주차장별 차량 개수 테스트")
     @Test
     void findParksWithCarCountTest() {
-        //given
-
-        //when
-
         //then
+        List<ParksInfoDto> parksInfoDtos = parkCarService.getParksWithCarCount();
+
+        assertThat(parksInfoDtos.get(0).getPossibleNum()).isEqualTo(POSSIBLE_NUM);
+        assertThat(parksInfoDtos.get(0).getCityId()).isEqualTo(CITY_ID);
+        assertThat(parksInfoDtos.get(0).getTownId()).isEqualTo(TOWN_ID);
+        assertThat(parksInfoDtos.get(0).getLocationName()).isEqualTo(LOCATION_NAME);
     }
 
     @DisplayName("주차장별 차량 다건 조회 테스트")
@@ -168,12 +155,10 @@ class ParkCarServiceImplTest {
             park.getId());
 
         //then
-        assertThat(getParkCarByParkId.get(0).getParkResponseDto().getId()).isEqualTo(
-            1L);
+        assertThat(getParkCarByParkId.get(0).getParkResponseDto().getId()).isEqualTo(ID);
         assertThat(getParkCarByParkId.get(0).getParkResponseDto()
             .getPossibleNum()).isEqualTo(parkConverter.parkToResponseDto(park).getPossibleNum());
-        assertThat(getParkCarByParkId.get(0).getCarResponseDto().getId()).isEqualTo(
-            1L);
+        assertThat(getParkCarByParkId.get(0).getCarResponseDto().getId()).isEqualTo(ID);
         assertThat(
             getParkCarByParkId.get(0).getCarResponseDto().getCarNum()).isEqualTo(
             carConverter.carToResponseDto(car).getCarNum());
@@ -191,19 +176,14 @@ class ParkCarServiceImplTest {
             car.getId());
 
         //then
-        assertThat(parkCarRequestDto.getCarResponseDto().getId(), is(1L));
-
-        assertThat(parkCarRequestDto.getCarResponseDto().getCarNum(),
-            is(carConverter.carToResponseDto(car).getCarNum()));
-
+        assertThat(parkCarRequestDto.getCarResponseDto().getId()).isEqualTo(ID);
+        assertThat(parkCarRequestDto.getCarResponseDto().getCarNum()).isEqualTo(
+            carConverter.carToResponseDto(car).getCarNum());
+        assertThat(parkCarRequestDto.getParkResponseDto().getId(), is(ID));
+        assertThat(parkCarRequestDto.getParkResponseDto().getPossibleNum()).isEqualTo(
+            parkConverter.parkToResponseDto(park).getPossibleNum());
         assertThat(parkCarRequestDto.getCarResponseDto().getSpeciesDto(),
             samePropertyValuesAs(carConverter.carToResponseDto(car).getSpeciesDto()));
-
-        assertThat(parkCarRequestDto.getParkResponseDto().getId(), is(1L));
-
-        assertThat(parkCarRequestDto.getParkResponseDto().getPossibleNum(),
-            is(parkConverter.parkToResponseDto(park).getPossibleNum()));
-
         assertThat(parkCarRequestDto.getParkResponseDto().getLocationDto(),
             samePropertyValuesAs(parkConverter.parkToResponseDto(park).getLocationDto()));
     }
@@ -216,15 +196,15 @@ class ParkCarServiceImplTest {
 
         //when
         List<ParkCarResponseDto> getParkCarByParkIdAndSpeciesName = parkCarService.getParkCarByParkIdAndSpeciesName(
-            park.getId(), 1L);
+            park.getId(), ID);
 
         //then
         assertThat(getParkCarByParkIdAndSpeciesName.get(0).getParkResponseDto().getId()).isEqualTo(
-            1L);
+            ID);
         assertThat(getParkCarByParkIdAndSpeciesName.get(0).getParkResponseDto()
             .getPossibleNum()).isEqualTo(parkConverter.parkToResponseDto(park).getPossibleNum());
         assertThat(getParkCarByParkIdAndSpeciesName.get(0).getCarResponseDto().getId()).isEqualTo(
-            1L);
+            ID);
         assertThat(
             getParkCarByParkIdAndSpeciesName.get(0).getCarResponseDto().getCarNum()).isEqualTo(
             carConverter.carToResponseDto(car).getCarNum());

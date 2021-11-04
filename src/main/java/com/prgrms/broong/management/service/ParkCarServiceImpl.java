@@ -4,6 +4,7 @@ import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.domain.converter.ParkCarConverter;
 import com.prgrms.broong.management.dto.ParkCarRequestDto;
 import com.prgrms.broong.management.dto.ParkCarResponseDto;
+import com.prgrms.broong.management.dto.ParksInfoDto;
 import com.prgrms.broong.management.repository.ParkCarRepository;
 import java.text.MessageFormat;
 import java.util.List;
@@ -18,12 +19,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class ParkCarServiceImpl implements ParkCarService {
 
     private final ParkCarRepository parkCarRepository;
+
     private final ParkCarConverter parkCarConverter;
 
-//    @Override
-//    public Page<ParksInfoDto> findParksWithCarCount(Pageable pageable) {
-//        return parkCarRepository.findParksWithCarCount(pageable);
-//    }
+    @Override
+    public List<ParksInfoDto> getParksWithCarCount() {
+        List<ParksInfoDto> parksInfoDtos = parkCarRepository.findParksWithCarCount();
+        if (parksInfoDtos.isEmpty()) {
+            throw new RuntimeException("주차장에 대한 정보를 찾아올 수 없습니다.");
+        }
+        return parksInfoDtos;
+    }
 
     @Override
     public ParkCarResponseDto getParkCarByParkIdAndCarId(Long parkId, Long carId) {
