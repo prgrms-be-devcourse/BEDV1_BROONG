@@ -13,7 +13,7 @@ public class ParkResponseDto {
 
     private Long id;
 
-    private Integer possibleNum;
+    private int possibleNum;
 
     private LocationDto locationDto;
 

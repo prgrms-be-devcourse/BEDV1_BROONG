@@ -40,14 +40,14 @@ public class Car extends BaseEntity {
 
     @Min(0)
     @Column(name = "fuel", columnDefinition = "BIGINT", nullable = false)
-    private Long fuel;
+    private long fuel;
 
     @Min(0)
     @Column(name = "price", columnDefinition = "BIGINT", nullable = false)
-    private Long price;
+    private long price;
 
     @Column(name = "possible_passengers", columnDefinition = "INT", nullable = false, updatable = false)
-    private Integer possiblePassengers;
+    private int possiblePassengers;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "species_id", referencedColumnName = "id")

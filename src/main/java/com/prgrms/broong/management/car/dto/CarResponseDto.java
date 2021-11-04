@@ -18,11 +18,11 @@ public class CarResponseDto {
 
     private String model;
 
-    private Long fuel;
+    private long fuel;
 
-    private Long price;
+    private long price;
 
-    private Integer possiblePassengers;
+    private int possiblePassengers;
 
     private SpeciesDto speciesDto;
 
