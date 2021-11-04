@@ -46,12 +46,12 @@ public class ReservationServiceImpl implements ReservationService {
         possibleReservationTimeByCarId(car.getId(), addReservationRequest.getStartTime(),
             ReservationStatus.CANCELD);
 
-        if (!getUser.isLicenseInfo()) {
+        if (!getUser.getLicenseInfo()) {
             throw new RuntimeException(
                 MessageFormat.format("사용자:{0}는 면허를 등록해 주세요",
                     getUser.getId()));
         }
-        if (!getUser.isPaymentMethod()) {
+        if (!getUser.getPaymentMethod()) {
             throw new RuntimeException(
                 MessageFormat.format("사용자:{0}는 결제수단을 등록해 주세요",
                     getUser.getId()));
