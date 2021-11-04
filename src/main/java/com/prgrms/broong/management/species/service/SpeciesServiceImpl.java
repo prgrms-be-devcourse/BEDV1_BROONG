@@ -14,8 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class SpeciesServiceImpl implements SpeciesService {
 
-    private static SpeciesRepository speciesRepository;
-    private static SpeciesConverter speciesConverter;
+    private final SpeciesRepository speciesRepository;
+
+    private final SpeciesConverter speciesConverter;
 
     @Override
     public Page<SpeciesDto> findAll(Pageable pageable) {
