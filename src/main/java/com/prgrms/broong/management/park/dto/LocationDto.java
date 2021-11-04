@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LocationDto {
 
-    @NotNull
+    @NotNull(message = "id는 null일 수 없습니다.")
     private Long id;
 
-    @NotNull
+    @NotNull(message = "cityId는 null일 수 없습니다.")
     private String cityId;
 
-    @NotNull
+    @NotNull(message = "townId는 null일 수 없습니다.")
     private String townId;
 
-    @NotNull
+    @NotNull(message = "locationName은 null일 수 없습니다.")
     private String locationName;
 
 }

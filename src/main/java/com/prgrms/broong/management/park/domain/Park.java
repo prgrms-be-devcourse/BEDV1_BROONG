@@ -32,7 +32,7 @@ public class Park extends BaseEntity {
     private Long id;
 
     @Min(0)
-    @Column(name = "possible_num", columnDefinition = "INT", nullable = false)
+    @Column(name = "possible_num", columnDefinition = "INT")
     private int possibleNum;
 
     @OneToOne(fetch = FetchType.LAZY)

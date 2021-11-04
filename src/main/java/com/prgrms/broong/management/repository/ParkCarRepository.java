@@ -14,8 +14,8 @@ public interface ParkCarRepository extends JpaRepository<ParkCar, Long> {
         value =
             "SELECT p.id as parkId, p.possible_num as possibleNum, COUNT(pc.id) as cnt, "
                 + "l.id as locationId, l.city_id as cityId, l.town_id as townId, l.location_name as locationName "
-                + "FROM park_car pc "
-                + "RIGHT OUTER JOIN park p on pc.park_id = p.id "
+                + "FROM park p "
+                + "LEFT OUTER JOIN park_car pc on pc.park_id = p.id "
                 + "INNER JOIN location l on p.location_id = l.id "
                 + "GROUP BY p.id "
                 + "ORDER BY l.id",

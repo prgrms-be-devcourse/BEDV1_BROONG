@@ -49,7 +49,7 @@ public class ReservationConverter {
             .fee(reservation.getFee())
             .isOneway(reservation.isOneway())
             .parkCarResponseDto(
-                parkCarConverter.ParkToResponseDto(reservation.getParkCar()))
+                parkCarConverter.parkCarToResponseDto(reservation.getParkCar()))
             .userResponseDto(
                 userConverter.UserToResponseDtoWithoutReservationList(reservation.getUser()))
             .build();

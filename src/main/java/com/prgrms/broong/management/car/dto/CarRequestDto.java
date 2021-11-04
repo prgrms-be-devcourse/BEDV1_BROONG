@@ -32,6 +32,7 @@ public class CarRequestDto {
     @Min(value = 0, message = "possiblePassengers는 최소 0이어야 합니다.")
     private int possiblePassengers;
 
+    @NotNull(message = "speciesDto는 null일 수 없습니다.")
     private SpeciesDto speciesDto;
 
 }
