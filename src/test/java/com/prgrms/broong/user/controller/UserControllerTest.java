@@ -59,7 +59,6 @@ class UserControllerTest {
             .password("1234")
             .paymentMethod(true)
             .build();
-
     }
 
     @Test
@@ -82,7 +81,6 @@ class UserControllerTest {
                     fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
                         .description("paymentMethod")
                 )
-
             ));
     }
 
