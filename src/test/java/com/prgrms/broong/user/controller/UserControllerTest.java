@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.broong.user.dto.UserRequestDto;
 import com.prgrms.broong.user.dto.UserUpdateDto;
+import com.prgrms.broong.user.service.UserService;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,11 +41,11 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-//    @Autowired
-//    WebApplicationContext wac;
-
     @Autowired
     LocalValidatorFactoryBean validatorFactoryBean;
+
+    @Autowired
+    UserService userService;
 
     private UserRequestDto userRequestDto;
 
@@ -88,8 +89,10 @@ class UserControllerTest {
     @Test
     @DisplayName("user 컨트롤러 조회 테스트")
     void getByIdTest() throws Exception {
-        mockMvc.perform(get("/api/v1/broong/users/{user_id}", 1L)
-                .contentType(MediaType.APPLICATION_JSON).param("user_id", String.valueOf(1L)))
+        Long id = userService.saveUser(userRequestDto);
+
+        mockMvc.perform(get("/api/v1/broong/users/{user_id}", id)
+                .contentType(MediaType.APPLICATION_JSON).param("user_id", String.valueOf(id)))
             .andExpect(status().isOk())
             .andDo(document("user-find",
                 // 요청
@@ -108,9 +111,9 @@ class UserControllerTest {
                         .description("licenseInfo"),
                     fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
                         .description("paymentMethod"),
-                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point")
-//                    fieldWithPath("reservationResponseDto[]").type(JsonFieldType.ARRAY)
-//                        .description("reservationResponseDto")
+                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point"),
+                    fieldWithPath("reservationResponseDto[]").type(JsonFieldType.ARRAY)
+                        .description("reservationResponseDto")
 //                    fieldWithPath("reservationResponseDto[].id").type(JsonFieldType.NUMBER)
 //                        .description("reservationResponseDto id"),
 //                    fieldWithPath("reservationResponseDto[].startTime").type(JsonFieldType.STRING)
@@ -138,13 +141,14 @@ class UserControllerTest {
     @DisplayName("user 컨트롤러 update 테스트")
     void updateTest() throws Exception {
         //given
+        Long id = userService.saveUser(userRequestDto);
         UserUpdateDto userUpdateDto = UserUpdateDto.builder()
             .point(15)
             .build();
 
-        mockMvc.perform(put("/api/v1/broong/users/{user_id}", 1L)
+        mockMvc.perform(put("/api/v1/broong/users/{user_id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("user_id", String.valueOf(1L))
+                .param("user_id", String.valueOf(id))
                 .content(objectMapper.writeValueAsString(userUpdateDto)))
             .andExpect(status().isOk())
             .andDo(document("user-update",
