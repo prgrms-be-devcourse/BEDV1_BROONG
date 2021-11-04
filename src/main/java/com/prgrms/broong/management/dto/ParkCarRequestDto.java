@@ -11,12 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParkCarResponseDto {
+public class ParkCarRequestDto {
 
-    private Long id;
+    ParkResponseDto parkResponseDto;
 
-    private CarResponseDto carResponseDto;
-
-    private ParkResponseDto parkResponseDto;
+    CarResponseDto carResponseDto;
 
 }

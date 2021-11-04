@@ -35,7 +35,7 @@ public class Park extends BaseEntity {
     @Column(name = "possible_num", columnDefinition = "INT", nullable = false)
     private Integer possibleNum;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 

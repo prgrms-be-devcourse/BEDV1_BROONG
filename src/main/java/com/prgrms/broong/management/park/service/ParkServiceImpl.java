@@ -28,8 +28,7 @@ public class ParkServiceImpl implements ParkService {
 
     @Override
     public ParkResponseDto getParkById(Long parkId) {
-        return parkRepository.findById(parkId)
-            .map(parkConverter::parkToResponseDto)
+        return parkRepository.findById(parkId).map(parkConverter::parkToResponseDto)
             .orElseThrow(() -> new RuntimeException(
                 MessageFormat.format("해당 {0}키의 주차장을 찾을 수 없습니다.", parkId)));
     }
