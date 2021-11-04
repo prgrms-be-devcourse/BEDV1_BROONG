@@ -1,0 +1,48 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== User
+
+=== 회원가입
+
+==== /api/v1/broong/users
+
+.CURL
+include::{snippets}/user-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/user-save/http-request.adoc[]
+
+.Response
+include::{snippets}/user-save/http-response.adoc[]
+
+=== user 단건 조회
+
+==== /api/v1/broong/users/{user_id}
+
+.CURL
+include::{snippets}/user-find/curl-request.adoc[]
+
+.Request
+include::{snippets}/user-find/http-request.adoc[]
+
+.Response
+include::{snippets}/user-find/http-response.adoc[]
+
+.Response Fields
+include::{snippets}/user-find/response-fields.adoc[]
+
+=== user point update
+
+==== /api/v1/broong/users/{user_id}
+
+.CURL
+include::{snippets}/user-update/curl-request.adoc[]
+
+.Request
+include::{snippets}/user-update/http-request.adoc[]
+
+.Response
+include::{snippets}/user-update/http-response.adoc[]
+
