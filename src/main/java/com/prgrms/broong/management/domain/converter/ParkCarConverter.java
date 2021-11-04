@@ -4,17 +4,20 @@ import com.prgrms.broong.management.car.converter.CarConverter;
 import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.dto.ParkCarResponseDto;
 import com.prgrms.broong.management.park.converter.ParkConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ParkCarConverter {
 
-    @Autowired
-    private ParkConverter parkConverter;
+    private final ParkConverter parkConverter;
 
-    @Autowired
-    private CarConverter carConverter;
+    private final CarConverter carConverter;
+
+    public ParkCarConverter(ParkConverter parkConverter,
+        CarConverter carConverter) {
+        this.parkConverter = parkConverter;
+        this.carConverter = carConverter;
+    }
 
     public ParkCar parkCarResponseToEntity(ParkCarResponseDto parkCarResponseDto) {
         return ParkCar.builder()
