@@ -19,11 +19,15 @@ public class GlobalExceptionHandler {
         log.error("NotFoundExceptionHandler : {}", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(ErrorResponse.of(e.getMessage()));
+            .body(
+                ErrorResponse.builder()
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .errorMessage(e.getMessage())
+                    .build());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> field(MethodArgumentNotValidException e) {
+    public ResponseEntity<ErrorResponse> fieldException(MethodArgumentNotValidException e) {
         final BindingResult bindingResult = e.getBindingResult();
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -33,11 +37,25 @@ public class GlobalExceptionHandler {
             stringBuilder.append(",");
         }
 
-        ErrorResponse errorResponse = new ErrorResponse(stringBuilder.toString());
-        log.error("MethodArgumentNotValidException: {}", stringBuilder.toString());
+        log.error("MethodArgumentNotValidException: {}", stringBuilder);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(errorResponse);
-//            .body(ErrorResponse.of(stringBuilder.toString()));
+            .body(ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .errorMessage(stringBuilder.toString())
+                .build());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> exception(Exception e) {
+        log.error("ExceptionHandler : {}", e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(
+                ErrorResponse.builder()
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .errorMessage(e.getMessage())
+                    .build());
+
     }
 
 }
