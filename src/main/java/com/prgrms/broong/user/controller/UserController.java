@@ -27,13 +27,13 @@ public class UserController {
         return ResponseEntity.ok(userService.saveUser(userRequestDto));
     }
 
-    @GetMapping(path = "/v1/broong/users/{user_id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("user_id") Long userId) {
+    @GetMapping(path = "/v1/broong/users/{userId}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @PutMapping(path = "/v1/broong/users/{user_id}")
-    public ResponseEntity<UserResponseDto> editUser(@PathVariable("user_id") Long userId,
+    @PutMapping(path = "/v1/broong/users/{userId}")
+    public ResponseEntity<UserResponseDto> editUser(@PathVariable("userId") Long userId,
         @RequestBody @Valid UserUpdateDto userUpdateDto) {
         return ResponseEntity.ok(userService.editUser(userId, userUpdateDto));
     }
