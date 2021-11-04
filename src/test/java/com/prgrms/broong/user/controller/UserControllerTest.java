@@ -7,8 +7,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -80,6 +80,9 @@ class UserControllerTest {
                         .description("licenseInfo"),
                     fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
                         .description("paymentMethod")
+                ),
+                responseFields(
+                    fieldWithPath("userId").description("id값")
                 )
             ));
     }
@@ -144,7 +147,7 @@ class UserControllerTest {
             .point(15)
             .build();
 
-        mockMvc.perform(put("/api/v1/users/{userId}", id)
+        mockMvc.perform(patch("/api/v1/users/{userId}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("user_id", String.valueOf(id))
                 .content(objectMapper.writeValueAsString(userUpdateDto)))
