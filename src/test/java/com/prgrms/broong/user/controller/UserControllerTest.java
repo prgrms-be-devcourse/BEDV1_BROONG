@@ -50,11 +50,6 @@ class UserControllerTest {
 
     @BeforeEach
     void setup() {
-//        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-//            .addFilters(new CharacterEncodingFilter("UTF-8", true))
-//            .alwaysDo(print())
-//            .build();
-
         userRequestDto = UserRequestDto.builder()
             .email("pinoa1228@naver.com")
             .name("박연수")
@@ -64,6 +59,30 @@ class UserControllerTest {
             .paymentMethod(true)
             .build();
 
+    }
+
+    @Test
+    @DisplayName("user 컨트롤러 저장 테스트")
+    void saveTest() throws Exception {
+        mockMvc.perform(post("/api/v1/broong/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequestDto)))
+            .andExpect(status().isOk())
+            .andDo(document("user-save",
+                // 요청
+                requestFields(
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("email"),
+                    fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
+                    fieldWithPath("locationName").type(JsonFieldType.STRING)
+                        .description("locationName"),
+                    fieldWithPath("licenseInfo").type(JsonFieldType.BOOLEAN)
+                        .description("licenseInfo"),
+                    fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
+                        .description("paymentMethod")
+                )
+
+            ));
     }
 
     @Test
@@ -116,35 +135,6 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("user 컨트롤러 저장 테스트")
-    void saveTest() throws Exception {
-        mockMvc.perform(post("/api/v1/broong/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequestDto)))
-            .andExpect(status().isOk())
-            .andDo(document("user-save",
-                // 요청
-                requestFields(
-                    fieldWithPath("email").type(JsonFieldType.STRING).description("email"),
-                    fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
-                    fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
-                    fieldWithPath("locationName").type(JsonFieldType.STRING)
-                        .description("locationName"),
-                    fieldWithPath("licenseInfo").type(JsonFieldType.BOOLEAN)
-                        .description("licenseInfo"),
-                    fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
-                        .description("paymentMethod")
-                )
-
-//                // 응답
-//                responseFields(
-////                    fieldWithPath("status").type(JsonFieldType.NUMBER).description("상태코드"),
-//                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("id값")
-//                )
-            ));
-    }
-
-    @Test
     @DisplayName("user 컨트롤러 update 테스트")
     void updateTest() throws Exception {
         //given
@@ -163,7 +153,6 @@ class UserControllerTest {
                     fieldWithPath("point").type(JsonFieldType.NUMBER).description("point")
                 )));
     }
-
 
     @Test
     @DisplayName("validation 테스트")
