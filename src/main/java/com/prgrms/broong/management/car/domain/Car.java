@@ -49,7 +49,7 @@ public class Car extends BaseEntity {
     @Column(name = "possible_passengers", columnDefinition = "INT", nullable = false, updatable = false)
     private Integer possiblePassengers;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "species_id", referencedColumnName = "id")
     private Species species;
 
