@@ -91,13 +91,13 @@ class UserControllerTest {
     void getByIdTest() throws Exception {
         Long id = userService.saveUser(userRequestDto);
 
-        mockMvc.perform(get("/api/v1/broong/users/{user_id}", id)
-                .contentType(MediaType.APPLICATION_JSON).param("user_id", String.valueOf(id)))
+        mockMvc.perform(get("/api/v1/broong/users/{userId}", id)
+                .contentType(MediaType.APPLICATION_JSON).param("userId", String.valueOf(id)))
             .andExpect(status().isOk())
             .andDo(document("user-find",
                 // 요청
                 requestParameters(
-                    parameterWithName("user_id").description("user_id")
+                    parameterWithName("userId").description("userId")
                 ),
                 // 응답
                 responseFields(
@@ -146,7 +146,7 @@ class UserControllerTest {
             .point(15)
             .build();
 
-        mockMvc.perform(put("/api/v1/broong/users/{user_id}", id)
+        mockMvc.perform(put("/api/v1/broong/users/{userId}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("user_id", String.valueOf(id))
                 .content(objectMapper.writeValueAsString(userUpdateDto)))
