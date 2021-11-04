@@ -175,8 +175,7 @@ class ReservationServiceTest {
             .build();
 
         //when
-        Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto,
-            userReservationCheckDto);
+        Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto);
 
         //then
         Long reservationCount = reservationRepository.findAll().stream().count();
@@ -218,8 +217,7 @@ class ReservationServiceTest {
 
         //when, then
         try {
-            Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto,
-                userReservationCheckDto);
+            Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto);
         } catch (RuntimeException e) {
             log.info("예약 중복 실패 테스트 에러내용 -> {}", e.getMessage());
         }
@@ -269,8 +267,7 @@ class ReservationServiceTest {
 
         //when, then
         try {
-            Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto,
-                userReservationCheckDto);
+            Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto);
         } catch (RuntimeException e) {
             log.info("예약 중복 실패 테스트 에러내용 -> {}", e.getMessage());
         }

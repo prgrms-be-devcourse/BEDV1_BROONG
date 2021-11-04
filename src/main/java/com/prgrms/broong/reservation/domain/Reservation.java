@@ -36,23 +36,31 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "BIGINT")
     private Long id;
+
     @Column(name = "start_time", columnDefinition = "TIMESTAMP", updatable = false, nullable = false)
     private LocalDateTime startTime;
+
     @Column(name = "end_time", columnDefinition = "TIMESTAMP", updatable = false, nullable = false)
     private LocalDateTime endTime;
+
     @Column(name = "usage_point", columnDefinition = "INT")
     private Integer usagePoint;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "reservation_status", columnDefinition = "VARCHAR(100)", nullable = false)
     private ReservationStatus reservationStatus;
+
     @Column(name = "fee", columnDefinition = "INT", nullable = false)
     private Integer fee;
+
     @Convert(converter = BooleanToYnConverter.class)
     @Column(name = "is_oneway", columnDefinition = "VARCHAR(50)", nullable = false)
     private boolean isOneway;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "park_car_id", referencedColumnName = "id")
     private ParkCar parkCar;
