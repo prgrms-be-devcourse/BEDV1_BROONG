@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
         }
 
         ErrorResponse errorResponse = new ErrorResponse(stringBuilder.toString());
-        log.error("NotFoundExceptionHandler : {}", stringBuilder.toString());
+        log.error("MethodArgumentNotValidException: {}", stringBuilder.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(errorResponse);
 //            .body(ErrorResponse.of(stringBuilder.toString()));

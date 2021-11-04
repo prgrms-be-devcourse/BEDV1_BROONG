@@ -1,9 +1,9 @@
 package com.prgrms.broong.user.dto;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class UserRequestDto {
     String email;
 
     @NotBlank
-    @Min(message = "비밀번호는 두자리 이상이어야 합니다.", value = 2)
+    @Size(message = "비밀번호는 두자리 이상이어야 합니다.", min = 2)
     @NotNull(message = "비밀번호를 입력해 주세요")
     String password;
 
