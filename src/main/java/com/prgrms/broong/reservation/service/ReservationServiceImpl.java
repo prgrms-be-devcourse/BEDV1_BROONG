@@ -33,16 +33,19 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Transactional
     @Override
-    public Long saveReservation(ReservationRequestDto addReservationRequest,
-        UserReservationCheckDto userReservationCheckDto) {
+    public Long saveReservation(ReservationRequestDto addReservationRequest) {
         Reservation reservation = converter.ReservationToEntity(addReservationRequest);
         Car car = carRepository.findById(
             addReservationRequest.getParkCarResponseDto().getCarResponseDto().getId()).get();
         User getUser = userRepository.findById(addReservationRequest.getUserResponseDto().getId())
             .get();
-        checkReservationByUserId(userReservationCheckDto, ReservationStatus.CANCELD);
-        possibleReservationTimeByCarId(car.getId(), userReservationCheckDto.getCheckTime(),
+
+        checkReservationByUserId(UserReservationCheckDto.builder().id(getUser.getId())
+            .checkTime(addReservationRequest.getStartTime()).build(), ReservationStatus.CANCELD);
+
+        possibleReservationTimeByCarId(car.getId(), addReservationRequest.getStartTime(),
             ReservationStatus.CANCELD);
+
         if (!getUser.isLicenseInfo()) {
             throw new RuntimeException(
                 MessageFormat.format("사용자:{0}는 면허를 등록해 주세요",
