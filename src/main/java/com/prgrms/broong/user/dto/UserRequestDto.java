@@ -17,25 +17,22 @@ public class UserRequestDto {
 
     @NotBlank(message = "email은 필수 입니다.")
     @Pattern(regexp = "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b", message = "유효한 email 형식이 아닙니다.")
-    String email;
+    private String email;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호는 null일 수 없습니다.")
     @Size(message = "비밀번호는 두자리 이상이어야 합니다.", min = 2)
-    @NotNull(message = "비밀번호는 null일 수 없습니다.")
-    String password;
+    private String password;
 
-    @NotBlank
-    @NotNull(message = "이름은 null일 수 없습니다.")
-    String name;
+    @NotBlank(message = "이름은 null일 수 없습니다.")
+    private String name;
 
-    @NotBlank
-    @NotNull(message = "위치정보는 null일 수 없습니다.")
-    String locationName;
+    @NotBlank(message = "위치정보는 null일 수 없습니다.")
+    private String locationName;
 
     @NotNull(message = "면허정보는 null일 수 없습니다.")
-    boolean licenseInfo;
+    private Boolean licenseInfo;
 
     @NotNull(message = "결제수단은 null일 수 없습니다.")
-    boolean paymentMethod;
+    private Boolean paymentMethod;
 
 }

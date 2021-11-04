@@ -9,5 +9,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Override
     @EntityGraph(attributePaths = {"reservations"})
-    Optional<User> findById(Long aLong);
+    Optional<User> findById(Long id);
+
 }
