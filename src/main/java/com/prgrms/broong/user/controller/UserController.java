@@ -17,22 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/v1")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(path = "/v1/users")
+    @PostMapping(path = "/users")
     public ResponseEntity<Long> save(@RequestBody @Valid UserRequestDto userRequestDto) {
         return ResponseEntity.ok(userService.saveUser(userRequestDto));
     }
 
-    @GetMapping(path = "/v1/users/{userId}")
+    @GetMapping(path = "/users/{userId}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @PutMapping(path = "/v1/users/{userId}")
+    @PutMapping(path = "users/{userId}")
     public ResponseEntity<UserResponseDto> editUser(@PathVariable("userId") Long userId,
         @RequestBody @Valid UserUpdateDto userUpdateDto) {
         return ResponseEntity.ok(userService.editUser(userId, userUpdateDto));

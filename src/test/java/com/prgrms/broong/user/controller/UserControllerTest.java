@@ -64,7 +64,7 @@ class UserControllerTest {
     @Test
     @DisplayName("user 컨트롤러 저장 테스트")
     void saveTest() throws Exception {
-        mockMvc.perform(post("/api/v1/broong/users")
+        mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRequestDto)))
             .andExpect(status().isOk())
@@ -89,7 +89,7 @@ class UserControllerTest {
     void getByIdTest() throws Exception {
         Long id = userService.saveUser(userRequestDto);
 
-        mockMvc.perform(get("/api/v1/broong/users/{userId}", id)
+        mockMvc.perform(get("/api/v1/users/{userId}", id)
                 .contentType(MediaType.APPLICATION_JSON).param("userId", String.valueOf(id)))
             .andExpect(status().isOk())
             .andDo(document("user-find",
@@ -144,7 +144,7 @@ class UserControllerTest {
             .point(15)
             .build();
 
-        mockMvc.perform(put("/api/v1/broong/users/{userId}", id)
+        mockMvc.perform(put("/api/v1/users/{userId}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("user_id", String.valueOf(id))
                 .content(objectMapper.writeValueAsString(userUpdateDto)))
