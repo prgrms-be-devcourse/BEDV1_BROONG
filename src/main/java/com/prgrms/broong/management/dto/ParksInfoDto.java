@@ -8,4 +8,12 @@ public interface ParksInfoDto {
 
     Integer getCnt();
 
+    Long getLocationId();
+
+    String getCityId();
+
+    String getTownId();
+
+    String getLocationName();
+
 }

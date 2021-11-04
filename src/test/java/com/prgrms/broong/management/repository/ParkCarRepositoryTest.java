@@ -1,10 +1,13 @@
 package com.prgrms.broong.management.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import com.prgrms.broong.management.car.domain.Car;
 import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.management.domain.ParkCar;
+import com.prgrms.broong.management.dto.ParksInfoDto;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
 import com.prgrms.broong.management.park.repository.LocationRepository;
@@ -39,11 +42,12 @@ class ParkCarRepositoryTest {
     @Autowired
     private LocationRepository locationRepository;
 
-    private Car car;
     private Car car2;
+
     private Park park;
-    private Park park2;
+
     private ParkCar parkCar;
+
     private Species species;
 
     @BeforeEach
@@ -53,7 +57,7 @@ class ParkCarRepositoryTest {
             .build();
         speciesRepository.save(species);
 
-        car = Car.builder()
+        Car car = Car.builder()
             .carNum("11허124333")
             .fuel(100L)
             .model("k5")
@@ -86,7 +90,7 @@ class ParkCarRepositoryTest {
             .build();
         parkRepository.save(park);
 
-        park2 = Park.builder()
+        Park park2 = Park.builder()
             .possibleNum(20)
             .location(location)
             .build();
@@ -126,15 +130,14 @@ class ParkCarRepositoryTest {
         assertThat(getParkCars).hasSize(3);
     }
 
-//    @DisplayName("주차장 다건 조회 및 주차장별 차량 개수 테스트")
-//    @Test
-//    void getParksWithCountTest() {
-//        //then
-//        Pageable pageable = PageRequest.of(0, 5);
-//        Page<ParksInfoDto> getParks = parkCarRepository.findParksWithCarCount(pageable);
-//
-////        assertThat(getParks.get(PARK_ORDER).getCnt()).isEqualTo(CAR_COUNT);
-//    }
+    @DisplayName("주차장 다건 조회 및 주차장별 차량 개수 테스트")
+    @Test
+    void getParksWithCountTest() {
+        //then
+        List<ParksInfoDto> getParks = parkCarRepository.findParksWithCarCount();
+
+        assertThat(getParks.get(PARK_ORDER).getCnt()).isEqualTo(CAR_COUNT);
+    }
 
     @DisplayName("주차장별 차량 단건 조회 테스트")
     @Test
@@ -166,7 +169,7 @@ class ParkCarRepositoryTest {
         List<ParkCar> getParkCar = parkCarRepository.findParkCarByParkIdAndSpeciesName(
             parkCar.getPark().getId(), parkCar.getCar().getSpecies().getId());
 
-//        assertThat(getParkCar.get(0).getCar().getSpecies(), samePropertyValuesAs(species));
+        assertThat(getParkCar.get(0).getCar().getSpecies(), samePropertyValuesAs(species));
     }
 
 }
