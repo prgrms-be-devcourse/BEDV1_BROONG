@@ -47,9 +47,9 @@ class UserServiceTest {
         assertThat(result.getEmail(), is(userRequestDto.getEmail()));
         assertThat(result.getName(), is(userRequestDto.getName()));
         assertThat(result.getPassword(), is(userRequestDto.getPassword()));
-        assertThat(result.isLicenseInfo(), is(userRequestDto.getLicenseInfo()));
+        assertThat(result.getLicenseInfo(), is(userRequestDto.getLicenseInfo()));
         assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
-        assertThat(result.isPaymentMethod(), is(userRequestDto.getPaymentMethod()));
+        assertThat(result.getPaymentMethod(), is(userRequestDto.getPaymentMethod()));
     }
 
     @Test
@@ -65,9 +65,9 @@ class UserServiceTest {
         assertThat(result.getEmail(), is(userRequestDto.getEmail()));
         assertThat(result.getName(), is(userRequestDto.getName()));
         assertThat(result.getPassword(), is(userRequestDto.getPassword()));
-        assertThat(result.isLicenseInfo(), is(userRequestDto.getLicenseInfo()));
+        assertThat(result.getLicenseInfo(), is(userRequestDto.getLicenseInfo()));
         assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
-        assertThat(result.isPaymentMethod(), is(userRequestDto.getPaymentMethod()));
+        assertThat(result.getPaymentMethod(), is(userRequestDto.getPaymentMethod()));
     }
 
     @Test

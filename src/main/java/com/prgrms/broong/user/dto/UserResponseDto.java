@@ -23,9 +23,9 @@ public class UserResponseDto {
 
     private String locationName;
 
-    private boolean licenseInfo;
+    private Boolean licenseInfo;
 
-    private boolean paymentMethod;
+    private Boolean paymentMethod;
 
     private int point;
 

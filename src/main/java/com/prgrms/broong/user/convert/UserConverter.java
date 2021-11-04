@@ -63,8 +63,8 @@ public class UserConverter {
             .password(userResponseDto.getPassword())
             .locationName(userResponseDto.getLocationName())
             .point(userResponseDto.getPoint())
-            .licenseInfo(userResponseDto.isLicenseInfo())
-            .paymentMethod(userResponseDto.isPaymentMethod())
+            .licenseInfo(userResponseDto.getLicenseInfo())
+            .paymentMethod(userResponseDto.getPaymentMethod())
             .build();
     }
 
