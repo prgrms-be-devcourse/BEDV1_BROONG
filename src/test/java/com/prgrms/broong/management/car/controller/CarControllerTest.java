@@ -111,31 +111,4 @@ class CarControllerTest {
             .andDo(print());
     }
 
-//    @Test
-//    @DisplayName("validation 테스트")
-//    void validation() {
-//        UserRequestDto userRequestDto1 = UserRequestDto.builder()
-//            .email("pinoa1228.com")
-//            .name("")
-//            .locationName("")
-//            .licenseInfo(true)
-//            .password("1")
-//            .paymentMethod(true)
-//            .build();
-//        Errors error = new BeanPropertyBindingResult(userRequestDto1,
-//            "user_request");
-//        validatorFactoryBean.validate(userRequestDto1, error);
-//
-//        // 에러가 있는지
-//        System.out.println("hasErrors(): " + error.hasErrors());
-//
-//        // 발생한 에러를 순차적으로 순회하며 에러코드와 default message 출력
-//        error.getAllErrors().forEach(e -> {
-//            System.out.println("=== Error Code ===");
-//            Arrays.stream(e.getCodes()).forEach(System.out::println);
-//            System.out.println(e.getDefaultMessage());
-//        });
-//
-//    }
-
 }
