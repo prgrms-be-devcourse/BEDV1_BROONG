@@ -132,7 +132,7 @@ class ReservationServiceTest {
         user = userRepository.save(user);
 
         reservation = Reservation.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .usagePoint(1000)
             .startTime(LocalDateTime.now().plusHours(1L))
             .endTime(LocalDateTime.now().plusHours(3L))
@@ -159,7 +159,7 @@ class ReservationServiceTest {
             .build();
 
         ReservationRequestDto reservationRequestDto = ReservationRequestDto.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .startTime(LocalDateTime.now().plusHours(4L))
             .endTime(LocalDateTime.now().plusHours(5L))
             .userResponseDto(userResponseDto)
@@ -171,7 +171,8 @@ class ReservationServiceTest {
 
         UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
             .id(user.getId())
-            .checkTime(reservationRequestDto.getStartTime())
+            .checkStartTime(reservationRequestDto.getStartTime())
+            .checkEndTime(reservationRequestDto.getEndTime())
             .build();
 
         //when
@@ -200,7 +201,7 @@ class ReservationServiceTest {
             .build();
 
         ReservationRequestDto reservationRequestDto = ReservationRequestDto.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .startTime(getReservation.getStartTime().plusHours(1))
             .endTime(getReservation.getEndTime().plusHours(4))
             .userResponseDto(userResponseDto)
@@ -212,7 +213,8 @@ class ReservationServiceTest {
 
         UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
             .id(getUser.getId())
-            .checkTime(reservationRequestDto.getStartTime())
+            .checkStartTime(reservationRequestDto.getStartTime())
+            .checkEndTime(reservationRequestDto.getEndTime())
             .build();
 
         //when, then
@@ -250,7 +252,7 @@ class ReservationServiceTest {
             .build();
 
         ReservationRequestDto reservationRequestDto = ReservationRequestDto.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .startTime(getReservation.getStartTime().plusHours(1))
             .endTime(getReservation.getEndTime().plusHours(4))
             .userResponseDto(userResponseDto)
@@ -262,7 +264,8 @@ class ReservationServiceTest {
 
         UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
             .id(user.getId())
-            .checkTime(reservationRequestDto.getStartTime())
+            .checkStartTime(reservationRequestDto.getStartTime())
+            .checkEndTime(reservationRequestDto.getEndTime())
             .build();
 
         //when, then
@@ -312,12 +315,12 @@ class ReservationServiceTest {
         //given
         UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
             .id(user.getId())
-            .checkTime(LocalDateTime.now().plusHours(4L))
+            .checkStartTime(LocalDateTime.now().plusHours(4L))
+            .checkEndTime(LocalDateTime.now().plusHours(7L))
             .build();
 
         //when
-        boolean check = reservationService.checkReservationByUserId(userReservationCheckDto,
-            ReservationStatus.CANCELD);
+        boolean check = reservationService.checkReservationByUserId(userReservationCheckDto);
 
         //then
         assertThat(check, samePropertyValuesAs(true));
@@ -328,7 +331,7 @@ class ReservationServiceTest {
     void possibleReservationTimeByCarId() {
         //given, when
         boolean check = reservationService.possibleReservationTimeByCarId(car.getId(),
-            LocalDateTime.now().plusHours(4L), ReservationStatus.CANCELD);
+            LocalDateTime.now().plusHours(4L), LocalDateTime.now().plusHours(6L));
 
         //then
         assertThat(check, samePropertyValuesAs(true));
@@ -344,6 +347,6 @@ class ReservationServiceTest {
         ReservationResponseDto cancelReservation = reservationService.getReservation(
             cancelReservationId);
         assertThat(cancelReservation.getReservationStatus(),
-            samePropertyValuesAs(ReservationStatus.CANCELD));
+            samePropertyValuesAs(ReservationStatus.CANCEL));
     }
 }

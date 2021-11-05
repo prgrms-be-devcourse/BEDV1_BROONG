@@ -47,9 +47,11 @@ public class ReservationServiceImpl implements ReservationService {
                 addReservationRequest.getUserResponseDto().getId())));
 
         checkReservationByUserId(UserReservationCheckDto.builder().id(getUser.getId())
-            .checkTime(addReservationRequest.getStartTime()).build());
+            .checkStartTime(addReservationRequest.getStartTime())
+            .checkEndTime(addReservationRequest.getEndTime()).build());
 
-        possibleReservationTimeByCarId(car.getId(), addReservationRequest.getStartTime());
+        possibleReservationTimeByCarId(car.getId(), addReservationRequest.getStartTime(),
+            addReservationRequest.getEndTime());
 
         if (!getUser.getLicenseInfo()) {
             throw new RuntimeException(
@@ -94,7 +96,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public boolean checkReservationByUserId(UserReservationCheckDto userReservationCheckDto) {
         long reservationCount = repository.checkReservationByUserId(userReservationCheckDto.getId(),
-            userReservationCheckDto.getCheckTime(), ReservationStatus.CANCEL).stream().count();
+            userReservationCheckDto.getCheckStartTime(), userReservationCheckDto.getCheckEndTime(),
+            ReservationStatus.CANCEL).stream().count();
         if (reservationCount != 0) {
             throw new RuntimeException(
                 MessageFormat.format("사용자:{0}키는 동일한 시간대에 예약이 존재합니다.",
@@ -104,9 +107,10 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean possibleReservationTimeByCarId(Long carId, LocalDateTime checkTime) {
+    public boolean possibleReservationTimeByCarId(Long carId, LocalDateTime checkStartTime,
+        LocalDateTime checkEndTime) {
         long reservationCount = repository.possibleReservationTimeByCarId(carId,
-            checkTime, ReservationStatus.CANCEL).stream().count();
+            checkStartTime, checkEndTime, ReservationStatus.CANCEL).stream().count();
         if (reservationCount != 0) {
             throw new RuntimeException(
                 MessageFormat.format("자동차:{0}키는 동일한 시간대에 예약이 존재합니다.", carId));

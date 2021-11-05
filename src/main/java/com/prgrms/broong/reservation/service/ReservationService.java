@@ -16,12 +16,13 @@ public interface ReservationService {
 
     Page<ReservationResponseDto> getReservationListByUserId(Long userId, Pageable pageable);
 
-    boolean checkReservationByUserId(UserReservationCheckDto userReservationCheckDto,
-        ReservationStatus reservationStatus);
+    boolean checkReservationByUserId(UserReservationCheckDto userReservationCheckDto);
 
-    boolean possibleReservationTimeByCarId(Long carId, LocalDateTime checkTime,
-        ReservationStatus reservationStatus);
+    boolean possibleReservationTimeByCarId(Long carId, LocalDateTime checkStartTime,
+        LocalDateTime checkEndTime);
 
     Long removeReservation(Long reservationId);
+
+    void editReservationByReservationQueue(Long reservationId, ReservationStatus changeStatusValue);
 
 }
