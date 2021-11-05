@@ -22,7 +22,7 @@ public class ReservationResponseDto {
 
     private ReservationStatus reservationStatus;
 
-    private boolean isOneway;
+    private Boolean isOneway;
 
     private Integer fee;
 
