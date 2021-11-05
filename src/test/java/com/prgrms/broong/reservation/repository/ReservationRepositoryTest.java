@@ -107,7 +107,7 @@ class ReservationRepositoryTest {
         parkCar = parkCarRepository.save(parkCar);
 
         reservation = Reservation.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .usagePoint(1000)
             .startTime(LocalDateTime.now())
             .endTime(LocalDateTime.now().plusHours(2L))
@@ -117,7 +117,7 @@ class ReservationRepositoryTest {
             .build();
 
         reservation2 = Reservation.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .usagePoint(3000)
             .startTime(LocalDateTime.now().plusHours(5L))
             .endTime(LocalDateTime.now().plusHours(7L))
@@ -177,10 +177,12 @@ class ReservationRepositoryTest {
         //when
         Optional<Reservation> duplicateReservation = reservationRepository.checkReservationByUserId(
             user.getId()
-            , reservation.getStartTime().plusHours(1), ReservationStatus.CANCELD);
+            , reservation.getStartTime().plusHours(1), reservation.getEndTime().plusHours(2),
+            ReservationStatus.CANCEL);
         Optional<Reservation> possibleReservation = reservationRepository.checkReservationByUserId(
             user.getId()
-            , reservation.getStartTime().plusHours(3), ReservationStatus.CANCELD);
+            , reservation.getStartTime().plusHours(3), reservation.getEndTime().plusHours(4),
+            ReservationStatus.CANCEL);
 
         //then
         assertThat(duplicateReservation.isEmpty(), samePropertyValuesAs(true));
@@ -199,10 +201,12 @@ class ReservationRepositoryTest {
         //when
         Optional<Reservation> failReservation = reservationRepository.possibleReservationTimeByCarId(
             reservation.getParkCar().getCar().getId()
-            , reservation.getStartTime().plusHours(1), ReservationStatus.CANCELD);
+            , reservation.getStartTime().plusHours(1), reservation.getEndTime().plusHours(2),
+            ReservationStatus.CANCEL);
         Optional<Reservation> successReservation = reservationRepository.possibleReservationTimeByCarId(
             reservation.getParkCar().getCar().getId()
-            , reservation.getStartTime().plusHours(3), ReservationStatus.CANCELD);
+            , reservation.getStartTime().plusHours(3), reservation.getEndTime().plusHours(4),
+            ReservationStatus.CANCEL);
 
         //then
         assertThat(failReservation.isEmpty(), samePropertyValuesAs(true));
