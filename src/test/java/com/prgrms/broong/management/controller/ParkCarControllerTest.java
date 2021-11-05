@@ -6,7 +6,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,11 +19,10 @@ import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
 import com.prgrms.broong.management.park.dto.LocationDto;
 import com.prgrms.broong.management.park.dto.ParkResponseDto;
-import com.prgrms.broong.management.park.repository.LocationRepository;
 import com.prgrms.broong.management.park.repository.ParkRepository;
+import com.prgrms.broong.management.service.ParkCarService;
 import com.prgrms.broong.management.species.domain.Species;
 import com.prgrms.broong.management.species.dto.SpeciesDto;
-import com.prgrms.broong.management.species.repository.SpeciesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,14 +34,11 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @SpringBootTest
 class ParkCarControllerTest {
-
-    private static final Long ID = 1L;
 
     @Autowired
     MockMvc mockMvc;
@@ -52,30 +47,29 @@ class ParkCarControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    WebApplicationContext wac;
-
-    @Autowired
     private ParkRepository parkRepository;
 
     @Autowired
     private CarRepository carRepository;
 
     @Autowired
-    private SpeciesRepository speciesRepository;
-
-    @Autowired
-    private LocationRepository locationRepository;
+    private ParkCarService parkCarService;
 
     private ParkCarRequestDto parkCarRequestDto;
 
+    private Species species;
+
+    private Car car;
+
+    private Park park;
+
     @BeforeEach
     void setUp() {
-        Species species = Species.builder()
+        species = Species.builder()
             .name("중형")
             .build();
-        speciesRepository.save(species);
 
-        Car car = Car.builder()
+        car = Car.builder()
             .carNum("11허124333")
             .fuel(100L)
             .model("k5")
@@ -90,9 +84,8 @@ class ParkCarControllerTest {
             .townId("101")
             .locationName("도봉구")
             .build();
-        locationRepository.save(location);
 
-        Park park = Park.builder()
+        park = Park.builder()
             .possibleNum(10)
             .location(location)
             .build();
@@ -134,6 +127,7 @@ class ParkCarControllerTest {
     @Test
     @DisplayName("parkCar 저장 controller 테스트")
     void saveParkCarTest() throws Exception {
+        //when //then
         mockMvc.perform(post("/api/v1/park-cars")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(parkCarRequestDto)))
@@ -197,7 +191,10 @@ class ParkCarControllerTest {
     @DisplayName("주차장 다건 조회 및 주차장별 차량 개수 controller 테스트")
     @Test
     void getParksWithCountTest() throws Exception {
-        //when
+        //given
+        parkCarService.saveParkCar(parkCarRequestDto);
+
+        //when //then
         mockMvc.perform(get("/api/v1/park-cars")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -224,9 +221,11 @@ class ParkCarControllerTest {
     @Test
     @DisplayName("park 단건, car 단건조회 controller 테스트")
     void getParkCarByParkIdAndCarIdTest() throws Exception {
+        //when //then
+        parkCarService.saveParkCar(parkCarRequestDto);
         mockMvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/park-cars/parks/{parkId}/cars/{carId}",
-                        ID, ID)
+                        park.getId(), car.getId())
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("parkCar-findOnePark-findOneCar",
@@ -289,8 +288,13 @@ class ParkCarControllerTest {
     @Test
     @DisplayName("park 단건, car 다건조회 controller 테스트")
     void getParkCarByParkIdTest() throws Exception {
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/park-cars/{parkId}", ID)
-                .contentType(MediaType.APPLICATION_JSON))
+        //given
+        parkCarService.saveParkCar(parkCarRequestDto);
+
+        //when //then
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/api/v1/park-cars/{parkId}", park.getId())
+                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("parkCar-findOnePark-findCars",
                 pathParameters(
@@ -352,13 +356,16 @@ class ParkCarControllerTest {
     @DisplayName("parkCar 주차장별 선택한 차종의 차량리스트 조회 테스트")
     @Test
     void getParkCarByParkIdAndSpeciesNameTest() throws Exception {
-        //when
+        //given
+        parkCarService.saveParkCar(parkCarRequestDto);
+
+        //when //then
         mockMvc.perform(RestDocumentationRequestBuilders.get(
-                    "/api/v1/park-cars/parks/{parkId}/species/{speciesId}", ID, ID)
+                    "/api/v1/park-cars/parks/{parkId}/species/{speciesId}", park.getId(), species.getId())
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("parkCar-filter",
-                requestParameters(
+                pathParameters(
                     parameterWithName("parkId").description("주차장 Id"),
                     parameterWithName("speciesId").description("차종 Id")
                 ),
