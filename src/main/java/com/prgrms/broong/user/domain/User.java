@@ -1,13 +1,11 @@
 package com.prgrms.broong.user.domain;
 
 import com.prgrms.broong.common.BaseEntity;
-import com.prgrms.broong.common.BooleanToYnConverter;
 import com.prgrms.broong.reservation.domain.Reservation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +26,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @Id
@@ -50,13 +48,11 @@ public class User extends BaseEntity {
     @Column(name = "location_name", columnDefinition = "VARCHAR(100)", nullable = false)
     private String locationName;
 
-    @Convert(converter = BooleanToYnConverter.class)
-    @Column(name = "license_info", columnDefinition = "VARCHAR(50)", nullable = false)
-    private boolean licenseInfo;
+    @Column(name = "license_info", columnDefinition = "BIT(1)", nullable = false)
+    private Boolean licenseInfo;
 
-    @Convert(converter = BooleanToYnConverter.class)
-    @Column(name = "payment_method", columnDefinition = "VARCHAR(50)", nullable = false)
-    private boolean paymentMethod;
+    @Column(name = "payment_method", columnDefinition = "BIT(1)", nullable = false)
+    private Boolean paymentMethod;
 
     @Min(0)
     @Column(name = "point", columnDefinition = "INT DEFAULT 0")
