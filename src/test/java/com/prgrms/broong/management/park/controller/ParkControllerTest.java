@@ -20,14 +20,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
+@AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @SpringBootTest
 class ParkControllerTest {
@@ -41,21 +42,13 @@ class ParkControllerTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    WebApplicationContext wac;
-
-    @Autowired
     LocationRepository locationRepository;
 
     private ParkRequestDto parkRequestDto;
 
     @BeforeEach
     void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-            .addFilters(new CharacterEncodingFilter("UTF-8", true))
-            .alwaysDo(print())
-            .build();
-
-        location = Location.builder()
+        Location location = Location.builder()
             .id(1L)
             .cityId("1")
             .townId("101")
@@ -83,17 +76,51 @@ class ParkControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(parkRequestDto)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("park-save",
+                requestFields(
+                    fieldWithPath("possibleNum").type(JsonFieldType.NUMBER)
+                        .description("주차장 수용가능한 차량 수"),
+                    fieldWithPath("locationDto").type(JsonFieldType.OBJECT)
+                        .description("위치 정보"),
+                    fieldWithPath("위치 Id").type(JsonFieldType.NUMBER).description("name"),
+                    fieldWithPath("locationDto.cityId").type(JsonFieldType.STRING)
+                        .description("시 Id"),
+                    fieldWithPath("locationDto.townId").type(JsonFieldType.STRING)
+                        .description("구 Id"),
+                    fieldWithPath("locationDto.locationName").type(JsonFieldType.STRING)
+                        .description("위치 이름")
+                ),
+                responseFields(
+                    fieldWithPath("parkId").type(JsonFieldType.NUMBER).description("주차장 id")
+                )
+            ));
     }
 
     @Test
     @DisplayName("Park 컨트롤러 조회 테스트")
     void getParkById() throws Exception {
-        mockMvc.perform(get("/api/v1/parks/{parkId}", PARK_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("parkId", String.valueOf(PARK_ID)))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/parks/{parkId}", PARK_ID)
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("park-find",
+                pathParameters(
+                    parameterWithName("parkId").description("주차장 Id")
+                ),
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("주차장 id"),
+                    fieldWithPath("possibleNum").type(JsonFieldType.NUMBER)
+                        .description("주차장 수용가능한 차량 수"),
+                    fieldWithPath("locationDto").type(JsonFieldType.OBJECT)
+                        .description("위치 정보"),
+                    fieldWithPath("locationDto.id").type(JsonFieldType.NUMBER).description("위치 Id"),
+                    fieldWithPath("locationDto.cityId").type(JsonFieldType.STRING)
+                        .description("시 Id"),
+                    fieldWithPath("locationDto.townId").type(JsonFieldType.STRING)
+                        .description("구 Id"),
+                    fieldWithPath("locationDto.locationName").type(JsonFieldType.STRING)
+                        .description("위치 이름")
+                )
+            ));
     }
 
     @Test
@@ -106,10 +133,17 @@ class ParkControllerTest {
 
         mockMvc.perform(put("/api/v1/parks/{parkId}", PARK_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("parkId", String.valueOf(PARK_ID))
                 .content(objectMapper.writeValueAsString(parkUpdateDto)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("park-update",
+                requestFields(
+                    fieldWithPath("possibleNum").type(JsonFieldType.NUMBER)
+                        .description("possibleNum")
+                ),
+                responseFields(
+                    fieldWithPath("parkId").type(JsonFieldType.NUMBER).description("주차장 id")
+                )
+            ));
     }
 
 }

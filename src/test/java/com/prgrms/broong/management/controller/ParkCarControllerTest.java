@@ -36,10 +36,9 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
+@AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @SpringBootTest
 class ParkCarControllerTest {
@@ -202,7 +201,24 @@ class ParkCarControllerTest {
         mockMvc.perform(get("/api/v1/park-cars")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("parkCar-count",
+                responseFields(
+                    fieldWithPath("[].cityId").type(JsonFieldType.STRING)
+                        .description("cityId"),
+                    fieldWithPath("[].parkId").type(JsonFieldType.NUMBER)
+                        .description("parkId"),
+                    fieldWithPath("[].possibleNum").type(JsonFieldType.NUMBER)
+                        .description("possibleNum"),
+                    fieldWithPath("[].cnt").type(JsonFieldType.NUMBER)
+                        .description("cnt"),
+                    fieldWithPath("[].locationId").type(JsonFieldType.NUMBER)
+                        .description("locationId"),
+                    fieldWithPath("[].townId").type(JsonFieldType.STRING)
+                        .description("townId"),
+                    fieldWithPath("[].locationName").type(JsonFieldType.STRING)
+                        .description("locationName")
+                )
+            ));
     }
 
     @Test
@@ -213,15 +229,68 @@ class ParkCarControllerTest {
                         ID, ID)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("parkCar-findOnePark-findOneCar",
+                pathParameters(
+                    parameterWithName("parkId").description("parkId"),
+                    parameterWithName("carId").description("carId")),
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("파크카 응답 DTO Id"),
+                    fieldWithPath("parkResponseDto").type(JsonFieldType.OBJECT)
+                        .description("주차장 응답 DTO"),
+                    fieldWithPath("parkResponseDto.id").type(JsonFieldType.NUMBER)
+                        .description("주차장 Id"),
+                    fieldWithPath("parkResponseDto.possibleNum").type(
+                            JsonFieldType.NUMBER)
+                        .description("주차장 수용가능한 차량 수"),
+                    fieldWithPath("parkResponseDto.locationDto").type(
+                            JsonFieldType.OBJECT)
+                        .description("주차장 위치"),
+                    fieldWithPath("parkResponseDto.locationDto.id").type(
+                            JsonFieldType.NUMBER)
+                        .description("위치 Id"),
+                    fieldWithPath("parkResponseDto.locationDto.cityId").type(
+                            JsonFieldType.STRING)
+                        .description("시 Id"),
+                    fieldWithPath("parkResponseDto.locationDto.townId").type(
+                            JsonFieldType.STRING)
+                        .description("구 Id"),
+                    fieldWithPath("parkResponseDto.locationDto.locationName").type(
+                            JsonFieldType.STRING)
+                        .description("위치 이름"),
+                    fieldWithPath("carResponseDto").type(JsonFieldType.OBJECT)
+                        .description("차량 응답 DTO"),
+                    fieldWithPath("carResponseDto.id").type(JsonFieldType.NUMBER)
+                        .description("차량 Id"),
+                    fieldWithPath("carResponseDto.carNum").type(
+                            JsonFieldType.STRING)
+                        .description("차량 번호"),
+                    fieldWithPath("carResponseDto.model").type(
+                            JsonFieldType.STRING)
+                        .description("차량 모델명"),
+                    fieldWithPath("carResponseDto.fuel").type(
+                        JsonFieldType.NUMBER).description("차량 기름양"),
+                    fieldWithPath("carResponseDto.price").type(
+                        JsonFieldType.NUMBER).description("차량 시간당 가격"),
+                    fieldWithPath("carResponseDto.possiblePassengers").type(
+                        JsonFieldType.NUMBER).description("차량 수용가능한 인원 수"),
+                    fieldWithPath("carResponseDto.speciesDto").type(
+                            JsonFieldType.OBJECT)
+                        .description("차종 DTO"),
+                    fieldWithPath("carResponseDto.speciesDto.id").type(
+                            JsonFieldType.NUMBER)
+                        .description("차종 Id"),
+                    fieldWithPath("carResponseDto.speciesDto.name").type(
+                            JsonFieldType.STRING)
+                        .description("차종 이름")
+                )
+            ));
     }
 
     @Test
     @DisplayName("park 단건, car 다건조회 controller 테스트")
     void getParkCarByParkIdTest() throws Exception {
-        mockMvc.perform(get("/api/v1/park-cars/{parkId}", ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("parkId", String.valueOf(ID)))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/park-cars/{parkId}", ID)
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("parkCar-findOnePark-findCars",
                 pathParameters(
@@ -284,10 +353,9 @@ class ParkCarControllerTest {
     @Test
     void getParkCarByParkIdAndSpeciesNameTest() throws Exception {
         //when
-        mockMvc.perform(get("/api/v1/park-cars/parks/{parkId}/species/{speciesId}", ID, ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("parkId", String.valueOf(ID))
-                .param("speciesId", String.valueOf(ID)))
+        mockMvc.perform(RestDocumentationRequestBuilders.get(
+                    "/api/v1/park-cars/parks/{parkId}/species/{speciesId}", ID, ID)
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("parkCar-filter",
                 requestParameters(

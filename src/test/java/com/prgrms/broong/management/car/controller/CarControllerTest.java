@@ -20,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -39,9 +40,6 @@ class CarControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
-    WebApplicationContext wac;
 
     @Autowired
     SpeciesRepository speciesRepository;
@@ -103,8 +101,8 @@ class CarControllerTest {
     @Test
     @DisplayName("Car 컨트롤러 조회 테스트")
     void getCarById() throws Exception {
-        mockMvc.perform(get("/api/v1/cars/{carId}", CAR_ID)
-                .contentType(MediaType.APPLICATION_JSON).param("carId", String.valueOf(CAR_ID)))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/cars/{carId}", CAR_ID)
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("car-find",
                 pathParameters(
@@ -141,7 +139,6 @@ class CarControllerTest {
 
         mockMvc.perform(put("/api/v1/cars/{carId}", CAR_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("car_id", String.valueOf(CAR_ID))
                 .content(objectMapper.writeValueAsString(carUpdateDto)))
             .andExpect(status().isOk())
             .andDo(document("car-update",
