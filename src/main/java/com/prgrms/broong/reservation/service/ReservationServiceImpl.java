@@ -4,9 +4,11 @@ import com.prgrms.broong.management.car.domain.Car;
 import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.reservation.converter.ReservationConverter;
 import com.prgrms.broong.reservation.domain.Reservation;
+import com.prgrms.broong.reservation.domain.ReservationQueue;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.reservation.dto.ReservationRequestDto;
 import com.prgrms.broong.reservation.dto.ReservationResponseDto;
+import com.prgrms.broong.reservation.repository.ReservationQueueRepository;
 import com.prgrms.broong.reservation.repository.ReservationRepository;
 import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.dto.UserReservationCheckDto;
@@ -30,21 +32,24 @@ public class ReservationServiceImpl implements ReservationService {
     private final UserRepository userRepository;
     private final CarRepository carRepository;
     private final ReservationConverter converter;
+    private final ReservationQueueRepository reservationQueueRepository;
 
     @Transactional
     @Override
     public Long saveReservation(ReservationRequestDto addReservationRequest) {
         Reservation reservation = converter.ReservationToEntity(addReservationRequest);
         Car car = carRepository.findById(
-            addReservationRequest.getParkCarResponseDto().getCarResponseDto().getId()).get();
+            addReservationRequest.getParkCarResponseDto().getCarResponseDto().getId()).orElseThrow(
+            () -> new RuntimeException(MessageFormat.format("해당 {0}키의 자동차를 찾을 수 없습니다.",
+                addReservationRequest.getParkCarResponseDto().getCarResponseDto().getId())));
         User getUser = userRepository.findById(addReservationRequest.getUserResponseDto().getId())
-            .get();
+            .orElseThrow(() -> new RuntimeException(MessageFormat.format("해당 {0}키의 사용자를 찾을 수 없습니다.",
+                addReservationRequest.getUserResponseDto().getId())));
 
         checkReservationByUserId(UserReservationCheckDto.builder().id(getUser.getId())
-            .checkTime(addReservationRequest.getStartTime()).build(), ReservationStatus.CANCELD);
+            .checkTime(addReservationRequest.getStartTime()).build());
 
-        possibleReservationTimeByCarId(car.getId(), addReservationRequest.getStartTime(),
-            ReservationStatus.CANCELD);
+        possibleReservationTimeByCarId(car.getId(), addReservationRequest.getStartTime());
 
         if (!getUser.isLicenseInfo()) {
             throw new RuntimeException(
@@ -56,10 +61,19 @@ public class ReservationServiceImpl implements ReservationService {
                 MessageFormat.format("사용자:{0}는 결제수단을 등록해 주세요",
                     getUser.getId()));
         }
-        if (!reservation.isOneway()) {
+        if (!reservation.getIsOneway()) {
             reservation.changeEndTime(ADD_HOUR);
         }
         getUser.reduceUsagePoint(reservation.getUsagePoint());
+        repository.save(reservation);
+        ReservationQueue usingReservationQueue = ReservationQueue.builder()
+            .reservationId(reservation.getId()).reservationStatus(ReservationStatus.PROCEED)
+            .checkTime(reservation.getStartTime()).build();
+        ReservationQueue returnReservationQueue = ReservationQueue.builder()
+            .reservationId(reservation.getId()).reservationStatus(ReservationStatus.COMPLETE)
+            .checkTime(reservation.getEndTime()).build();
+        reservationQueueRepository.save(usingReservationQueue);
+        reservationQueueRepository.save(returnReservationQueue);
         return repository.save(reservation).getId();
     }
 
@@ -78,10 +92,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean checkReservationByUserId(UserReservationCheckDto userReservationCheckDto,
-        ReservationStatus reservationStatus) {
+    public boolean checkReservationByUserId(UserReservationCheckDto userReservationCheckDto) {
         long reservationCount = repository.checkReservationByUserId(userReservationCheckDto.getId(),
-            userReservationCheckDto.getCheckTime(), reservationStatus).stream().count();
+            userReservationCheckDto.getCheckTime(), ReservationStatus.CANCEL).stream().count();
         if (reservationCount != 0) {
             throw new RuntimeException(
                 MessageFormat.format("사용자:{0}키는 동일한 시간대에 예약이 존재합니다.",
@@ -91,10 +104,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean possibleReservationTimeByCarId(Long carId, LocalDateTime checkTime,
-        ReservationStatus reservationStatus) {
+    public boolean possibleReservationTimeByCarId(Long carId, LocalDateTime checkTime) {
         long reservationCount = repository.possibleReservationTimeByCarId(carId,
-            checkTime, reservationStatus).stream().count();
+            checkTime, ReservationStatus.CANCEL).stream().count();
         if (reservationCount != 0) {
             throw new RuntimeException(
                 MessageFormat.format("자동차:{0}키는 동일한 시간대에 예약이 존재합니다.", carId));
@@ -105,13 +117,27 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     @Override
     public Long removeReservation(Long reservationId) {
-        Reservation reservation = repository.findReservationAndUser(reservationId)
+        Reservation getReservation = repository.findReservationAndUser(reservationId)
             .orElseThrow(() -> new RuntimeException(
                 MessageFormat.format("해당 {0}키의 객체를 찾을 수 없습니다.", reservationId)));
-        reservation.changeReservationStatus(ReservationStatus.CANCELD);
-        Integer returnUsagePoint = reservation.getUsagePoint() + reservation.getUser().getPoint();
-        reservation.getUser().changePoint(returnUsagePoint);
-        return reservationId;
+        getReservation.changeReservationStatus(ReservationStatus.CANCEL);
+        getReservation.getUser()
+            .changePoint(getReservation.getUsagePoint() + getReservation.getUser().getPoint());
+        return getReservation.getId();
+    }
+
+    @Transactional
+    @Override
+    public void editReservationByReservationQueue(Long reservationId,
+        ReservationStatus changeStatusValue) {
+        Reservation getReservation = repository.findReservationAndUser(reservationId)
+            .orElseThrow(() -> new RuntimeException(
+                MessageFormat.format("해당 {0}키의 객체를 찾을 수 없습니다.", reservationId)));
+        if (changeStatusValue.equals(ReservationStatus.COMPLETE)) {
+            getReservation.getUser()
+                .changePoint(getReservation.getUser().getPoint() + getReservation.getFee() % 10);
+        }
+        getReservation.changeReservationStatus(changeStatusValue);
     }
 
 }
