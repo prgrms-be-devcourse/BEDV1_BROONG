@@ -1,8 +1,8 @@
 package com.prgrms.broong.reservation.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -151,7 +151,7 @@ class ReservationControllerTest {
         user = userRepository.save(user);
 
         reservation = Reservation.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .usagePoint(1000)
             .startTime(LocalDateTime.now().plusHours(1L))
             .endTime(LocalDateTime.now().plusHours(3L))
@@ -177,7 +177,7 @@ class ReservationControllerTest {
             .build();
 
         ReservationRequestDto reservationRequestDto = ReservationRequestDto.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .startTime(LocalDateTime.now().plusHours(6L))
             .endTime(LocalDateTime.now().plusHours(7L))
             .userResponseDto(userResponseDto)
@@ -187,7 +187,7 @@ class ReservationControllerTest {
             .isOneway(false)
             .build();
 
-        mockMvc.perform(post("/api/v1/broong/reservations")
+        mockMvc.perform(post("/api/v1/reservations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(reservationRequestDto)))
             .andExpect(status().isOk())
@@ -197,7 +197,7 @@ class ReservationControllerTest {
     @Test
     @DisplayName("예약 단건 조회 테스트")
     void getReservationTest() throws Exception {
-        mockMvc.perform(get("/api/v1/broong/reservations/{reservationId}", reservation.getId())
+        mockMvc.perform(get("/api/v1/reservations/{reservationId}", reservation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print());
@@ -206,7 +206,7 @@ class ReservationControllerTest {
     @Test
     @DisplayName("예약 취소시 상태 변경 테스트")
     void cancelReservationTest() throws Exception {
-        mockMvc.perform(put("/api/v1/broong/reservations/{reservationId}", reservation.getId())
+        mockMvc.perform(patch("/api/v1/reservations/{reservationId}", reservation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print());
@@ -216,7 +216,7 @@ class ReservationControllerTest {
     @DisplayName("사용자의 예약 조회 리스트")
     void getReservationListByUserIdTest() throws Exception {
         mockMvc.perform(
-                get("/api/v1/broong/reservations/users/{userId}", reservation.getUser().getId())
+                get("/api/v1/reservations/users/{userId}", reservation.getUser().getId())
                     .param("page", String.valueOf(0))
                     .param("size", String.valueOf(20))
                     .contentType(MediaType.APPLICATION_JSON))
@@ -228,9 +228,10 @@ class ReservationControllerTest {
     @DisplayName("사용자의 중복 예약 확인 테스트")
     void checkReservationByUserIdTest() throws Exception {
         mockMvc.perform(
-                get("/api/v1/broong/reservations/check-reservations/{userId}",
+                get("/api/v1/reservations/check-reservations/{userId}",
                     reservation.getUser().getId())
-                    .param("checkTime", String.valueOf(LocalDateTime.now().plusHours(10)))
+                    .param("checkStartTime", String.valueOf(LocalDateTime.now().plusHours(10)))
+                    .param("checkEndTime", String.valueOf(LocalDateTime.now().plusHours(12)))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print());
@@ -240,9 +241,10 @@ class ReservationControllerTest {
     @DisplayName("선택한 자동차 예약 가능 확인 테스트")
     void possibleReservationByCarIdTest() throws Exception {
         mockMvc.perform(
-                get("/api/v1/broong/reservations/possible-reservations/{carId}",
+                get("/api/v1/reservations/possible-reservations/{carId}",
                     reservation.getUser().getId())
-                    .param("checkTime", String.valueOf(LocalDateTime.now().plusHours(10)))
+                    .param("checkStartTime", String.valueOf(LocalDateTime.now().plusHours(10)))
+                    .param("checkEndTime", String.valueOf(LocalDateTime.now().plusHours(12)))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print());
