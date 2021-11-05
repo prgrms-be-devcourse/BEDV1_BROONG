@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ParkUpdateDto {
 
-    @NotNull
-    @Min(0)
-    private Integer possibleNum;
+    @NotNull(message = "possibleNum은 null일 수 없습니다.")
+    @Min(value = 0, message = "possibleNum은 0이상이어야 합니다.")
+    private int possibleNum;
 
 }

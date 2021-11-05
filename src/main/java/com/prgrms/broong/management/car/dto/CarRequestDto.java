@@ -14,24 +14,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarRequestDto {
 
-    @NotNull
+    @NotNull(message = "carNum은 null일 수 없습니다.")
     private String carNum;
 
-    @NotNull
+    @NotNull(message = "model null일 수 없습니다.")
     private String model;
 
-    @NotNull
-    @Min(0)
-    private Long fuel;
+    @NotNull(message = "fuel은 null일 수 없습니다.")
+    @Min(value = 0, message = "fuel은 최소 0이어야 합니다.")
+    private long fuel;
 
-    @NotNull
-    @Min(0)
-    private Long price;
+    @NotNull(message = "price는 null일 수 없습니다.")
+    @Min(value = 0, message = "price는 최소 0이어야 합니다.")
+    private long price;
 
-    @NotNull
-    @Min(0)
-    private Integer possiblePassengers;
+    @NotNull(message = "possiblePassengers는 null일 수 없습니다.")
+    @Min(value = 0, message = "possiblePassengers는 최소 0이어야 합니다.")
+    private int possiblePassengers;
 
+    @NotNull(message = "speciesDto는 null일 수 없습니다.")
     private SpeciesDto speciesDto;
 
 }

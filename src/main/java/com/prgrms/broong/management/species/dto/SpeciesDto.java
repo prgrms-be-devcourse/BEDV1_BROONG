@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SpeciesDto {
 
-    @NotNull
+    @NotNull(message = "id는 null일 수 없습니다.")
     private Long id;
 
-    @NotNull
+    @NotNull(message = "차종은 null일 수 없습니다.")
     private String name;
 
 }

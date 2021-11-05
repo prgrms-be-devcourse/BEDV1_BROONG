@@ -4,6 +4,7 @@ import com.prgrms.broong.management.car.dto.CarRequestDto;
 import com.prgrms.broong.management.car.dto.CarResponseDto;
 import com.prgrms.broong.management.car.dto.CarUpdateDto;
 import com.prgrms.broong.management.car.service.CarService;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +18,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/v1")
 public class CarController {
+
+    private static final String CAR_ID = "carId";
 
     private final CarService carService;
 
-    @PostMapping(path = "/v1/broong/cars")
-    public ResponseEntity<Long> save(@RequestBody @Valid CarRequestDto carRequestDto) {
-        return ResponseEntity.ok(carService.saveCar(carRequestDto));
+    @PostMapping(path = "/cars")
+    public ResponseEntity<Map<String, Long>> save(@RequestBody @Valid CarRequestDto carRequestDto) {
+        return ResponseEntity.ok(Map.of(CAR_ID, carService.saveCar(carRequestDto)));
     }
 
-    @GetMapping(path = "/v1/broong/cars/{carId}")
+    @GetMapping(path = "/cars/{carId}")
     public ResponseEntity<CarResponseDto> getCarById(@PathVariable("carId") Long carId) {
         return ResponseEntity.ok(carService.getCarById(carId));
     }
 
-    @PutMapping(path = "/v1/broong/cars/{carId}")
-    public ResponseEntity<Long> editCar(@PathVariable("carId") Long carId,
+    @PutMapping(path = "/cars/{carId}")
+    public ResponseEntity<Map<String, Long>> editCar(@PathVariable("carId") Long carId,
         @RequestBody @Valid CarUpdateDto carUpdateDto) {
-        return ResponseEntity.ok(carService.editCar(carId, carUpdateDto));
+        return ResponseEntity.ok(Map.of(CAR_ID, carService.editCar(carId, carUpdateDto)));
     }
 
 }

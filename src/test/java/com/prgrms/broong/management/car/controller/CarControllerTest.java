@@ -77,7 +77,7 @@ class CarControllerTest {
     @Test
     @DisplayName("Car 컨트롤러 저장 테스트")
     void saveTest() throws Exception {
-        mockMvc.perform(post("/api/v1/broong/cars")
+        mockMvc.perform(post("/api/v1/cars")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(carRequestDto)))
             .andExpect(status().isOk())
@@ -87,7 +87,7 @@ class CarControllerTest {
     @Test
     @DisplayName("Car 컨트롤러 조회 테스트")
     void getCarById() throws Exception {
-        mockMvc.perform(get("/api/v1/broong/cars/{carId}", CAR_ID)
+        mockMvc.perform(get("/api/v1/cars/{carId}", CAR_ID)
                 .contentType(MediaType.APPLICATION_JSON).param("carId", String.valueOf(CAR_ID)))
             .andExpect(status().isOk())
             .andDo(print());
@@ -103,7 +103,7 @@ class CarControllerTest {
             .price(50000L)
             .build();
 
-        mockMvc.perform(put("/api/v1/broong/cars/{carId}", CAR_ID)
+        mockMvc.perform(put("/api/v1/cars/{carId}", CAR_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("car_id", String.valueOf(CAR_ID))
                 .content(objectMapper.writeValueAsString(carUpdateDto)))

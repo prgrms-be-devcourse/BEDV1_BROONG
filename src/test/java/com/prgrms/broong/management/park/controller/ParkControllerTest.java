@@ -77,7 +77,7 @@ class ParkControllerTest {
     @Test
     @DisplayName("Park 컨트롤러 저장 테스트")
     void saveParkTest() throws Exception {
-        mockMvc.perform(post("/api/v1/broong/parks")
+        mockMvc.perform(post("/api/v1/parks")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(parkRequestDto)))
             .andExpect(status().isOk())
@@ -87,7 +87,7 @@ class ParkControllerTest {
     @Test
     @DisplayName("Park 컨트롤러 조회 테스트")
     void getParkById() throws Exception {
-        mockMvc.perform(get("/api/v1/broong/parks/{parkId}", PARK_ID)
+        mockMvc.perform(get("/api/v1/parks/{parkId}", PARK_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("parkId", String.valueOf(PARK_ID)))
             .andExpect(status().isOk())
@@ -102,7 +102,7 @@ class ParkControllerTest {
             .possibleNum(13)
             .build();
 
-        mockMvc.perform(put("/api/v1/broong/parks/{parkId}", PARK_ID)
+        mockMvc.perform(put("/api/v1/parks/{parkId}", PARK_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("parkId", String.valueOf(PARK_ID))
                 .content(objectMapper.writeValueAsString(parkUpdateDto)))

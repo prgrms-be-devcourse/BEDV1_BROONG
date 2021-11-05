@@ -41,10 +41,10 @@ class SpeciesControllerTest {
     }
 
     @Test
-    @DisplayName("차종 다건 조회 controller테스트")
+    @DisplayName("speciees controller테스트")
     void findAll() throws Exception {
         PageRequest page = PageRequest.of(0, 10);
-        mockMvc.perform(get("/api/v1/broong/species")
+        mockMvc.perform(get("/api/v1/species")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(String.valueOf(page)))
             .andExpect(status().isOk())

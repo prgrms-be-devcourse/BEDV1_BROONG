@@ -6,6 +6,7 @@ import com.prgrms.broong.management.species.domain.Species;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,18 +40,18 @@ public class Car extends BaseEntity {
     private String model;
 
     @Min(0)
-    @Column(name = "fuel", columnDefinition = "BIGINT", nullable = false)
-    private Long fuel;
+    @Column(name = "fuel", columnDefinition = "BIGINT")
+    private long fuel;
 
     @Min(0)
-    @Column(name = "price", columnDefinition = "BIGINT", nullable = false)
-    private Long price;
+    @Column(name = "price", columnDefinition = "BIGINT")
+    private long price;
 
-    @Column(name = "possible_passengers", columnDefinition = "INT", nullable = false, updatable = false)
-    private Integer possiblePassengers;
+    @Column(name = "possible_passengers", columnDefinition = "INT", updatable = false)
+    private int possiblePassengers;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "species_id", referencedColumnName = "id")
+    @JoinColumn(name = "species_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_car_to_species"))
     private Species species;
 
     public void changeCarInfo(CarUpdateDto carUpdateDto) {

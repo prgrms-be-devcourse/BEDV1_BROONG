@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/v1")
 public class SpeciesController {
 
     private final SpeciesService speciesService;
 
-    @GetMapping(path = "/v1/broong/species")
+    @GetMapping(path = "/species")
     public ResponseEntity<Page<SpeciesDto>> getAllSpecies(Pageable pageable) {
         return ResponseEntity.ok(speciesService.findAll(pageable));
     }

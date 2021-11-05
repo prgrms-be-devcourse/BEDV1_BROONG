@@ -4,6 +4,7 @@ import com.prgrms.broong.management.park.dto.ParkRequestDto;
 import com.prgrms.broong.management.park.dto.ParkResponseDto;
 import com.prgrms.broong.management.park.dto.ParkUpdateDto;
 import com.prgrms.broong.management.park.service.ParkService;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +18,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/v1")
 public class ParkController {
+
+    private static final String PARK_ID = "parkId";
 
     private final ParkService parkService;
 
-    @PostMapping("/v1/broong/parks")
-    public ResponseEntity<Long> savepark(@Valid @RequestBody ParkRequestDto parkRequestDto) {
-        return ResponseEntity.ok(parkService.savePark(parkRequestDto));
+    @PostMapping("/parks")
+    public ResponseEntity<Map<String, Long>> savePark(
+        @Valid @RequestBody ParkRequestDto parkRequestDto) {
+        return ResponseEntity.ok(Map.of(PARK_ID, parkService.savePark(parkRequestDto)));
     }
 
-    @GetMapping("/v1/broong/parks/{parkId}")
+    @GetMapping("/parks/{parkId}")
     public ResponseEntity<ParkResponseDto> getByParkId(@PathVariable("parkId") Long parkId) {
         return ResponseEntity.ok(parkService.getParkById(parkId));
     }
 
-    @PutMapping("/v1/broong/parks/{parkId}")
-    public ResponseEntity<Long> editPark(@PathVariable("parkId") Long parkId, @Valid @RequestBody
-        ParkUpdateDto parkUpdateDto) {
-        return ResponseEntity.ok(parkService.editPark(parkId, parkUpdateDto));
+    @PutMapping("/parks/{parkId}")
+    public ResponseEntity<Map<String, Long>> editPark(@PathVariable("parkId") Long parkId,
+        @Valid @RequestBody
+            ParkUpdateDto parkUpdateDto) {
+        return ResponseEntity.ok(Map.of(PARK_ID, parkService.editPark(parkId, parkUpdateDto)));
     }
 
 }

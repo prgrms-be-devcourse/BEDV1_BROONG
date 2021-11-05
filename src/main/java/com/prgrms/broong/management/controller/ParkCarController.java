@@ -5,6 +5,7 @@ import com.prgrms.broong.management.dto.ParkCarResponseDto;
 import com.prgrms.broong.management.dto.ParksInfoDto;
 import com.prgrms.broong.management.service.ParkCarService;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,36 +18,39 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/v1")
 public class ParkCarController {
+
+    private static final String PARK_CAR_ID = "parkCarId";
 
     private final ParkCarService parkCarService;
 
-    @PostMapping(path = "/v1/broong/park-cars")
-    public ResponseEntity<Long> save(@RequestBody @Valid ParkCarRequestDto parkCarRequestDto) {
-        return ResponseEntity.ok(parkCarService.saveParkCar(parkCarRequestDto));
+    @PostMapping(path = "/park-cars")
+    public ResponseEntity<Map<String, Long>> save(
+        @RequestBody @Valid ParkCarRequestDto parkCarRequestDto) {
+        return ResponseEntity.ok(
+            Map.of(PARK_CAR_ID, parkCarService.saveParkCar(parkCarRequestDto)));
     }
 
-    //전체 주차장 + 차량 개수 조회 <- 나중에 추가
-    @GetMapping(path = "/v1/broong/park-cars")
+    @GetMapping(path = "/park-cars")
     public ResponseEntity<List<ParksInfoDto>> getParksWithCount() {
         return ResponseEntity.ok(parkCarService.getParksWithCarCount());
     }
 
-    @GetMapping(path = "/v1/broong/park-cars/parks/{parkId}/{carId}")
+    @GetMapping(path = "/park-cars/parks/{parkId}/cars/{carId}")
     public ResponseEntity<ParkCarResponseDto> getParkCarByParkIdAndCarId(
         @PathVariable("parkId") Long parkId,
         @PathVariable("carId") Long carId) {
         return ResponseEntity.ok(parkCarService.getParkCarByParkIdAndCarId(parkId, carId));
     }
 
-    @GetMapping(path = "/v1/broong/park-cars/{parkId}")
+    @GetMapping(path = "/park-cars/{parkId}")
     public ResponseEntity<List<ParkCarResponseDto>> getParkCarByParkId(
         @PathVariable("parkId") Long parkId) {
         return ResponseEntity.ok(parkCarService.getParkCarByParkId(parkId));
     }
 
-    @GetMapping(path = "/v1/broong/park-cars/parks/species/{parkId}/{speciesId}")
+    @GetMapping(path = "/park-cars/parks/{parkId}/species/{speciesId}")
     public ResponseEntity<List<ParkCarResponseDto>> getParkCarByParkIdAndSpeciesName(
         @PathVariable("parkId") Long parkId, @PathVariable("speciesId") Long speciesId) {
         return ResponseEntity.ok(
