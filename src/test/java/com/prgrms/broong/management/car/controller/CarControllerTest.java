@@ -1,9 +1,13 @@
 package com.prgrms.broong.management.car.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,11 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
+@AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @SpringBootTest
 class CarControllerTest {
@@ -43,28 +47,21 @@ class CarControllerTest {
     SpeciesRepository speciesRepository;
 
     private CarRequestDto carRequestDto;
-    private SpeciesDto speciesDto;
-    private Species species;
 
     @BeforeEach
     void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-            .addFilters(new CharacterEncodingFilter("UTF-8", true))
-            .alwaysDo(print())
-            .build();
-
-        species = Species.builder()
+        Species species = Species.builder()
             .id(1L)
             .name("중형")
             .build();
         speciesRepository.save(species);
 
-        speciesDto = SpeciesDto.builder()
+        SpeciesDto speciesDto = SpeciesDto.builder()
             .id(1L)
             .name("중형")
             .build();
 
-        carRequestDto = carRequestDto.builder()
+        carRequestDto = CarRequestDto.builder()
             .carNum("11허124333")
             .fuel(100L)
             .model("k5")
@@ -81,7 +78,26 @@ class CarControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(carRequestDto)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("car-save",
+                requestFields(
+                    fieldWithPath("carNum").type(JsonFieldType.STRING).description("차량 번호"),
+                    fieldWithPath("model").type(JsonFieldType.STRING).description("차량 모델"),
+                    fieldWithPath("fuel").type(JsonFieldType.NUMBER).description("차량 기름양"),
+                    fieldWithPath("price").type(JsonFieldType.NUMBER)
+                        .description("차량 시간당 가격"),
+                    fieldWithPath("possiblePassengers").type(JsonFieldType.NUMBER)
+                        .description("차량 수용가능한 인원 수"),
+                    fieldWithPath("speciesDto").type(JsonFieldType.OBJECT)
+                        .description("차종"),
+                    fieldWithPath("speciesDto.id").type(JsonFieldType.NUMBER)
+                        .description("차종 Id"),
+                    fieldWithPath("speciesDto.name").type(JsonFieldType.STRING)
+                        .description("차종 Name")
+                ),
+                responseFields(
+                    fieldWithPath("carId").description("차량 Id")
+                )
+            ));
     }
 
     @Test
@@ -90,7 +106,27 @@ class CarControllerTest {
         mockMvc.perform(get("/api/v1/cars/{carId}", CAR_ID)
                 .contentType(MediaType.APPLICATION_JSON).param("carId", String.valueOf(CAR_ID)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("car-find",
+                pathParameters(
+                    parameterWithName("carId").description("차량 Id")
+                ),
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("차량 Id"),
+                    fieldWithPath("carNum").type(JsonFieldType.STRING).description("차량 번호"),
+                    fieldWithPath("model").type(JsonFieldType.STRING).description("차량 모델"),
+                    fieldWithPath("fuel").type(JsonFieldType.NUMBER).description("차량 기름양"),
+                    fieldWithPath("price").type(JsonFieldType.NUMBER)
+                        .description("차량 시간당 가격"),
+                    fieldWithPath("possiblePassengers").type(JsonFieldType.NUMBER)
+                        .description("차량 수용가능한 인원 수"),
+                    fieldWithPath("speciesDto").type(JsonFieldType.OBJECT)
+                        .description("차종"),
+                    fieldWithPath("speciesDto.id").type(JsonFieldType.NUMBER)
+                        .description("차종 Id"),
+                    fieldWithPath("speciesDto.name").type(JsonFieldType.STRING)
+                        .description("차종 Name")
+                )
+            ));
     }
 
     @Test
@@ -108,7 +144,17 @@ class CarControllerTest {
                 .param("car_id", String.valueOf(CAR_ID))
                 .content(objectMapper.writeValueAsString(carUpdateDto)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("car-update",
+                requestFields(
+                    fieldWithPath("carNum").type(JsonFieldType.STRING).description("차량 번호"),
+                    fieldWithPath("fuel").type(JsonFieldType.NUMBER).description("차량 기름양"),
+                    fieldWithPath("price").type(JsonFieldType.NUMBER)
+                        .description("차량 시간당 가격")
+                ),
+                responseFields(
+                    fieldWithPath("carId").description("차량 Id")
+                )
+            ));
     }
 
 }
