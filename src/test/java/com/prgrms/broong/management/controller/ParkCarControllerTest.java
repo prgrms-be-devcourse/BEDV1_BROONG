@@ -131,7 +131,7 @@ class ParkCarControllerTest {
     @Test
     @DisplayName("parkcar 저장 controller 테스트")
     void saveParkcarTest() throws Exception {
-        mockMvc.perform(post("/api/v1/broong/park-cars")
+        mockMvc.perform(post("/api/v1/park-cars")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(parkCarRequestDto)))
             .andExpect(status().isOk())
@@ -142,7 +142,7 @@ class ParkCarControllerTest {
     @Test
     void getParksWithCountTest() throws Exception {
         //when
-        mockMvc.perform(get("/api/v1/broong/park-cars")
+        mockMvc.perform(get("/api/v1/park-cars")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print());
@@ -151,7 +151,7 @@ class ParkCarControllerTest {
     @Test
     @DisplayName("park 단건, car 단건조회 controller 테스트")
     void getParkCarByParkIdAndCarIdTest() throws Exception {
-        mockMvc.perform(get("/api/v1/broong/park-cars/parks/{parkId}/{carId}", ID, ID)
+        mockMvc.perform(get("/api/v1/park-cars/parks/{parkId}/cars/{carId}", ID, ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("parkId", String.valueOf(ID))
                 .param("carId", String.valueOf(ID)))
@@ -162,7 +162,7 @@ class ParkCarControllerTest {
     @Test
     @DisplayName("park 단건, car 다건조회 controller 테스트")
     void getParkCarByParkIdTest() throws Exception {
-        mockMvc.perform(get("/api/v1/broong/park-cars/{parkId}", ID)
+        mockMvc.perform(get("/api/v1/park-cars/{parkId}", ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("parkId", String.valueOf(ID)))
             .andExpect(status().isOk())
@@ -173,7 +173,7 @@ class ParkCarControllerTest {
     @Test
     void getParkCarByParkIdAndSpeciesNameTest() throws Exception {
         //when
-        mockMvc.perform(get("/api/v1/broong/park-cars/parks/species/{parkId}/{speciesId}", ID, ID)
+        mockMvc.perform(get("/api/v1/park-cars/parks/{parkId}/species/{speciesId}", ID, ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("parkId", String.valueOf(ID))
                 .param("speciesId", String.valueOf(ID)))

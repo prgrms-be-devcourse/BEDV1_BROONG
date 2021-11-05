@@ -1,8 +1,6 @@
 package com.prgrms.broong.management.car.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import com.prgrms.broong.management.car.domain.Car;
 import com.prgrms.broong.management.car.dto.CarUpdateDto;
@@ -72,7 +70,11 @@ class CarRepositoryTest {
         //then
         Car getCar = carRepository.findById(car.getId()).get();
 
-        assertThat(getCar, samePropertyValuesAs(car));
+        assertThat(getCar.getCarNum()).isEqualTo(car.getCarNum());
+        assertThat(getCar.getModel()).isEqualTo(car.getModel());
+        assertThat(getCar.getPrice()).isEqualTo(car.getPrice());
+        assertThat(getCar.getFuel()).isEqualTo(car.getFuel());
+        assertThat(getCar.getPossiblePassengers()).isEqualTo(car.getPossiblePassengers());
     }
 
     @Transactional

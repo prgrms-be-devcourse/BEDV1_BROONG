@@ -2,7 +2,6 @@ package com.prgrms.broong.management.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 import com.prgrms.broong.management.car.converter.CarConverter;
@@ -120,7 +119,7 @@ class ParkCarServiceImplTest {
     @Test
     @Transactional
     @DisplayName("주차장과 차량 테이블 저장 테스트")
-    void save() {
+    void saveTest() {
         //given//when
         Long id = parkCarService.saveParkCar(parkCarRequestDto);
 
@@ -179,7 +178,7 @@ class ParkCarServiceImplTest {
         assertThat(parkCarRequestDto.getCarResponseDto().getId()).isEqualTo(ID);
         assertThat(parkCarRequestDto.getCarResponseDto().getCarNum()).isEqualTo(
             carConverter.carToResponseDto(car).getCarNum());
-        assertThat(parkCarRequestDto.getParkResponseDto().getId(), is(ID));
+        assertThat(parkCarRequestDto.getParkResponseDto().getId()).isEqualTo(ID);
         assertThat(parkCarRequestDto.getParkResponseDto().getPossibleNum()).isEqualTo(
             parkConverter.parkToResponseDto(park).getPossibleNum());
         assertThat(parkCarRequestDto.getCarResponseDto().getSpeciesDto(),
