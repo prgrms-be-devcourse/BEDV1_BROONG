@@ -1,17 +1,16 @@
 package com.prgrms.broong.reservation.domain;
 
 import com.prgrms.broong.common.BaseEntity;
-import com.prgrms.broong.common.BooleanToYnConverter;
 import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,8 +42,8 @@ public class Reservation extends BaseEntity {
     @Column(name = "end_time", columnDefinition = "TIMESTAMP", updatable = false, nullable = false)
     private LocalDateTime endTime;
 
-    @Column(name = "usage_point", columnDefinition = "INT")
-    private Integer usagePoint;
+    @Column(name = "usage_point", columnDefinition = "INT DEFAULT 0")
+    private int usagePoint;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "reservation_status", columnDefinition = "VARCHAR(100)", nullable = false)
@@ -53,16 +52,15 @@ public class Reservation extends BaseEntity {
     @Column(name = "fee", columnDefinition = "INT", nullable = false)
     private Integer fee;
 
-    @Convert(converter = BooleanToYnConverter.class)
-    @Column(name = "is_oneway", columnDefinition = "VARCHAR(50)", nullable = false)
-    private boolean isOneway;
+    @Column(name = "is_oneway", columnDefinition = "BIT(1)", nullable = false)
+    private Boolean isOneway;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_reservation_to_user"))
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "park_car_id", referencedColumnName = "id")
+    @JoinColumn(name = "park_car_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_reservation_to_park_car"))
     private ParkCar parkCar;
 
     public void registerUser(User user) {

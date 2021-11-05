@@ -16,17 +16,21 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query(value = "SELECT r FROM Reservation r WHERE r.user.id = :userId"
         + " AND r.reservationStatus <> :status"
-        + " AND r.startTime <= :checkTime"
-        + " AND r.endTime >= :checkTime")
+        + " AND r.startTime > :checkEndTime"
+        + " AND r.endTime < :checkStartTime")
     Optional<Reservation> checkReservationByUserId(@Param("userId") Long userId,
-        @Param("checkTime") LocalDateTime checkTime, @Param("status") ReservationStatus status);
+        @Param("checkStartTime") LocalDateTime checkStartTime,
+        @Param("checkEndTime") LocalDateTime checkEndTime,
+        @Param("status") ReservationStatus status);
 
     @Query(value = "SELECT r FROM Reservation r WHERE r.parkCar.car.id = :carId"
         + " AND r.reservationStatus <> :status"
-        + " AND r.startTime <= :checkTime"
-        + " AND r.endTime >= :checkTime")
+        + " AND r.startTime > :checkEndTime"
+        + " AND r.endTime < :checkStartTime")
     Optional<Reservation> possibleReservationTimeByCarId(@Param("carId") Long carId,
-        @Param("checkTime") LocalDateTime checkTime, @Param("status") ReservationStatus status);
+        @Param("checkStartTime") LocalDateTime checkStartTime,
+        @Param("checkEndTime") LocalDateTime checkEndTime,
+        @Param("status") ReservationStatus status);
 
     @Query(value = "SELECT r FROM Reservation r JOIN FETCH r.user WHERE r.id = :reservationId")
     Optional<Reservation> findReservationAndUser(@Param("reservationId") Long reservationId);

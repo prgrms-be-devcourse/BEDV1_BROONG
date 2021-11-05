@@ -16,6 +16,9 @@ public class UserReservationCheckDto {
     private Long id;
 
     @TimeValid
-    private LocalDateTime checkTime;
+    private LocalDateTime checkStartTime;
+
+    @TimeValid
+    private LocalDateTime checkEndTime;
 
 }
