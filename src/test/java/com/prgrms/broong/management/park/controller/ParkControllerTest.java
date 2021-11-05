@@ -1,9 +1,13 @@
 package com.prgrms.broong.management.park.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +32,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @SpringBootTest
 class ParkControllerTest {
 
-    private static Long PARK_ID = 1L;
+    private static final Long PARK_ID = 1L;
 
     @Autowired
     MockMvc mockMvc;
@@ -43,8 +47,6 @@ class ParkControllerTest {
     LocationRepository locationRepository;
 
     private ParkRequestDto parkRequestDto;
-
-    private Location location;
 
     @BeforeEach
     void setup() {
