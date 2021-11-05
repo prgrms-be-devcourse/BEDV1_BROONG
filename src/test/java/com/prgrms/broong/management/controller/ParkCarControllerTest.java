@@ -1,8 +1,14 @@
 package com.prgrms.broong.management.controller;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,9 +29,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -62,11 +71,6 @@ class ParkCarControllerTest {
 
     @BeforeEach
     void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-            .addFilters(new CharacterEncodingFilter("UTF-8", true))
-            .alwaysDo(print())
-            .build();
-
         Species species = Species.builder()
             .name("중형")
             .build();
@@ -129,13 +133,66 @@ class ParkCarControllerTest {
     }
 
     @Test
-    @DisplayName("parkcar 저장 controller 테스트")
-    void saveParkcarTest() throws Exception {
+    @DisplayName("parkCar 저장 controller 테스트")
+    void saveParkCarTest() throws Exception {
         mockMvc.perform(post("/api/v1/park-cars")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(parkCarRequestDto)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("parkCar-save",
+                requestFields(
+                    fieldWithPath("parkResponseDto").type(JsonFieldType.OBJECT)
+                        .description("주차장 응답 DTO"),
+                    fieldWithPath("parkResponseDto.id").type(JsonFieldType.NUMBER)
+                        .description("주차장 Id"),
+                    fieldWithPath("parkResponseDto.possibleNum").type(
+                            JsonFieldType.NUMBER)
+                        .description("주차장 수용가능한 차량 수"),
+                    fieldWithPath("parkResponseDto.locationDto").type(
+                            JsonFieldType.OBJECT)
+                        .description("주차장 위치"),
+                    fieldWithPath("parkResponseDto.locationDto.id").type(
+                            JsonFieldType.NUMBER)
+                        .description("위치 Id"),
+                    fieldWithPath("parkResponseDto.locationDto.cityId").type(
+                            JsonFieldType.STRING)
+                        .description("시 Id"),
+                    fieldWithPath("parkResponseDto.locationDto.townId").type(
+                            JsonFieldType.STRING)
+                        .description("구 Id"),
+                    fieldWithPath("parkResponseDto.locationDto.locationName").type(
+                            JsonFieldType.STRING)
+                        .description("위치 이름"),
+                    fieldWithPath("carResponseDto").type(JsonFieldType.OBJECT)
+                        .description("차량 응답 DTO"),
+                    fieldWithPath("carResponseDto.id").type(JsonFieldType.NUMBER)
+                        .description("차량 Id"),
+                    fieldWithPath("carResponseDto.carNum").type(
+                            JsonFieldType.STRING)
+                        .description("차량 번호"),
+                    fieldWithPath("carResponseDto.model").type(
+                            JsonFieldType.STRING)
+                        .description("차량 모델명"),
+                    fieldWithPath("carResponseDto.fuel").type(
+                        JsonFieldType.NUMBER).description("차량 기름양"),
+                    fieldWithPath("carResponseDto.price").type(
+                        JsonFieldType.NUMBER).description("차량 시간당 가격"),
+                    fieldWithPath("carResponseDto.possiblePassengers").type(
+                        JsonFieldType.NUMBER).description("차량 수용가능한 인원 수"),
+                    fieldWithPath("carResponseDto.speciesDto").type(
+                            JsonFieldType.OBJECT)
+                        .description("차종 DTO"),
+                    fieldWithPath("carResponseDto.speciesDto.id").type(
+                            JsonFieldType.NUMBER)
+                        .description("차종 Id"),
+                    fieldWithPath("carResponseDto.speciesDto.name").type(
+                            JsonFieldType.STRING)
+                        .description("차종 이름")
+                ),
+                responseFields(
+                    fieldWithPath("parkCarId").description("파크 Id")
+                )
+            ));
     }
 
     @DisplayName("주차장 다건 조회 및 주차장별 차량 개수 controller 테스트")
@@ -151,10 +208,10 @@ class ParkCarControllerTest {
     @Test
     @DisplayName("park 단건, car 단건조회 controller 테스트")
     void getParkCarByParkIdAndCarIdTest() throws Exception {
-        mockMvc.perform(get("/api/v1/park-cars/parks/{parkId}/cars/{carId}", ID, ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("parkId", String.valueOf(ID))
-                .param("carId", String.valueOf(ID)))
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/api/v1/park-cars/parks/{parkId}/cars/{carId}",
+                        ID, ID)
+                    .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(print());
     }
@@ -166,10 +223,64 @@ class ParkCarControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("parkId", String.valueOf(ID)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("parkCar-findOnePark-findCars",
+                pathParameters(
+                    parameterWithName("parkId").description("parkId")
+                ),
+                responseFields(
+                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("파크카 응답 DTO Id"),
+                    fieldWithPath("[].parkResponseDto").type(JsonFieldType.OBJECT)
+                        .description("주차장 응답 DTO"),
+                    fieldWithPath("[].parkResponseDto.id").type(JsonFieldType.NUMBER)
+                        .description("주차장 Id"),
+                    fieldWithPath("[].parkResponseDto.possibleNum").type(
+                            JsonFieldType.NUMBER)
+                        .description("주차장 수용가능한 차량 수"),
+                    fieldWithPath("[].parkResponseDto.locationDto").type(
+                            JsonFieldType.OBJECT)
+                        .description("주차장 위치"),
+                    fieldWithPath("[].parkResponseDto.locationDto.id").type(
+                            JsonFieldType.NUMBER)
+                        .description("위치 Id"),
+                    fieldWithPath("[].parkResponseDto.locationDto.cityId").type(
+                            JsonFieldType.STRING)
+                        .description("시 Id"),
+                    fieldWithPath("[].parkResponseDto.locationDto.townId").type(
+                            JsonFieldType.STRING)
+                        .description("구 Id"),
+                    fieldWithPath("[].parkResponseDto.locationDto.locationName").type(
+                            JsonFieldType.STRING)
+                        .description("위치 이름"),
+                    fieldWithPath("[].carResponseDto").type(JsonFieldType.OBJECT)
+                        .description("차량 응답 DTO"),
+                    fieldWithPath("[].carResponseDto.id").type(JsonFieldType.NUMBER)
+                        .description("차량 Id"),
+                    fieldWithPath("[].carResponseDto.carNum").type(
+                            JsonFieldType.STRING)
+                        .description("차량 번호"),
+                    fieldWithPath("[].carResponseDto.model").type(
+                            JsonFieldType.STRING)
+                        .description("차량 모델명"),
+                    fieldWithPath("[].carResponseDto.fuel").type(
+                        JsonFieldType.NUMBER).description("차량 기름양"),
+                    fieldWithPath("[].carResponseDto.price").type(
+                        JsonFieldType.NUMBER).description("차량 시간당 가격"),
+                    fieldWithPath("[].carResponseDto.possiblePassengers").type(
+                        JsonFieldType.NUMBER).description("차량 수용가능한 인원 수"),
+                    fieldWithPath("[].carResponseDto.speciesDto").type(
+                            JsonFieldType.OBJECT)
+                        .description("차종 DTO"),
+                    fieldWithPath("[].carResponseDto.speciesDto.id").type(
+                            JsonFieldType.NUMBER)
+                        .description("차종 Id"),
+                    fieldWithPath("[].carResponseDto.speciesDto.name").type(
+                            JsonFieldType.STRING)
+                        .description("차종 이름")
+                )
+            ));
     }
 
-    @DisplayName("parkcar 주차장별 선택한 차종의 차량리스트 조회 테스트")
+    @DisplayName("parkCar 주차장별 선택한 차종의 차량리스트 조회 테스트")
     @Test
     void getParkCarByParkIdAndSpeciesNameTest() throws Exception {
         //when
@@ -178,7 +289,62 @@ class ParkCarControllerTest {
                 .param("parkId", String.valueOf(ID))
                 .param("speciesId", String.valueOf(ID)))
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(document("parkCar-filter",
+                requestParameters(
+                    parameterWithName("parkId").description("주차장 Id"),
+                    parameterWithName("speciesId").description("차종 Id")
+                ),
+                responseFields(
+                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("파크카 응답 DTO Id"),
+                    fieldWithPath("[].parkResponseDto").type(JsonFieldType.OBJECT)
+                        .description("주차장 응답 DTO"),
+                    fieldWithPath("[].parkResponseDto.id").type(JsonFieldType.NUMBER)
+                        .description("주차장 Id"),
+                    fieldWithPath("[].parkResponseDto.possibleNum").type(
+                            JsonFieldType.NUMBER)
+                        .description("주차장 수용가능한 차량 수"),
+                    fieldWithPath("[].parkResponseDto.locationDto").type(
+                            JsonFieldType.OBJECT)
+                        .description("주차장 위치"),
+                    fieldWithPath("[].parkResponseDto.locationDto.id").type(
+                            JsonFieldType.NUMBER)
+                        .description("위치 Id"),
+                    fieldWithPath("[].parkResponseDto.locationDto.cityId").type(
+                            JsonFieldType.STRING)
+                        .description("시 Id"),
+                    fieldWithPath("[].parkResponseDto.locationDto.townId").type(
+                            JsonFieldType.STRING)
+                        .description("구 Id"),
+                    fieldWithPath("[].parkResponseDto.locationDto.locationName").type(
+                            JsonFieldType.STRING)
+                        .description("위치 이름"),
+                    fieldWithPath("[].carResponseDto").type(JsonFieldType.OBJECT)
+                        .description("차량 응답 DTO"),
+                    fieldWithPath("[].carResponseDto.id").type(JsonFieldType.NUMBER)
+                        .description("차량 Id"),
+                    fieldWithPath("[].carResponseDto.carNum").type(
+                            JsonFieldType.STRING)
+                        .description("차량 번호"),
+                    fieldWithPath("[].carResponseDto.model").type(
+                            JsonFieldType.STRING)
+                        .description("차량 모델명"),
+                    fieldWithPath("[].carResponseDto.fuel").type(
+                        JsonFieldType.NUMBER).description("차량 기름양"),
+                    fieldWithPath("[].carResponseDto.price").type(
+                        JsonFieldType.NUMBER).description("차량 시간당 가격"),
+                    fieldWithPath("[].carResponseDto.possiblePassengers").type(
+                        JsonFieldType.NUMBER).description("차량 수용가능한 인원 수"),
+                    fieldWithPath("[].carResponseDto.speciesDto").type(
+                            JsonFieldType.OBJECT)
+                        .description("차종 DTO"),
+                    fieldWithPath("[].carResponseDto.speciesDto.id").type(
+                            JsonFieldType.NUMBER)
+                        .description("차종 Id"),
+                    fieldWithPath("[].carResponseDto.speciesDto.name").type(
+                            JsonFieldType.STRING)
+                        .description("차종 이름")
+                )
+            ));
     }
 
 }
