@@ -26,7 +26,7 @@ public class ParkController {
     private final ParkService parkService;
 
     @PostMapping("/parks")
-    public ResponseEntity<Map<String, Long>> savepark(
+    public ResponseEntity<Map<String, Long>> savePark(
         @Valid @RequestBody ParkRequestDto parkRequestDto) {
         return ResponseEntity.ok(Map.of(PARK_ID, parkService.savePark(parkRequestDto)));
     }
