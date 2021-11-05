@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
+    private static final int ZERO_COUNT = 0;
+    private static final int TEN_PERCENT = 10;
     private static final Long ADD_HOUR = 2L;
 
     private final ReservationRepository repository;
@@ -98,7 +100,7 @@ public class ReservationServiceImpl implements ReservationService {
         long reservationCount = repository.checkReservationByUserId(userReservationCheckDto.getId(),
             userReservationCheckDto.getCheckStartTime(), userReservationCheckDto.getCheckEndTime(),
             ReservationStatus.CANCEL).stream().count();
-        if (reservationCount != 0) {
+        if (reservationCount != ZERO_COUNT) {
             throw new RuntimeException(
                 MessageFormat.format("사용자:{0}키는 동일한 시간대에 예약이 존재합니다.",
                     userReservationCheckDto.getId()));
@@ -111,7 +113,7 @@ public class ReservationServiceImpl implements ReservationService {
         LocalDateTime checkEndTime) {
         long reservationCount = repository.possibleReservationTimeByCarId(carId,
             checkStartTime, checkEndTime, ReservationStatus.CANCEL).stream().count();
-        if (reservationCount != 0) {
+        if (reservationCount != ZERO_COUNT) {
             throw new RuntimeException(
                 MessageFormat.format("자동차:{0}키는 동일한 시간대에 예약이 존재합니다.", carId));
         }
@@ -139,7 +141,8 @@ public class ReservationServiceImpl implements ReservationService {
                 MessageFormat.format("해당 {0}키의 객체를 찾을 수 없습니다.", reservationId)));
         if (changeStatusValue.equals(ReservationStatus.COMPLETE)) {
             getReservation.getUser()
-                .changePoint(getReservation.getUser().getPoint() + getReservation.getFee() % 10);
+                .changePoint(
+                    getReservation.getUser().getPoint() + getReservation.getFee() % TEN_PERCENT);
         }
         getReservation.changeReservationStatus(changeStatusValue);
     }
