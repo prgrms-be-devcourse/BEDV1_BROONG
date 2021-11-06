@@ -6,6 +6,7 @@ import com.prgrms.broong.management.park.domain.Park;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,11 +34,11 @@ public class ParkCar extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "park_id", referencedColumnName = "id")
+    @JoinColumn(name = "park_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_parkCar_to_park"))
     private Park park;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id", referencedColumnName = "id")
+    @JoinColumn(name = "car_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_parkCar_to_car"))
     private Car car;
 
 }
