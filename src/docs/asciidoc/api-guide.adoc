@@ -46,3 +46,129 @@ include::{snippets}/user-update/http-request.adoc[]
 .Response
 include::{snippets}/user-update/http-response.adoc[]
 
+== Car
+
+=== 차량 등록
+
+.CURL
+include::{snippets}/car-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/car-save/http-request.adoc[]
+
+.Response
+include::{snippets}/car-save/http-response.adoc[]
+
+=== 차량 조회
+
+.CURL
+include::{snippets}/car-find/curl-request.adoc[]
+
+.Request
+include::{snippets}/car-find/http-request.adoc[]
+
+.Response
+include::{snippets}/car-find/http-response.adoc[]
+
+=== 차량 수정
+
+.CURL
+include::{snippets}/car-update/curl-request.adoc[]
+
+.Request
+include::{snippets}/car-update/http-request.adoc[]
+
+.Response
+include::{snippets}/car-update/http-response.adoc[]
+
+== Park
+
+=== 주차장 등록
+
+.CURL
+include::{snippets}/park-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/park-save/http-request.adoc[]
+
+.Response
+include::{snippets}/park-save/http-response.adoc[]
+
+=== 주차장 조회
+
+.CURL
+include::{snippets}/park-find/curl-request.adoc[]
+
+.Request
+include::{snippets}/park-find/http-request.adoc[]
+
+.Response
+include::{snippets}/park-find/http-response.adoc[]
+
+=== 주차장 수정
+
+.CURL
+include::{snippets}/park-update/curl-request.adoc[]
+
+.Request
+include::{snippets}/park-update/http-request.adoc[]
+
+.Response
+include::{snippets}/park-update/http-response.adoc[]
+
+== Park-Car
+
+=== 주차장-차량 등록
+
+.CURL
+include::{snippets}/parkCar-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-save/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-save/http-response.adoc[]
+
+=== 주차장 다건 및 주차장별 차량 개수 조회
+
+.CURL
+include::{snippets}/parkCar-count/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-count/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-count/http-response.adoc[]
+
+=== 주차장 단건 및 차량 단건 조회
+
+.CURL
+include::{snippets}/parkCar-findOnePark-findOneCar/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-findOnePark-findOneCar/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-findOnePark-findOneCar/http-response.adoc[]
+
+=== 주차장 단건 및 차량 단건 조회
+
+.CURL
+include::{snippets}/parkCar-findOnePark-findCars/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-findOnePark-findCars/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-findOnePark-findCars/http-response.adoc[]
+
+=== 주차장 단건 및 필터 적용한 차량 리스트 조회
+
+.CURL
+include::{snippets}/parkCar-filter/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-filter/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-filter/http-response.adoc[]

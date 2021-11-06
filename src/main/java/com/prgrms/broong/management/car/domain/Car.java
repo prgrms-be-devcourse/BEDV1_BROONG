@@ -3,6 +3,7 @@ package com.prgrms.broong.management.car.domain;
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.management.car.dto.CarUpdateDto;
 import com.prgrms.broong.management.species.domain.Species;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -50,7 +51,7 @@ public class Car extends BaseEntity {
     @Column(name = "possible_passengers", columnDefinition = "INT", updatable = false)
     private int possiblePassengers;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "species_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_car_to_species"))
     private Species species;
 
