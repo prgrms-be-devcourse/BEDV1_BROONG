@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -45,8 +44,8 @@ public class ReservationController {
 
     @GetMapping(path = "/reservations/users/{userId}")
     public ResponseEntity<Page<ReservationResponseDto>> getReservationListByUserId(
-        @PathVariable("userId") Long userId, Pageable pageable) {
-        return ResponseEntity.ok(reservationService.getReservationListByUserId(userId, pageable));
+        @PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(reservationService.getReservationListByUserId(userId));
     }
 
     @GetMapping(path = "/reservations/{reservationId}")
