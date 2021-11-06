@@ -17,7 +17,9 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,8 +92,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Page<ReservationResponseDto> getReservationListByUserId(Long userId, Pageable pageable) {
-        return repository.findReservationsByUserId(userId, pageable)
+    public Page<ReservationResponseDto> getReservationListByUserId(Long userId) {
+        Pageable pageRequest = PageRequest.of(10, 10, Sort.unsorted());
+        return repository.findReservationsByUserId(userId, pageRequest)
             .map(converter::ReservationToResponseDto);
     }
 

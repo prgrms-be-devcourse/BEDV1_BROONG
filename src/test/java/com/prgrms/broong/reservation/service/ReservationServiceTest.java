@@ -303,7 +303,7 @@ class ReservationServiceTest {
 
         //when
         Page<ReservationResponseDto> reservationListByUserId = reservationService.getReservationListByUserId(
-            user.getId(), null);
+            user.getId());
 
         //then
         assertThat(reservationListByUserId.stream().count(), samePropertyValuesAs(2L));
