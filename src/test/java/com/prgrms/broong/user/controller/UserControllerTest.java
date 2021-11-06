@@ -5,8 +5,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -69,20 +69,19 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(userRequestDto)))
             .andExpect(status().isOk())
             .andDo(document("user-save",
-                // 요청
                 requestFields(
-                    fieldWithPath("email").type(JsonFieldType.STRING).description("email"),
-                    fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
-                    fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                    fieldWithPath("password").type(JsonFieldType.STRING).description("사용자 패스워드"),
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
                     fieldWithPath("locationName").type(JsonFieldType.STRING)
-                        .description("locationName"),
+                        .description("사용자 위치정보"),
                     fieldWithPath("licenseInfo").type(JsonFieldType.BOOLEAN)
-                        .description("licenseInfo"),
+                        .description("사용자 면허정보"),
                     fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
-                        .description("paymentMethod")
+                        .description("사용자 결제수단")
                 ),
                 responseFields(
-                    fieldWithPath("userId").description("id값")
+                    fieldWithPath("userId").description("사용자 id")
                 )
             ));
     }
@@ -92,48 +91,27 @@ class UserControllerTest {
     void getByIdTest() throws Exception {
         Long id = userService.saveUser(userRequestDto);
 
-        mockMvc.perform(get("/api/v1/users/{userId}", id)
-                .contentType(MediaType.APPLICATION_JSON).param("userId", String.valueOf(id)))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/users/{userId}", id)
+                .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("user-find",
-                // 요청
-                requestParameters(
-                    parameterWithName("userId").description("userId")
+                pathParameters(
+                    parameterWithName("userId").description("사용자 id")
                 ),
-                // 응답
                 responseFields(
-                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("id"),
-                    fieldWithPath("email").type(JsonFieldType.STRING).description("email"),
-                    fieldWithPath("password").type(JsonFieldType.STRING).description("password"),
-                    fieldWithPath("name").type(JsonFieldType.STRING).description("name"),
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                    fieldWithPath("password").type(JsonFieldType.STRING).description("사용자 패스워드"),
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
                     fieldWithPath("locationName").type(JsonFieldType.STRING)
-                        .description("locationName"),
+                        .description("사용자 위치정보"),
                     fieldWithPath("licenseInfo").type(JsonFieldType.BOOLEAN)
-                        .description("licenseInfo"),
+                        .description("사용자 면허정보"),
                     fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
-                        .description("paymentMethod"),
+                        .description("사용자 결제수단"),
                     fieldWithPath("point").type(JsonFieldType.NUMBER).description("point"),
                     fieldWithPath("reservationResponseDto[]").type(JsonFieldType.ARRAY)
-                        .description("reservationResponseDto")
-//                    fieldWithPath("reservationResponseDto[].id").type(JsonFieldType.NUMBER)
-//                        .description("reservationResponseDto id"),
-//                    fieldWithPath("reservationResponseDto[].startTime").type(JsonFieldType.STRING)
-//                        .description("reservationResponseDto startTime"),
-//                    fieldWithPath("reservationResponseDto[].endTime").type(JsonFieldType.STRING)
-//                        .description("reservationResponseDto endTime"),
-//                    fieldWithPath("reservationResponseDto[].usagePoint").type(JsonFieldType.NUMBER)
-//                        .description("reservationResponseDto usagePoint"),
-//                    fieldWithPath("reservationResponseDto[].reservationStatus").type(
-//                            JsonFieldType.STRING)
-//                        .description("reservationResponseDto reservationStatus"),
-//                    fieldWithPath("reservationResponseDto[].isOneway").type(JsonFieldType.BOOLEAN)
-//                        .description("reservationResponseDto isOneway"),
-//                    fieldWithPath("reservationResponseDto[].fee").type(JsonFieldType.NUMBER)
-//                        .description("reservationResponseDto fee"),
-//                    fieldWithPath("reservationResponseDto[].parkCarResponseDto").type(
-//                        JsonFieldType.OBJECT).description("parkCarResponseDto"),
-//                    fieldWithPath("reservationResponseDto[].userResponseDto").type(
-//                        JsonFieldType.OBJECT).description("userResponseDto")
+                        .description("사용자 예약")
                 )
             ));
     }
@@ -153,10 +131,27 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(userUpdateDto)))
             .andExpect(status().isOk())
             .andDo(document("user-update",
-                // 요청
                 requestFields(
-                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point")
-                )));
+                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("사용자 포인트")
+                ),
+
+                responseFields(
+                    fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
+                    fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                    fieldWithPath("password").type(JsonFieldType.STRING).description("사용자 패스워드"),
+                    fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
+                    fieldWithPath("locationName").type(JsonFieldType.STRING)
+                        .description("사용자 위치정보"),
+                    fieldWithPath("licenseInfo").type(JsonFieldType.BOOLEAN)
+                        .description("사용자 면허정보"),
+                    fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
+                        .description("사용자 결제수단"),
+                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point"),
+                    fieldWithPath("reservationResponseDto[]").type(JsonFieldType.ARRAY)
+                        .description("사용자 예약")
+
+                )
+            ));
     }
 
     @Test
@@ -174,10 +169,8 @@ class UserControllerTest {
             "user_request");
         validatorFactoryBean.validate(userRequestDto1, error);
 
-        // 에러가 있는지
         System.out.println("hasErrors(): " + error.hasErrors());
 
-        // 발생한 에러를 순차적으로 순회하며 에러코드와 default message 출력
         error.getAllErrors().forEach(e -> {
             System.out.println("=== Error Code ===");
             Arrays.stream(e.getCodes()).forEach(System.out::println);
