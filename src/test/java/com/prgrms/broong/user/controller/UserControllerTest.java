@@ -69,7 +69,6 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(userRequestDto)))
             .andExpect(status().isOk())
             .andDo(document("user-save",
-                // 요청
                 requestFields(
                     fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
                     fieldWithPath("password").type(JsonFieldType.STRING).description("사용자 패스워드"),
@@ -96,11 +95,9 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("user-find",
-                // 요청
                 pathParameters(
                     parameterWithName("userId").description("사용자 id")
                 ),
-                // 응답
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 id"),
                     fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
@@ -134,7 +131,6 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(userUpdateDto)))
             .andExpect(status().isOk())
             .andDo(document("user-update",
-                // 요청
                 requestFields(
                     fieldWithPath("point").type(JsonFieldType.NUMBER).description("사용자 포인트")
                 ),
@@ -173,10 +169,8 @@ class UserControllerTest {
             "user_request");
         validatorFactoryBean.validate(userRequestDto1, error);
 
-        // 에러가 있는지
         System.out.println("hasErrors(): " + error.hasErrors());
 
-        // 발생한 에러를 순차적으로 순회하며 에러코드와 default message 출력
         error.getAllErrors().forEach(e -> {
             System.out.println("=== Error Code ===");
             Arrays.stream(e.getCodes()).forEach(System.out::println);
