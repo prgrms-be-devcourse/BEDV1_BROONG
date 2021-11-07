@@ -13,7 +13,7 @@ public interface ReservationService {
 
     ReservationResponseDto getReservation(Long reservationId);
 
-    Page<ReservationResponseDto> getReservationListByUserId(Long userId);
+    Page<ReservationResponseDto> getReservationListByUserId(Long userId, int pageNum, int pageSize);
 
     boolean checkReservationByUserId(UserReservationCheckDto userReservationCheckDto);
 
