@@ -8,11 +8,9 @@ import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.management.domain.ParkCar;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
-import com.prgrms.broong.management.park.repository.LocationRepository;
 import com.prgrms.broong.management.park.repository.ParkRepository;
 import com.prgrms.broong.management.repository.ParkCarRepository;
 import com.prgrms.broong.management.species.domain.Species;
-import com.prgrms.broong.management.species.repository.SpeciesRepository;
 import com.prgrms.broong.reservation.domain.Reservation;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.user.domain.User;
@@ -43,12 +41,6 @@ class ReservationRepositoryTest {
     private ParkRepository parkRepository;
 
     @Autowired
-    private LocationRepository locationRepository;
-
-    @Autowired
-    private SpeciesRepository speciesRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     private User user;
@@ -74,7 +66,6 @@ class ReservationRepositoryTest {
         Species species = Species.builder()
             .name("중형")
             .build();
-        speciesRepository.save(species);
 
         Car car = Car.builder()
             .carNum("11허124333")
@@ -91,7 +82,6 @@ class ReservationRepositoryTest {
             .townId("101")
             .locationName("도봉구")
             .build();
-        locationRepository.save(location);
 
         Park park = Park.builder()
             .possibleNum(10)
@@ -103,7 +93,6 @@ class ReservationRepositoryTest {
             .car(car)
             .park(park)
             .build();
-
         parkCar = parkCarRepository.save(parkCar);
 
         reservation = Reservation.builder()

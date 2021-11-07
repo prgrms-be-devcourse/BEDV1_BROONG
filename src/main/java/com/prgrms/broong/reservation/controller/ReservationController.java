@@ -44,8 +44,11 @@ public class ReservationController {
 
     @GetMapping(path = "/reservations/users/{userId}")
     public ResponseEntity<Page<ReservationResponseDto>> getReservationListByUserId(
-        @PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(reservationService.getReservationListByUserId(userId));
+        @PathVariable("userId") Long userId,
+        @RequestParam("pageNum") int pageNum,
+        @RequestParam("pageSize") int pageSize) {
+        return ResponseEntity.ok(
+            reservationService.getReservationListByUserId(userId, pageNum, pageSize));
     }
 
     @GetMapping(path = "/reservations/{reservationId}")
