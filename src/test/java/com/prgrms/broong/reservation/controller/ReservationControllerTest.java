@@ -8,6 +8,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,11 +20,9 @@ import com.prgrms.broong.management.dto.ParkCarResponseDto;
 import com.prgrms.broong.management.park.converter.ParkConverter;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
-import com.prgrms.broong.management.park.repository.LocationRepository;
 import com.prgrms.broong.management.park.repository.ParkRepository;
 import com.prgrms.broong.management.repository.ParkCarRepository;
 import com.prgrms.broong.management.species.domain.Species;
-import com.prgrms.broong.management.species.repository.SpeciesRepository;
 import com.prgrms.broong.reservation.domain.Reservation;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.reservation.dto.ReservationRequestDto;
@@ -50,50 +49,32 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 class ReservationControllerTest {
 
+    private static final int PAGE_NUM = 0;
+    private static final int PAGE_SIZE = 30;
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     private UserConverter userConverter;
-
     @Autowired
     private CarConverter carConverter;
-
     @Autowired
     private ParkConverter parkConverter;
-
     @Autowired
     private ReservationRepository reservationRepository;
-
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private LocationRepository locationRepository;
-
-    @Autowired
-    private SpeciesRepository speciesRepository;
-
     @Autowired
     private CarRepository carRepository;
-
     @Autowired
     private ParkRepository parkRepository;
-
     @Autowired
     private ParkCarRepository parkCarRepository;
-
     private User user;
-
     private Car car;
-
     private Park park;
-
     private ParkCar parkCar;
-
     private Reservation reservation;
 
     @BeforeEach
@@ -111,7 +92,6 @@ class ReservationControllerTest {
         Species species = Species.builder()
             .name("중형")
             .build();
-        speciesRepository.save(species);
 
         car = Car.builder()
             .carNum("11허124333")
@@ -128,7 +108,6 @@ class ReservationControllerTest {
             .townId("101")
             .locationName("도봉구")
             .build();
-        locationRepository.save(location);
 
         park = Park.builder()
             .possibleNum(10)
@@ -185,7 +164,6 @@ class ReservationControllerTest {
                 .content(objectMapper.writeValueAsString(reservationRequestDto)))
             .andExpect(status().isOk())
             .andDo(document("reservation-save",
-                // 요청
                 requestFields(
                     fieldWithPath("startTime").type(JsonFieldType.STRING).description("예약 시작 시간"),
                     fieldWithPath("endTime").type(JsonFieldType.STRING).description("예약 끝 시간"),
@@ -256,7 +234,6 @@ class ReservationControllerTest {
                         JsonFieldType.STRING).description("차종 이름")
                 ),
                 responseFields(
-                    //응답
                     fieldWithPath("reservationId").description("예약 ID")
                 )
             ));
@@ -271,7 +248,6 @@ class ReservationControllerTest {
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("reservation-find",
-                // 요청
                 pathParameters(
                     parameterWithName("reservationId").description("예약 id")
                 ),
@@ -357,7 +333,6 @@ class ReservationControllerTest {
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("reservation-cancel",
-                // 요청
                 pathParameters(
                     parameterWithName("reservationId").description("예약 id")
                 ),
@@ -373,10 +348,12 @@ class ReservationControllerTest {
         mockMvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/reservations/users/{userId}",
                         reservation.getUser().getId())
+                    .param("pageNum", String.valueOf(PAGE_NUM))
+                    .param("pageSize", String.valueOf(PAGE_SIZE))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
+            .andDo(print())
             .andDo(document("reservation-find-all-by-user",
-                // 요청
                 pathParameters(
                     parameterWithName("userId").description("예약 id")
                 ),
@@ -457,7 +434,7 @@ class ReservationControllerTest {
                     fieldWithPath(
                         "content[].parkCarResponseDto.carResponseDto.speciesDto.name").type(
                         JsonFieldType.STRING).description("차종 이름"),
-                    fieldWithPath("pageable").type(JsonFieldType.STRING).description("pageable"),
+                    fieldWithPath("pageable").type(JsonFieldType.OBJECT).description("pageable"),
                     fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("last"),
                     fieldWithPath("totalPages").type(JsonFieldType.NUMBER)
                         .description("totalPages"),
@@ -465,6 +442,22 @@ class ReservationControllerTest {
                         .description("totalElements"),
                     fieldWithPath("size").type(JsonFieldType.NUMBER).description("size"),
                     fieldWithPath("number").type(JsonFieldType.NUMBER).description("number"),
+                    fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN)
+                        .description("empty"),
+                    fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN)
+                        .description("empty"),
+                    fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN)
+                        .description("empty"),
+                    fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER)
+                        .description("page offset"),
+                    fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER)
+                        .description("page 숫자"),
+                    fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER)
+                        .description("page 크기"),
+                    fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN)
+                        .description("paged 사용"),
+                    fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN)
+                        .description("empty"),
                     fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("empty"),
                     fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("empty"),
                     fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("empty"),
@@ -487,7 +480,6 @@ class ReservationControllerTest {
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("reservation-check-user",
-                // 요청
                 pathParameters(
                     parameterWithName("userId").description("사용자 ID")
                 ),
@@ -514,7 +506,6 @@ class ReservationControllerTest {
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("reservation-possible-car",
-                // 요청
                 pathParameters(
                     parameterWithName("carId").description("자동차 ID")
                 ),
