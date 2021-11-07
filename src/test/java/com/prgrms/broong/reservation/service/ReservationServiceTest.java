@@ -11,11 +11,9 @@ import com.prgrms.broong.management.dto.ParkCarResponseDto;
 import com.prgrms.broong.management.park.converter.ParkConverter;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
-import com.prgrms.broong.management.park.repository.LocationRepository;
 import com.prgrms.broong.management.park.repository.ParkRepository;
 import com.prgrms.broong.management.repository.ParkCarRepository;
 import com.prgrms.broong.management.species.domain.Species;
-import com.prgrms.broong.management.species.repository.SpeciesRepository;
 import com.prgrms.broong.reservation.domain.Reservation;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.reservation.dto.ReservationRequestDto;
@@ -60,12 +58,6 @@ class ReservationServiceTest {
     private UserRepository userRepository;
 
     @Autowired
-    private LocationRepository locationRepository;
-
-    @Autowired
-    private SpeciesRepository speciesRepository;
-
-    @Autowired
     private CarRepository carRepository;
 
     @Autowired
@@ -99,7 +91,6 @@ class ReservationServiceTest {
         Species species = Species.builder()
             .name("중형")
             .build();
-        speciesRepository.save(species);
 
         car = Car.builder()
             .carNum("11허124333")
@@ -116,7 +107,6 @@ class ReservationServiceTest {
             .townId("101")
             .locationName("도봉구")
             .build();
-        locationRepository.save(location);
 
         park = Park.builder()
             .possibleNum(10)
@@ -303,7 +293,7 @@ class ReservationServiceTest {
 
         //when
         Page<ReservationResponseDto> reservationListByUserId = reservationService.getReservationListByUserId(
-            user.getId(), null);
+            user.getId(), 0, 30);
 
         //then
         assertThat(reservationListByUserId.stream().count(), samePropertyValuesAs(2L));

@@ -1,5 +1,6 @@
 package com.prgrms.broong.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.prgrms.broong.reservation.dto.ReservationResponseDto;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ public class UserResponseDto {
 
     private int point;
 
+    @JsonIgnore
     private List<ReservationResponseDto> reservationResponseDto;
 
 }
