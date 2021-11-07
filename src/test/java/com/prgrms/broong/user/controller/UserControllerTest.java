@@ -109,9 +109,7 @@ class UserControllerTest {
                         .description("사용자 면허정보"),
                     fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
                         .description("사용자 결제수단"),
-                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point"),
-                    fieldWithPath("reservationResponseDto[]").type(JsonFieldType.ARRAY)
-                        .description("사용자 예약")
+                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point")
                 )
             ));
     }
@@ -146,10 +144,7 @@ class UserControllerTest {
                         .description("사용자 면허정보"),
                     fieldWithPath("paymentMethod").type(JsonFieldType.BOOLEAN)
                         .description("사용자 결제수단"),
-                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point"),
-                    fieldWithPath("reservationResponseDto[]").type(JsonFieldType.ARRAY)
-                        .description("사용자 예약")
-
+                    fieldWithPath("point").type(JsonFieldType.NUMBER).description("point")
                 )
             ));
     }
