@@ -172,3 +172,83 @@ include::{snippets}/parkCar-filter/http-request.adoc[]
 
 .Response
 include::{snippets}/parkCar-filter/http-response.adoc[]
+
+== Reservation
+
+=== 예약 하기
+
+==== /api/v1/reservations
+
+.CURL
+include::{snippets}/reservation-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-save/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-save/http-response.adoc[]
+
+=== 예약 단건 조회
+
+==== /api/v1/reservations/{reservation_id}
+
+.CURL
+include::{snippets}/reservation-find/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-find/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-find/http-response.adoc[]
+
+=== 사용자 예약 내역 리스트
+
+==== /api/v1/reservations/users/{user_id}
+
+.CURL
+include::{snippets}/reservation-find-all-by-user/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-find-all-by-user/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-find-all-by-user/http-response.adoc[]
+
+=== 예약 취소
+
+==== /api/v1/reservations/{reservation_id}
+
+.CURL
+include::{snippets}/reservation-cancel/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-cancel/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-cancel/http-response.adoc[]
+
+=== 사용자 예약 중복 확인
+
+==== /api/v1/reservations/check-reservations/{user_id}
+
+.CURL
+include::{snippets}/reservation-check-user/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-check-user/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-check-user/http-response.adoc[]
+
+=== 자동차 예약 확인
+
+==== /api/v1/reservations/possible-reservations/{car_id}
+
+.CURL
+include::{snippets}/reservation-possible-car/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-possible-car/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-possible-car/http-response.adoc[]
