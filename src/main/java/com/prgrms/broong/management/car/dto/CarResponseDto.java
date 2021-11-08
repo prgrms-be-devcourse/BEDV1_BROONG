@@ -1,11 +1,15 @@
 package com.prgrms.broong.management.car.dto;
 
 import com.prgrms.broong.management.species.dto.SpeciesDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CarResponseDto {
 
     private Long id;
@@ -14,11 +18,11 @@ public class CarResponseDto {
 
     private String model;
 
-    private Long fuel;
+    private long fuel;
 
-    private Long price;
+    private long price;
 
-    private Integer possiblePassengers;
+    private int possiblePassengers;
 
     private SpeciesDto speciesDto;
 

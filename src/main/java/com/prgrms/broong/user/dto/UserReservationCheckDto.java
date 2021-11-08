@@ -13,9 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserReservationCheckDto {
 
-    Long id;
+    private Long id;
 
     @TimeValid
-    LocalDateTime checkTime;
+    private LocalDateTime checkStartTime;
+
+    @TimeValid
+    private LocalDateTime checkEndTime;
 
 }

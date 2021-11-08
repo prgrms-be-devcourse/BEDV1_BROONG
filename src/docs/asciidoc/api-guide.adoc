@@ -1,0 +1,254 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== User
+
+=== 회원가입
+
+==== /api/v1/broong/users
+
+.CURL
+include::{snippets}/user-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/user-save/http-request.adoc[]
+
+.Response
+include::{snippets}/user-save/http-response.adoc[]
+
+=== user 단건 조회
+
+==== /api/v1/broong/users/{user_id}
+
+.CURL
+include::{snippets}/user-find/curl-request.adoc[]
+
+.Request
+include::{snippets}/user-find/http-request.adoc[]
+
+.Response
+include::{snippets}/user-find/http-response.adoc[]
+
+.Response Fields
+include::{snippets}/user-find/response-fields.adoc[]
+
+=== user point update
+
+==== /api/v1/broong/users/{user_id}
+
+.CURL
+include::{snippets}/user-update/curl-request.adoc[]
+
+.Request
+include::{snippets}/user-update/http-request.adoc[]
+
+.Response
+include::{snippets}/user-update/http-response.adoc[]
+
+== Car
+
+=== 차량 등록
+
+.CURL
+include::{snippets}/car-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/car-save/http-request.adoc[]
+
+.Response
+include::{snippets}/car-save/http-response.adoc[]
+
+=== 차량 조회
+
+.CURL
+include::{snippets}/car-find/curl-request.adoc[]
+
+.Request
+include::{snippets}/car-find/http-request.adoc[]
+
+.Response
+include::{snippets}/car-find/http-response.adoc[]
+
+=== 차량 수정
+
+.CURL
+include::{snippets}/car-update/curl-request.adoc[]
+
+.Request
+include::{snippets}/car-update/http-request.adoc[]
+
+.Response
+include::{snippets}/car-update/http-response.adoc[]
+
+== Park
+
+=== 주차장 등록
+
+.CURL
+include::{snippets}/park-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/park-save/http-request.adoc[]
+
+.Response
+include::{snippets}/park-save/http-response.adoc[]
+
+=== 주차장 조회
+
+.CURL
+include::{snippets}/park-find/curl-request.adoc[]
+
+.Request
+include::{snippets}/park-find/http-request.adoc[]
+
+.Response
+include::{snippets}/park-find/http-response.adoc[]
+
+=== 주차장 수정
+
+.CURL
+include::{snippets}/park-update/curl-request.adoc[]
+
+.Request
+include::{snippets}/park-update/http-request.adoc[]
+
+.Response
+include::{snippets}/park-update/http-response.adoc[]
+
+== Park-Car
+
+=== 주차장-차량 등록
+
+.CURL
+include::{snippets}/parkCar-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-save/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-save/http-response.adoc[]
+
+=== 주차장 다건 및 주차장별 차량 개수 조회
+
+.CURL
+include::{snippets}/parkCar-count/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-count/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-count/http-response.adoc[]
+
+=== 주차장 단건 및 차량 단건 조회
+
+.CURL
+include::{snippets}/parkCar-findOnePark-findOneCar/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-findOnePark-findOneCar/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-findOnePark-findOneCar/http-response.adoc[]
+
+=== 주차장 단건 및 차량 단건 조회
+
+.CURL
+include::{snippets}/parkCar-findOnePark-findCars/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-findOnePark-findCars/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-findOnePark-findCars/http-response.adoc[]
+
+=== 주차장 단건 및 필터 적용한 차량 리스트 조회
+
+.CURL
+include::{snippets}/parkCar-filter/curl-request.adoc[]
+
+.Request
+include::{snippets}/parkCar-filter/http-request.adoc[]
+
+.Response
+include::{snippets}/parkCar-filter/http-response.adoc[]
+
+== Reservation
+
+=== 예약 하기
+
+==== /api/v1/reservations
+
+.CURL
+include::{snippets}/reservation-save/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-save/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-save/http-response.adoc[]
+
+=== 예약 단건 조회
+
+==== /api/v1/reservations/{reservation_id}
+
+.CURL
+include::{snippets}/reservation-find/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-find/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-find/http-response.adoc[]
+
+=== 사용자 예약 내역 리스트
+
+==== /api/v1/reservations/users/{user_id}
+
+.CURL
+include::{snippets}/reservation-find-all-by-user/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-find-all-by-user/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-find-all-by-user/http-response.adoc[]
+
+=== 예약 취소
+
+==== /api/v1/reservations/{reservation_id}
+
+.CURL
+include::{snippets}/reservation-cancel/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-cancel/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-cancel/http-response.adoc[]
+
+=== 사용자 예약 중복 확인
+
+==== /api/v1/reservations/check-reservations/{user_id}
+
+.CURL
+include::{snippets}/reservation-check-user/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-check-user/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-check-user/http-response.adoc[]
+
+=== 자동차 예약 확인
+
+==== /api/v1/reservations/possible-reservations/{car_id}
+
+.CURL
+include::{snippets}/reservation-possible-car/curl-request.adoc[]
+
+.Request
+include::{snippets}/reservation-possible-car/http-request.adoc[]
+
+.Response
+include::{snippets}/reservation-possible-car/http-response.adoc[]

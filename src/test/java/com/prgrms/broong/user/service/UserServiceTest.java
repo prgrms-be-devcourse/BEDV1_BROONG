@@ -40,8 +40,16 @@ class UserServiceTest {
         // When
         Long id = userService.saveUser(userRequestDto);
 
+        //When
+        UserResponseDto result = userService.getUserById(id);
+
         //Then
-        assertThat(id, is(1L));
+        assertThat(result.getEmail(), is(userRequestDto.getEmail()));
+        assertThat(result.getName(), is(userRequestDto.getName()));
+        assertThat(result.getPassword(), is(userRequestDto.getPassword()));
+        assertThat(result.getLicenseInfo(), is(userRequestDto.getLicenseInfo()));
+        assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
+        assertThat(result.getPaymentMethod(), is(userRequestDto.getPaymentMethod()));
     }
 
     @Test
@@ -57,9 +65,9 @@ class UserServiceTest {
         assertThat(result.getEmail(), is(userRequestDto.getEmail()));
         assertThat(result.getName(), is(userRequestDto.getName()));
         assertThat(result.getPassword(), is(userRequestDto.getPassword()));
-        assertThat(result.isLicenseInfo(), is(userRequestDto.isLicenseInfo()));
+        assertThat(result.getLicenseInfo(), is(userRequestDto.getLicenseInfo()));
         assertThat(result.getLocationName(), is(userRequestDto.getLocationName()));
-        assertThat(result.isPaymentMethod(), is(userRequestDto.isPaymentMethod()));
+        assertThat(result.getPaymentMethod(), is(userRequestDto.getPaymentMethod()));
     }
 
     @Test

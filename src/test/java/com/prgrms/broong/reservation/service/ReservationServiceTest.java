@@ -11,11 +11,9 @@ import com.prgrms.broong.management.dto.ParkCarResponseDto;
 import com.prgrms.broong.management.park.converter.ParkConverter;
 import com.prgrms.broong.management.park.domain.Location;
 import com.prgrms.broong.management.park.domain.Park;
-import com.prgrms.broong.management.park.repository.LocationRepository;
 import com.prgrms.broong.management.park.repository.ParkRepository;
 import com.prgrms.broong.management.repository.ParkCarRepository;
 import com.prgrms.broong.management.species.domain.Species;
-import com.prgrms.broong.management.species.repository.SpeciesRepository;
 import com.prgrms.broong.reservation.domain.Reservation;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.reservation.dto.ReservationRequestDto;
@@ -60,12 +58,6 @@ class ReservationServiceTest {
     private UserRepository userRepository;
 
     @Autowired
-    private LocationRepository locationRepository;
-
-    @Autowired
-    private SpeciesRepository speciesRepository;
-
-    @Autowired
     private CarRepository carRepository;
 
     @Autowired
@@ -99,7 +91,6 @@ class ReservationServiceTest {
         Species species = Species.builder()
             .name("중형")
             .build();
-        speciesRepository.save(species);
 
         car = Car.builder()
             .carNum("11허124333")
@@ -116,7 +107,6 @@ class ReservationServiceTest {
             .townId("101")
             .locationName("도봉구")
             .build();
-        locationRepository.save(location);
 
         park = Park.builder()
             .possibleNum(10)
@@ -132,7 +122,7 @@ class ReservationServiceTest {
         user = userRepository.save(user);
 
         reservation = Reservation.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .usagePoint(1000)
             .startTime(LocalDateTime.now().plusHours(1L))
             .endTime(LocalDateTime.now().plusHours(3L))
@@ -147,7 +137,7 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("사용자 예약 성공 테스트")
-    void saveSuccessReservation() {
+    void saveSuccessReservationTest() {
         //given
         UserResponseDto userResponseDto = userConverter.UserToResponseDtoWithoutReservationList(
             user);
@@ -159,7 +149,7 @@ class ReservationServiceTest {
             .build();
 
         ReservationRequestDto reservationRequestDto = ReservationRequestDto.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .startTime(LocalDateTime.now().plusHours(4L))
             .endTime(LocalDateTime.now().plusHours(5L))
             .userResponseDto(userResponseDto)
@@ -171,12 +161,12 @@ class ReservationServiceTest {
 
         UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
             .id(user.getId())
-            .checkTime(reservationRequestDto.getStartTime())
+            .checkStartTime(reservationRequestDto.getStartTime())
+            .checkEndTime(reservationRequestDto.getEndTime())
             .build();
 
         //when
-        Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto,
-            userReservationCheckDto);
+        Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto);
 
         //then
         Long reservationCount = reservationRepository.findAll().stream().count();
@@ -185,7 +175,7 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("사용자가 중복된 시간으로 예약했을때 저장 실패 테스트")
-    void saveFailByDuplicateUserReservation() {
+    void saveFailByDuplicateUserReservationTest() {
         Reservation getReservation = reservationRepository.findById(reservation.getId()).get();
 
         User getUser = userRepository.findById(user.getId()).get();
@@ -201,7 +191,7 @@ class ReservationServiceTest {
             .build();
 
         ReservationRequestDto reservationRequestDto = ReservationRequestDto.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .startTime(getReservation.getStartTime().plusHours(1))
             .endTime(getReservation.getEndTime().plusHours(4))
             .userResponseDto(userResponseDto)
@@ -213,13 +203,13 @@ class ReservationServiceTest {
 
         UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
             .id(getUser.getId())
-            .checkTime(reservationRequestDto.getStartTime())
+            .checkStartTime(reservationRequestDto.getStartTime())
+            .checkEndTime(reservationRequestDto.getEndTime())
             .build();
 
         //when, then
         try {
-            Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto,
-                userReservationCheckDto);
+            Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto);
         } catch (RuntimeException e) {
             log.info("예약 중복 실패 테스트 에러내용 -> {}", e.getMessage());
         }
@@ -227,7 +217,7 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("사용자가 선택한 차량이 이미 예약되어있을 경우 저장 실패 테스트")
-    void savefailByDuplicateCarReservation() {
+    void savefailByDuplicateCarReservationTest() {
         User user2 = User.builder()
             .email("dbwlgna98@naver.com")
             .name("유지훈")
@@ -252,7 +242,7 @@ class ReservationServiceTest {
             .build();
 
         ReservationRequestDto reservationRequestDto = ReservationRequestDto.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .startTime(getReservation.getStartTime().plusHours(1))
             .endTime(getReservation.getEndTime().plusHours(4))
             .userResponseDto(userResponseDto)
@@ -264,13 +254,13 @@ class ReservationServiceTest {
 
         UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
             .id(user.getId())
-            .checkTime(reservationRequestDto.getStartTime())
+            .checkStartTime(reservationRequestDto.getStartTime())
+            .checkEndTime(reservationRequestDto.getEndTime())
             .build();
 
         //when, then
         try {
-            Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto,
-                userReservationCheckDto);
+            Long reservationSuccessId = reservationService.saveReservation(reservationRequestDto);
         } catch (RuntimeException e) {
             log.info("예약 중복 실패 테스트 에러내용 -> {}", e.getMessage());
         }
@@ -278,7 +268,7 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("예약 단건 조회 테스트")
-    void getReservation() {
+    void getReservationTest() {
         //given, when
         ReservationResponseDto findReservation = reservationService.getReservation(
             reservationService.getReservation(reservation.getId()).getId());
@@ -297,13 +287,13 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("사용자의 예약 내역 조회 테스트")
-    void getReservationListByUserId() {
+    void getReservationListByUserIdTest() {
         //given
-        saveSuccessReservation();
+        saveSuccessReservationTest();
 
         //when
         Page<ReservationResponseDto> reservationListByUserId = reservationService.getReservationListByUserId(
-            user.getId(), null);
+            user.getId(), 0, 30);
 
         //then
         assertThat(reservationListByUserId.stream().count(), samePropertyValuesAs(2L));
@@ -311,16 +301,16 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("사용자의 예약 가능 확인 테스트")
-    void checkReservationByUserId() {
+    void checkReservationByUserIdTest() {
         //given
         UserReservationCheckDto userReservationCheckDto = UserReservationCheckDto.builder()
             .id(user.getId())
-            .checkTime(LocalDateTime.now().plusHours(4L))
+            .checkStartTime(LocalDateTime.now().plusHours(4L))
+            .checkEndTime(LocalDateTime.now().plusHours(7L))
             .build();
 
         //when
-        boolean check = reservationService.checkReservationByUserId(userReservationCheckDto,
-            ReservationStatus.CANCELD);
+        boolean check = reservationService.checkReservationByUserId(userReservationCheckDto);
 
         //then
         assertThat(check, samePropertyValuesAs(true));
@@ -328,10 +318,10 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("특정 자동차의 예약 가능 확인")
-    void possibleReservationTimeByCarId() {
+    void possibleReservationTimeByCarIdTest() {
         //given, when
         boolean check = reservationService.possibleReservationTimeByCarId(car.getId(),
-            LocalDateTime.now().plusHours(4L), ReservationStatus.CANCELD);
+            LocalDateTime.now().plusHours(4L), LocalDateTime.now().plusHours(6L));
 
         //then
         assertThat(check, samePropertyValuesAs(true));
@@ -347,6 +337,6 @@ class ReservationServiceTest {
         ReservationResponseDto cancelReservation = reservationService.getReservation(
             cancelReservationId);
         assertThat(cancelReservation.getReservationStatus(),
-            samePropertyValuesAs(ReservationStatus.CANCELD));
+            samePropertyValuesAs(ReservationStatus.CANCEL));
     }
 }

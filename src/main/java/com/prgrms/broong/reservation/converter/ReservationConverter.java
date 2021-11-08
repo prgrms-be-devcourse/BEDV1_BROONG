@@ -26,13 +26,13 @@ public class ReservationConverter {
         ParkCar parkCar = parkCarConverter.parkCarResponseToEntity(
             addReservationRequest.getParkCarResponseDto());
         Reservation reservation = Reservation.builder()
-            .reservationStatus(ReservationStatus.RESERVATION)
+            .reservationStatus(ReservationStatus.READY)
             .startTime(addReservationRequest.getStartTime())
             .endTime(addReservationRequest.getEndTime())
             .usagePoint(addReservationRequest.getUsagePoint())
             .fee(addReservationRequest.getFee())
             .parkCar(parkCar)
-            .isOneway(addReservationRequest.isOneway())
+            .isOneway(addReservationRequest.getIsOneway())
             .user(user)
             .build();
         reservation.registerUser(user);
@@ -47,9 +47,9 @@ public class ReservationConverter {
             .endTime(reservation.getEndTime())
             .usagePoint(reservation.getUsagePoint())
             .fee(reservation.getFee())
-            .isOneway(reservation.isOneway())
+            .isOneway(reservation.getIsOneway())
             .parkCarResponseDto(
-                parkCarConverter.ParkToResponseDto(reservation.getParkCar()))
+                parkCarConverter.parkCarToResponseDto(reservation.getParkCar()))
             .userResponseDto(
                 userConverter.UserToResponseDtoWithoutReservationList(reservation.getUser()))
             .build();

@@ -2,9 +2,11 @@ package com.prgrms.broong.management.park.domain;
 
 import com.prgrms.broong.common.BaseEntity;
 import com.prgrms.broong.management.park.dto.ParkUpdateDto;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,11 +34,11 @@ public class Park extends BaseEntity {
     private Long id;
 
     @Min(0)
-    @Column(name = "possible_num", columnDefinition = "INT", nullable = false)
-    private Integer possibleNum;
+    @Column(name = "possible_num", columnDefinition = "INT")
+    private int possibleNum;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_park_to_location"))
     private Location location;
 
     public void changeParkInfo(ParkUpdateDto parkUpdateDto) {
