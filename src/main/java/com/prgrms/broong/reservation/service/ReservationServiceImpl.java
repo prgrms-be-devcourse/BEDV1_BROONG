@@ -4,9 +4,11 @@ import com.prgrms.broong.management.car.domain.Car;
 import com.prgrms.broong.management.car.repository.CarRepository;
 import com.prgrms.broong.reservation.converter.ReservationConverter;
 import com.prgrms.broong.reservation.domain.Reservation;
+import com.prgrms.broong.reservation.domain.ReservationQueue;
 import com.prgrms.broong.reservation.domain.ReservationStatus;
 import com.prgrms.broong.reservation.dto.ReservationRequestDto;
 import com.prgrms.broong.reservation.dto.ReservationResponseDto;
+import com.prgrms.broong.reservation.repository.ReservationQueueRepository;
 import com.prgrms.broong.reservation.repository.ReservationRepository;
 import com.prgrms.broong.user.domain.User;
 import com.prgrms.broong.user.dto.UserReservationCheckDto;
@@ -34,6 +36,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final UserRepository userRepository;
     private final CarRepository carRepository;
     private final ReservationConverter converter;
+    private final ReservationQueueRepository reservationQueueRepository;
 
     @Transactional
     @Override
@@ -69,6 +72,14 @@ public class ReservationServiceImpl implements ReservationService {
         }
         getUser.reduceUsagePoint(reservation.getUsagePoint());
         repository.save(reservation);
+        ReservationQueue usingReservationQueue = ReservationQueue.builder()
+            .reservationId(reservation.getId()).reservationStatus(ReservationStatus.PROCEED)
+            .checkTime(reservation.getStartTime()).build();
+        ReservationQueue returnReservationQueue = ReservationQueue.builder()
+            .reservationId(reservation.getId()).reservationStatus(ReservationStatus.COMPLETE)
+            .checkTime(reservation.getEndTime()).build();
+        reservationQueueRepository.save(usingReservationQueue);
+        reservationQueueRepository.save(returnReservationQueue);
         return repository.save(reservation).getId();
     }
 
