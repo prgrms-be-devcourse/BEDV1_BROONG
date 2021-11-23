@@ -1,16 +1,17 @@
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:~/broong;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST}/${DB_NAME}?serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
-    hibernate:
-      ddl-auto: create-drop
     show-sql: true
-    properties:
-      hibernate.format_sql: true
+    hibernate:
+      format_sql: true
+      ddl-auto: none
 
   server:
     servlet:
